@@ -14,8 +14,10 @@
 `win + 上下左右` 可以对窗口位置进行调整
 ## 打开多个工作区
 ubuntu支持同时打开多个工作区工作，切换流畅，方便舒适
-
-- 方法：点击一个窗口，按`ctr + shift + alt + 上下` 组合键可以将该窗口移动至不同的工作区打开
+**方法**：
+- 点击一个窗口，按`ctr + shift + alt + 上下` 组合键可以将该窗口移动至不同的工作区打开  
+- `alt + ctrl`切换工作区
+- `win`显示所有工作区及每个工作区内的窗口
 
 具体使用方法可以再自行摸索  
 **建议**：学习软件知识时，可以开一个工作区学习，开一个工作区写文档记录总结。养成写文档的好习惯，可以同时使自己和他人受益，文档是一种积淀
@@ -32,3 +34,12 @@ ubuntu支持同时打开多个工作区工作，切换流畅，方便舒适
 1. `F11 `使得vscode编辑窗口全屏化
 2. `alt + 上下 `移动单行代码
 3. `shift + alt + 上下` 向上，向下复制该行代码
+
+## vscode推荐扩展
+**以下扩展主要是增强vscode功能，提高舒适度**
+#### markdown相关：
+1. `markdown preview github styling` 以github风格预览markdown文件
+2. `markdown pdf` 支持将markdown文件转换成pdf,html,jpg,png格式，支持vscode阅读pdf文件  
+> `markdown pdf` 使用方法： 按`F1` 输入`export`即可选择导出的格式
+3. `office Viewer` 可以以纯阅读的模式打开markdown文件进行阅读（超强的功能），也可以将markdown文件转换成pdf，此扩展还使得vscode可以打开word,excel，pdf文件，还有其他一些小功能。（此扩展功能过多，为了有一个简洁的vscode，建议平时禁用，只在需要使用时启用）
+
