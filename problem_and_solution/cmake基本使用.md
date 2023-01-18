@@ -15,3 +15,27 @@
 > 2. 在CMakeLists.txt中通过install()命令指定`文件类型`， `打包的文件名（文件路径为相对于此CMakeLists.txt的相对路径）`（注意：目标文件和库文件只需要写名称即可，其他的均要相对路径）及其`打包的目标地址（此处为相对地址）`。相对地址是相对于CMAKE_INSTALL_PREFIX变量中的地址的（就是说如果相对地址为/doc/file，则最终地址为${CMAKE_INSTALL_PREFIX}/doc/file），可以在项目目录的CMakeLists.txt中通过set()命令设定该变量的值（默认为/usr/local）。注意：其他子目录下设置该变量无效
 
 
+注意：《cmake实践》这本书看到第30页即可，后面的属于扩展内容。
+
+**cmake_lzc总结**：
+> 常用指令  
+> - `cmake_minimum_required(VERSION 3.0)`要求cmake最小版本为3.0
+> - `project(项目名称)` 定义项目名称
+> - `message(STATUS "内容")` 在命令行输出前缀为--的内容
+> - `add_subdirectory(src bin)` 添加工程目录下的子目录  第一个为源码目录，第二个为目标二进制目录
+> - `add_executable(hello hello.c)`生成可执行文件  第一个为可执行文件名，第二个为源码文件名
+> - `add_library(hello1 SHARED hello.c)`生成库文件 第一个为库名xxx，生成的库文件名为libxxx.so（动态库）或者libxxx.a（静态库）。 第二个为源码文件名。默认生成静态库，加SHARED选项后生成动态库
+> - `set(变量名 变量值)`设置变量值
+> - `install(FILES|PROGRAMS|TARGETS|DIRECTORY 文件名 DESTINATION 目标路径)`安装相应文件到相应目录 FILES表示一般文件 PROGRAMS表示脚本文件等（如.sh .bash文件），TARGETS表示目标文件（如可执行文件和库文件) DIRECTORY表示目录或整个目录下的文件。DESTNATION后的目标路径是相对于变量CMAKE_INSTALL_PREFIX的路径。
+> - `include_directories(/home/lzc/cmake/include)`添加第三方头文件目录，如/home/lzc/cmake/include
+> - `link_directories(/home/lzc/cmake/lib)` 添加第三方库文件目录，如/home/lzc/cmake/lib
+> - `target_link_libraries(hello libhello.so)` 将库文件链接到可执行文件。第一个参数为可执行文件名称，第二个参数为库文件名称。注意：要先add_executable生成可执行文件后才能进行target_link_libraries链接
+>常用变量
+> - `EXECUTABLE_OUTPUT_PATH` 设置生成的可执行文件存放位置  
+> - `LIBRARY_OUTPUT_PATH` 设置生成的库文件存放位置
+> - `CMAKE_INSTALL_PREFIX` 安装时的前置路径，其他相对路径均是以此为前缀
+
+
+
+
+
