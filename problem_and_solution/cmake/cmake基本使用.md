@@ -32,12 +32,11 @@ t1 - t4文件夹是我阅读《cmake实践》时跟着做的实践内容
 > - `target_link_libraries(hello libhello.so)` 将库文件链接到可执行文件。第一个参数为可执行文件名称，第二个参数为库文件名称。注意：要先add_executable生成可执行文件后才能进行target_link_libraries链接
 >常用变量
 > - `EXECUTABLE_OUTPUT_PATH` 设置生成的可执行文件存放位置  
-> - `LIBRARY_OUTPUT_PATH` 设置生成的库文件存放位置
+> - `LIBRARY_OUTPUT_PATH` 设置生成的库文件存放位置  
 > - `CMAKE_INSTALL_PREFIX` 安装时的前置路径，其他相对路径均是以此为前缀  
-> 下面两个变量常用于更改`EXECUTABLE_OUTPUT_PATH`和`LIBRARY_OUTPUT_PATH`的值
-> - `项目名称_BINARY_DIR` 项目二进制目录，为add_subdirectory()中的第二个参数的绝对路径
-> - `项目名称_SOURCE_DIR` 项目源码目录，为add_subdirectory()中的第一个参数的绝对路径
-
+> 下面两个变量常用于更改`EXECUTABLE_OUTPUT_PATH`和`LIBRARY_OUTPUT_PATH`的值,且需要在源代码目录下的CMakeLists.txt中修改才有用
+> - `项目名称_BINARY_DIR` 项目二进制目录，为使用make的目录
+> - `项目名称_SOURCE_DIR` 项目源码目录，为`cmake 目标路径`命令中的目标路径目录
 
 
 
