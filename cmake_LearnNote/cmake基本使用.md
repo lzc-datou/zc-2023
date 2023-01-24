@@ -25,7 +25,7 @@ t1 - t4文件夹是我阅读《cmake实践》时跟着做的实践内容
 > - `add_subdirectory(src bin)` 添加工程目录下的子目录  第一个为源码目录，第二个为目标二进制目录
 > - `add_executable(hello hello.c)`生成可执行文件  第一个为可执行文件名，第二个为源码文件名
 > - `add_library(hello1 SHARED hello.c)`生成库文件 第一个为库名xxx，生成的库文件名为libxxx.so（动态库）或者libxxx.a（静态库）。 第二个为源码文件名。默认生成静态库，加SHARED选项后生成动态库
-> - `set(变量名 变量值)`设置变量值
+> - `set(变量名 变量值)`设置变量值  注意：上下层目录CMakeLists.txt中定义的变量不能互相使用，即任何CMakeLists.txt中定义的变量只能给自己使用，不能给父目录或子目录中的其他CMakeLists.txt使用。如果两个CMakeLists.txt中需要使用相同的变量，那么只能分别定义
 > - `install(FILES|PROGRAMS|TARGETS|DIRECTORY 文件名 DESTINATION 目标路径)`安装相应文件到相应目录 FILES表示一般文件 PROGRAMS表示脚本文件等（如.sh .bash文件），TARGETS表示目标文件（如可执行文件和库文件) DIRECTORY表示目录或整个目录下的文件。DESTNATION后的目标路径是相对于变量CMAKE_INSTALL_PREFIX的路径。
 > - `include_directories(/home/lzc/cmake/include)`添加第三方头文件目录，如/home/lzc/cmake/include
 > - `link_directories(/home/lzc/cmake/lib)` 添加第三方库文件目录，如/home/lzc/cmake/lib
