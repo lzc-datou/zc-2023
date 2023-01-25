@@ -1,0 +1,3 @@
+/home/lzc/桌面/cmake_practice/test/install/bin/test
+/home/lzc/桌面/cmake_practice/test/install/lib/liblib.so
+/home/lzc/桌面/cmake_practice/test/install/include/lib.h
