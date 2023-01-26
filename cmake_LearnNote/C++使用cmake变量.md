@@ -16,3 +16,5 @@
 例子：`add_definitions(-DCMAKE_INSTALL_PREFIX="${CMAKE_INSTALL_PREFIX}")`
 
 `-D`前缀表示宏定义`define`，`-D`后面是宏变量名称，使用`=`进行赋值，注意：在CMakeLists.txt中在`""`中也可以通过`${}`来使用变量。由于我们需要的路径是字符串，而${CMAKE_INSTALL_PREFIX}不是字符串（是没有引号的路径），所以需要给它加上`""`变成字符串再赋值给宏变量，这样再C++程序中就可以使用宏变量`CMAKE_INSTALL_PREFIX`来获取安装路径了。linux下C++通过空格即可拼接宏变量字符串，详见文章1
+
+这部分详细实践可见`cmake_practice`文件夹中的项目
