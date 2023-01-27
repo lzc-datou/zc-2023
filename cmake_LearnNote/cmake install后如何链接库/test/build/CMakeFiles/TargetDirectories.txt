@@ -1,8 +1,0 @@
-/home/lzc/桌面/cmake_practice/test/build/CMakeFiles/install/strip.dir
-/home/lzc/桌面/cmake_practice/test/build/CMakeFiles/install/local.dir
-/home/lzc/桌面/cmake_practice/test/build/CMakeFiles/install.dir
-/home/lzc/桌面/cmake_practice/test/build/CMakeFiles/list_install_components.dir
-/home/lzc/桌面/cmake_practice/test/build/CMakeFiles/rebuild_cache.dir
-/home/lzc/桌面/cmake_practice/test/build/CMakeFiles/lib.dir
-/home/lzc/桌面/cmake_practice/test/build/CMakeFiles/edit_cache.dir
-/home/lzc/桌面/cmake_practice/test/build/CMakeFiles/test.dir

@@ -1,0 +1,17 @@
+/home/lzc/桌面/cmake_practice/project/install/include/computerRoom.h
+/home/lzc/桌面/cmake_practice/project/install/include/orderFile.h
+/home/lzc/桌面/cmake_practice/project/install/include/Manager.h
+/home/lzc/桌面/cmake_practice/project/install/include/Student.h
+/home/lzc/桌面/cmake_practice/project/install/include/Teacher.h
+/home/lzc/桌面/cmake_practice/project/install/include/globalFile.h
+/home/lzc/桌面/cmake_practice/project/install/include/Identity.h
+/home/lzc/桌面/cmake_practice/project/install/bin/document/computerRoom.txt
+/home/lzc/桌面/cmake_practice/project/install/bin/document/admin.txt
+/home/lzc/桌面/cmake_practice/project/install/bin/document/order.txt
+/home/lzc/桌面/cmake_practice/project/install/bin/document/teacher.txt
+/home/lzc/桌面/cmake_practice/project/install/bin/document/student.txt
+/home/lzc/桌面/cmake_practice/project/install/bin/main
+/home/lzc/桌面/cmake_practice/project/install/lib/libstudent.so
+/home/lzc/桌面/cmake_practice/project/install/lib/libteacher.so
+/home/lzc/桌面/cmake_practice/project/install/lib/libmanager.so
+/home/lzc/桌面/cmake_practice/project/install/lib/liborderFile.so

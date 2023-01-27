@@ -1,0 +1,3 @@
+date:1  interval:上午  stuId:1  stuName:张三  roomId:1  status:审核中
+date:2  interval:上午  stuId:1  stuName:张三  roomId:1  status:审核中
+date:1  interval:下午  stuId:2  stuName:张三  roomId:1  status:审核中

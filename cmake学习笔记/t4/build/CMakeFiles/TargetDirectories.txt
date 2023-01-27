@@ -1,0 +1,5 @@
+/home/lzc/z/cmake/t4/build/CMakeFiles/rebuild_cache.dir
+/home/lzc/z/cmake/t4/build/CMakeFiles/edit_cache.dir
+/home/lzc/z/cmake/t4/build/bin/CMakeFiles/rebuild_cache.dir
+/home/lzc/z/cmake/t4/build/bin/CMakeFiles/edit_cache.dir
+/home/lzc/z/cmake/t4/build/bin/CMakeFiles/main.dir

@@ -1,0 +1,36 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/lzc/桌面/cmake_practice/project/include/Identity.h
+iostream
+-
+fstream
+-
+vector
+-
+map
+-
+algorithm
+-
+globalFile.h
+/home/lzc/桌面/cmake_practice/project/include/globalFile.h
+computerRoom.h
+/home/lzc/桌面/cmake_practice/project/include/computerRoom.h
+
+/home/lzc/桌面/cmake_practice/project/include/computerRoom.h
+
+/home/lzc/桌面/cmake_practice/project/include/globalFile.h
+
+/home/lzc/桌面/cmake_practice/project/include/orderFile.h
+Identity.h
+/home/lzc/桌面/cmake_practice/project/include/Identity.h
+
+/home/lzc/桌面/cmake_practice/project/src/orderFile.cpp
+../include/orderFile.h
+/home/lzc/桌面/cmake_practice/project/include/orderFile.h
+

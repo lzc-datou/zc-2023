@@ -1,1 +1,0 @@
-/usr/bin/cc   -rdynamic CMakeFiles/main.dir/main.c.o  -o main  -Wl,-rpath,/home/lzc/z/cmake/t3/example/lib /home/lzc/z/cmake/t3/example/lib/libhello.so 

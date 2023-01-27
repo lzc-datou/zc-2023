@@ -1,3 +1,0 @@
-/home/lzc/z/cmake/t3/example/bin/hello_main
-/home/lzc/z/cmake/t3/example/lib/libhello.so
-/home/lzc/z/cmake/t3/example/include/hello.h

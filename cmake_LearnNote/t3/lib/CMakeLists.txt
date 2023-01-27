@@ -1,5 +1,0 @@
-set(LIBHELLO_SRC hello.c)
-add_library(hello SHARED ${LIBHELLO_SRC})
-add_executable(hello_main hello_main.c)
-install(TARGETS hello_main hello RUNTIME DESTINATION bin LIBRARY DESTINATION lib)
-install(FILES hello.h DESTINATION include)

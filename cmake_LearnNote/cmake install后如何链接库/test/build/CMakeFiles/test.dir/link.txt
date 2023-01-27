@@ -1,1 +1,0 @@
-/usr/bin/c++    -rdynamic CMakeFiles/test.dir/test.cpp.o  -o test  -Wl,-rpath,/home/lzc/桌面/cmake_practice/test/install/lib liblib.so 
