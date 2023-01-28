@@ -24,6 +24,7 @@
 > - `project(项目名称)` 定义项目名称
 > - `message(STATUS "内容")` 在命令行输出前缀为--的内容
 > - `add_subdirectory(src bin)` 添加工程目录下的子目录  第一个为源码目录，第二个为目标二进制目录
+> - `find_package(包名)` 搜包命令，方便使用第三方库，详细讲解见文章[《轻松搞定CMake”系列之find_package用法详解》](https://blog.csdn.net/zhanghm1995/article/details/105466372)
 > - `add_executable(hello hello.c)`生成可执行文件  第一个为可执行文件名，第二个为源码文件名
 > - `add_library(hello1 SHARED hello.c)`生成库文件 第一个为库名xxx，生成的库文件名为libxxx.so（动态库）或者libxxx.a（静态库）。 第二个为源码文件名。默认生成静态库，加SHARED选项后生成动态库
 > - `add_definitions(-DVAL="变量内容")`在CMakeLists.txt中为C++程序定义宏变量，`-D`前缀表示宏定义`define`的意思，`VAL`为宏变量名称，`=`赋值，后面跟着的是宏变量的内容
