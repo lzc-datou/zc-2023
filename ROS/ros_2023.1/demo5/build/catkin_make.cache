@@ -1,0 +1,2 @@
+turtle_control
+-DCATKIN_DEVEL_PREFIX=/home/lzc/ros_2023.1/demo5/devel -DCMAKE_INSTALL_PREFIX=/home/lzc/ros_2023.1/demo5/install -G Unix Makefiles

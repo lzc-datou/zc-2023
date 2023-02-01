@@ -40,3 +40,42 @@
 
 参数服务器使用方式：运行一次相应的python文件即可
 可以在launch文件中添加一行命令来运行参数服务器的py文件，运行一次后所有参数就都设置完成了，成为了ros系统中的全局变量，可以通过`rospy.get_param("变量名")`来获取
+
+## 5.ROS常用命令
+
+### 5.1命令行获取话题发布的消息内容  
+假设话题名称为topic_name,消息类型为msg_type
+```
+rostopic list
+rostopic type topic_name
+rosmsg show msg_type
+
+```
+
+1. `rostopic list`  列出当前运行的所有话题名称
+2. `rostopic type 话题名称`   打印对应话题名称的消息类型
+3. `rosmsg show 消息类型 ` 打印该消息类型具体所含内容（与打印出结构体变量内部结构类似），其中`rosmsg show` 与`rosmsg info`作用相同
+
+将`rostopic`命令换成`rosservice`，`rosmsg`命令换成`rossrv`，按照上述流程，也可以获取到相应服务的消息类型与具体内容  
+流程如下:  
+
+```
+//假如服务名称为service_name，消息类型为srv_type
+rosservice list
+rosservice type service_name
+rossrv show srv_type
+
+```
+
+## 6. 日志输出函数
+```
+rospy.logdebug("hello,debug")  #不会输出
+rospy.loginfo("hello,info")  #默认白色字体
+rospy.logwarn("hello,warn")  #默认黄色字体
+rospy.logerr("hello,error")  #默认红色字体
+
+
+```
+
+
+

@@ -1,0 +1,7 @@
+<launch>
+
+    <node pkg="service" type="client.py" name="client" output="screen"/>
+    <node pkg="service" type="srv_p.py" name="service" output="screen"/>
+    <node pkg="service" type="param.py" name="param" output="screen"/>
+
+</launch>

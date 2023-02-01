@@ -1,0 +1,20 @@
+{
+    "python.autoComplete.extraPaths": [
+        "/opt/ros/noetic/lib/python3/dist-packages"
+    ],
+    "python.analysis.extraPaths": [
+        "/opt/ros/noetic/lib/python3/dist-packages"
+    ],
+    "terminal.integrated.fontFamily": "monospace",
+    "python.linting.enabled": false,
+    "python.linting.pylintCategorySeverity.error": "Information",
+    "python.linting.pylintCategorySeverity.refactor": "Information",
+    "python.linting.pylintCategorySeverity.fatal": "Information",
+    "python.linting.pylintCategorySeverity.warning": "Information",
+    "python.linting.pylintPath": "",
+    "python.linting.flake8CategorySeverity.E": "Information",
+    "python.linting.flake8CategorySeverity.F": "Information",
+    "python.linting.flake8CategorySeverity.W": "Information",
+    "python.linting.lintOnSave": false,
+    "python.linting.mypyCategorySeverity.error": "Information"
+}

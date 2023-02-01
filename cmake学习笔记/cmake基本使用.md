@@ -27,6 +27,7 @@
 > - `find_package(包名)` 搜包命令，方便使用第三方库，详细讲解见文章[《轻松搞定CMake”系列之find_package用法详解》](https://blog.csdn.net/zhanghm1995/article/details/105466372)
 > - `add_executable(hello hello.c)`生成可执行文件  第一个为可执行文件名，第二个为源码文件名
 > - `add_library(hello1 SHARED hello.c)`生成库文件 第一个为库名xxx，生成的库文件名为libxxx.so（动态库）或者libxxx.a（静态库）。 第二个为源码文件名。默认生成静态库，加SHARED选项后生成动态库
+> - `add_dependencies(main a.so b.so)`提醒编译器需要先生成a.so和b.so两个库文件，再去生成main这个可执行文件。详解见文章[cmake中add_dependencies的基本作用](https://blog.csdn.net/KingOfMyHeart/article/details/112983922)
 > - `add_definitions(-DVAL="变量内容")`在CMakeLists.txt中为C++程序定义宏变量，`-D`前缀表示宏定义`define`的意思，`VAL`为宏变量名称，`=`赋值，后面跟着的是宏变量的内容
 > - `set(变量名 变量值)`设置变量值  注意：上下层目录CMakeLists.txt中定义的变量不能互相使用，即任何CMakeLists.txt中定义的变量只能给自己使用，不能给父目录或子目录中的其他CMakeLists.txt使用。如果两个CMakeLists.txt中需要使用相同的变量，那么只能分别定义
 > - `install(FILES|PROGRAMS|TARGETS|DIRECTORY 文件名 DESTINATION 目标路径)`安装相应文件到相应目录 FILES表示一般文件 PROGRAMS表示脚本文件等（如.sh .bash文件），TARGETS表示目标文件（如可执行文件和库文件) DIRECTORY表示目录或整个目录下的文件，如果文件夹路径写成`home/lzc/目录`,则安装过去时会含有`目录`本身，如果文件夹路径写成`home/lzc/目录/`，则安装过去的是目录下的所有文件，不包括目录本身。DESTNATION后的目标路径是相对于变量CMAKE_INSTALL_PREFIX的路径。即该目标路径的前缀为变量CMAKE_INSTALL_PREFIX。

@@ -1,0 +1,2 @@
+service
+-DCATKIN_DEVEL_PREFIX=/home/lzc/ros_2023.1/demo4/devel -DCMAKE_INSTALL_PREFIX=/home/lzc/ros_2023.1/demo4/install -G Unix Makefiles

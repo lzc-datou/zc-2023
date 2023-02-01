@@ -1,0 +1,8 @@
+prefix=/home/lzc/ros_2023.1/demo2/install
+
+Name: pub_sub
+Description: Description of pub_sub
+Version: 0.0.0
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib 
+Requires: roscpp rospy std_msg message_runtime

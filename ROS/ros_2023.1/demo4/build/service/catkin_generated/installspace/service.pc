@@ -1,0 +1,8 @@
+prefix=/home/lzc/ros_2023.1/demo4/install
+
+Name: service
+Description: Description of service
+Version: 0.0.0
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib 
+Requires: 

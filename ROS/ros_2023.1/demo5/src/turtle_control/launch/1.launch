@@ -1,0 +1,10 @@
+<launch>
+
+    <node pkg="turtle_control" type="t_control.py" name="control" output="screen"/>
+    <node pkg="turtlesim" type="turtlesim_node" name="turtles" output="screen"/>
+    <node pkg="turtlesim" type="turtle_teleop_key" name="teleop" output="screen"/>
+    <node pkg="turtle_control" type="Pose_print.py" name="Pose" output="screen"/>
+    <node pkg="turtle_control" type="request.py" name="req" output="screen"/>
+
+
+</launch>
