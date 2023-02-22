@@ -44,6 +44,12 @@
 
 > 对已下载好的软件包进行软件安装
 
+3. 方法三：
+- 1. `pip3 install 包名`
+- 2. `pip3 install -r requirements.txt`
+> 使用pip3安装python3的包,`-r`选项作用为`install from the given requirements file`，可以根据txt文件中的内容同时安装多个包（将包名分别写在txt文件中即可，分隔符为`换行`）
+
+
 ### 3.在当前目录下查找文件
 
 - `ls | grep 文件名   `
