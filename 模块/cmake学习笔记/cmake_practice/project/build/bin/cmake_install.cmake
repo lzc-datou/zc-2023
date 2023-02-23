@@ -1,8 +1,8 @@
-# Install script for directory: /home/lzc/桌面/cmake_practice/project/src
+# Install script for directory: /home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project/src
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/lzc/桌面/cmake_practice/project/install")
+  set(CMAKE_INSTALL_PREFIX "/home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 

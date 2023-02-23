@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/lzc/桌面/cmake_practice/project
+CMAKE_SOURCE_DIR = /home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/lzc/桌面/cmake_practice/project/build
+CMAKE_BINARY_DIR = /home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -126,14 +126,14 @@ install/strip/fast: preinstall/fast
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/lzc/桌面/cmake_practice/project/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/lzc/桌面/cmake_practice/project/build/CMakeFiles /home/lzc/桌面/cmake_practice/project/build/bin/CMakeFiles/progress.marks
-	cd /home/lzc/桌面/cmake_practice/project/build && $(MAKE) -f CMakeFiles/Makefile2 bin/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/lzc/桌面/cmake_practice/project/build/CMakeFiles 0
+	cd /home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project/build/CMakeFiles /home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project/build/bin/CMakeFiles/progress.marks
+	cd /home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project/build && $(MAKE) -f CMakeFiles/Makefile2 bin/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/lzc/桌面/cmake_practice/project/build && $(MAKE) -f CMakeFiles/Makefile2 bin/clean
+	cd /home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project/build && $(MAKE) -f CMakeFiles/Makefile2 bin/clean
 .PHONY : clean
 
 # The main clean target
@@ -143,22 +143,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/lzc/桌面/cmake_practice/project/build && $(MAKE) -f CMakeFiles/Makefile2 bin/preinstall
+	cd /home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project/build && $(MAKE) -f CMakeFiles/Makefile2 bin/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/lzc/桌面/cmake_practice/project/build && $(MAKE) -f CMakeFiles/Makefile2 bin/preinstall
+	cd /home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project/build && $(MAKE) -f CMakeFiles/Makefile2 bin/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/lzc/桌面/cmake_practice/project/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 bin/CMakeFiles/orderFile.dir/rule:
-	cd /home/lzc/桌面/cmake_practice/project/build && $(MAKE) -f CMakeFiles/Makefile2 bin/CMakeFiles/orderFile.dir/rule
+	cd /home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project/build && $(MAKE) -f CMakeFiles/Makefile2 bin/CMakeFiles/orderFile.dir/rule
 .PHONY : bin/CMakeFiles/orderFile.dir/rule
 
 # Convenience name for target.
@@ -168,12 +168,12 @@ orderFile: bin/CMakeFiles/orderFile.dir/rule
 
 # fast build rule for target.
 orderFile/fast:
-	cd /home/lzc/桌面/cmake_practice/project/build && $(MAKE) -f bin/CMakeFiles/orderFile.dir/build.make bin/CMakeFiles/orderFile.dir/build
+	cd /home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project/build && $(MAKE) -f bin/CMakeFiles/orderFile.dir/build.make bin/CMakeFiles/orderFile.dir/build
 .PHONY : orderFile/fast
 
 # Convenience name for target.
 bin/CMakeFiles/manager.dir/rule:
-	cd /home/lzc/桌面/cmake_practice/project/build && $(MAKE) -f CMakeFiles/Makefile2 bin/CMakeFiles/manager.dir/rule
+	cd /home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project/build && $(MAKE) -f CMakeFiles/Makefile2 bin/CMakeFiles/manager.dir/rule
 .PHONY : bin/CMakeFiles/manager.dir/rule
 
 # Convenience name for target.
@@ -183,12 +183,12 @@ manager: bin/CMakeFiles/manager.dir/rule
 
 # fast build rule for target.
 manager/fast:
-	cd /home/lzc/桌面/cmake_practice/project/build && $(MAKE) -f bin/CMakeFiles/manager.dir/build.make bin/CMakeFiles/manager.dir/build
+	cd /home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project/build && $(MAKE) -f bin/CMakeFiles/manager.dir/build.make bin/CMakeFiles/manager.dir/build
 .PHONY : manager/fast
 
 # Convenience name for target.
 bin/CMakeFiles/student.dir/rule:
-	cd /home/lzc/桌面/cmake_practice/project/build && $(MAKE) -f CMakeFiles/Makefile2 bin/CMakeFiles/student.dir/rule
+	cd /home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project/build && $(MAKE) -f CMakeFiles/Makefile2 bin/CMakeFiles/student.dir/rule
 .PHONY : bin/CMakeFiles/student.dir/rule
 
 # Convenience name for target.
@@ -198,12 +198,12 @@ student: bin/CMakeFiles/student.dir/rule
 
 # fast build rule for target.
 student/fast:
-	cd /home/lzc/桌面/cmake_practice/project/build && $(MAKE) -f bin/CMakeFiles/student.dir/build.make bin/CMakeFiles/student.dir/build
+	cd /home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project/build && $(MAKE) -f bin/CMakeFiles/student.dir/build.make bin/CMakeFiles/student.dir/build
 .PHONY : student/fast
 
 # Convenience name for target.
 bin/CMakeFiles/teacher.dir/rule:
-	cd /home/lzc/桌面/cmake_practice/project/build && $(MAKE) -f CMakeFiles/Makefile2 bin/CMakeFiles/teacher.dir/rule
+	cd /home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project/build && $(MAKE) -f CMakeFiles/Makefile2 bin/CMakeFiles/teacher.dir/rule
 .PHONY : bin/CMakeFiles/teacher.dir/rule
 
 # Convenience name for target.
@@ -213,12 +213,12 @@ teacher: bin/CMakeFiles/teacher.dir/rule
 
 # fast build rule for target.
 teacher/fast:
-	cd /home/lzc/桌面/cmake_practice/project/build && $(MAKE) -f bin/CMakeFiles/teacher.dir/build.make bin/CMakeFiles/teacher.dir/build
+	cd /home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project/build && $(MAKE) -f bin/CMakeFiles/teacher.dir/build.make bin/CMakeFiles/teacher.dir/build
 .PHONY : teacher/fast
 
 # Convenience name for target.
 bin/CMakeFiles/main.dir/rule:
-	cd /home/lzc/桌面/cmake_practice/project/build && $(MAKE) -f CMakeFiles/Makefile2 bin/CMakeFiles/main.dir/rule
+	cd /home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project/build && $(MAKE) -f CMakeFiles/Makefile2 bin/CMakeFiles/main.dir/rule
 .PHONY : bin/CMakeFiles/main.dir/rule
 
 # Convenience name for target.
@@ -228,7 +228,7 @@ main: bin/CMakeFiles/main.dir/rule
 
 # fast build rule for target.
 main/fast:
-	cd /home/lzc/桌面/cmake_practice/project/build && $(MAKE) -f bin/CMakeFiles/main.dir/build.make bin/CMakeFiles/main.dir/build
+	cd /home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project/build && $(MAKE) -f bin/CMakeFiles/main.dir/build.make bin/CMakeFiles/main.dir/build
 .PHONY : main/fast
 
 Manager.o: Manager.cpp.o
@@ -237,7 +237,7 @@ Manager.o: Manager.cpp.o
 
 # target to build an object file
 Manager.cpp.o:
-	cd /home/lzc/桌面/cmake_practice/project/build && $(MAKE) -f bin/CMakeFiles/manager.dir/build.make bin/CMakeFiles/manager.dir/Manager.cpp.o
+	cd /home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project/build && $(MAKE) -f bin/CMakeFiles/manager.dir/build.make bin/CMakeFiles/manager.dir/Manager.cpp.o
 .PHONY : Manager.cpp.o
 
 Manager.i: Manager.cpp.i
@@ -246,7 +246,7 @@ Manager.i: Manager.cpp.i
 
 # target to preprocess a source file
 Manager.cpp.i:
-	cd /home/lzc/桌面/cmake_practice/project/build && $(MAKE) -f bin/CMakeFiles/manager.dir/build.make bin/CMakeFiles/manager.dir/Manager.cpp.i
+	cd /home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project/build && $(MAKE) -f bin/CMakeFiles/manager.dir/build.make bin/CMakeFiles/manager.dir/Manager.cpp.i
 .PHONY : Manager.cpp.i
 
 Manager.s: Manager.cpp.s
@@ -255,7 +255,7 @@ Manager.s: Manager.cpp.s
 
 # target to generate assembly for a file
 Manager.cpp.s:
-	cd /home/lzc/桌面/cmake_practice/project/build && $(MAKE) -f bin/CMakeFiles/manager.dir/build.make bin/CMakeFiles/manager.dir/Manager.cpp.s
+	cd /home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project/build && $(MAKE) -f bin/CMakeFiles/manager.dir/build.make bin/CMakeFiles/manager.dir/Manager.cpp.s
 .PHONY : Manager.cpp.s
 
 Student.o: Student.cpp.o
@@ -264,7 +264,7 @@ Student.o: Student.cpp.o
 
 # target to build an object file
 Student.cpp.o:
-	cd /home/lzc/桌面/cmake_practice/project/build && $(MAKE) -f bin/CMakeFiles/student.dir/build.make bin/CMakeFiles/student.dir/Student.cpp.o
+	cd /home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project/build && $(MAKE) -f bin/CMakeFiles/student.dir/build.make bin/CMakeFiles/student.dir/Student.cpp.o
 .PHONY : Student.cpp.o
 
 Student.i: Student.cpp.i
@@ -273,7 +273,7 @@ Student.i: Student.cpp.i
 
 # target to preprocess a source file
 Student.cpp.i:
-	cd /home/lzc/桌面/cmake_practice/project/build && $(MAKE) -f bin/CMakeFiles/student.dir/build.make bin/CMakeFiles/student.dir/Student.cpp.i
+	cd /home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project/build && $(MAKE) -f bin/CMakeFiles/student.dir/build.make bin/CMakeFiles/student.dir/Student.cpp.i
 .PHONY : Student.cpp.i
 
 Student.s: Student.cpp.s
@@ -282,7 +282,7 @@ Student.s: Student.cpp.s
 
 # target to generate assembly for a file
 Student.cpp.s:
-	cd /home/lzc/桌面/cmake_practice/project/build && $(MAKE) -f bin/CMakeFiles/student.dir/build.make bin/CMakeFiles/student.dir/Student.cpp.s
+	cd /home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project/build && $(MAKE) -f bin/CMakeFiles/student.dir/build.make bin/CMakeFiles/student.dir/Student.cpp.s
 .PHONY : Student.cpp.s
 
 Teacher.o: Teacher.cpp.o
@@ -291,7 +291,7 @@ Teacher.o: Teacher.cpp.o
 
 # target to build an object file
 Teacher.cpp.o:
-	cd /home/lzc/桌面/cmake_practice/project/build && $(MAKE) -f bin/CMakeFiles/teacher.dir/build.make bin/CMakeFiles/teacher.dir/Teacher.cpp.o
+	cd /home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project/build && $(MAKE) -f bin/CMakeFiles/teacher.dir/build.make bin/CMakeFiles/teacher.dir/Teacher.cpp.o
 .PHONY : Teacher.cpp.o
 
 Teacher.i: Teacher.cpp.i
@@ -300,7 +300,7 @@ Teacher.i: Teacher.cpp.i
 
 # target to preprocess a source file
 Teacher.cpp.i:
-	cd /home/lzc/桌面/cmake_practice/project/build && $(MAKE) -f bin/CMakeFiles/teacher.dir/build.make bin/CMakeFiles/teacher.dir/Teacher.cpp.i
+	cd /home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project/build && $(MAKE) -f bin/CMakeFiles/teacher.dir/build.make bin/CMakeFiles/teacher.dir/Teacher.cpp.i
 .PHONY : Teacher.cpp.i
 
 Teacher.s: Teacher.cpp.s
@@ -309,7 +309,7 @@ Teacher.s: Teacher.cpp.s
 
 # target to generate assembly for a file
 Teacher.cpp.s:
-	cd /home/lzc/桌面/cmake_practice/project/build && $(MAKE) -f bin/CMakeFiles/teacher.dir/build.make bin/CMakeFiles/teacher.dir/Teacher.cpp.s
+	cd /home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project/build && $(MAKE) -f bin/CMakeFiles/teacher.dir/build.make bin/CMakeFiles/teacher.dir/Teacher.cpp.s
 .PHONY : Teacher.cpp.s
 
 computerReservation.o: computerReservation.cpp.o
@@ -318,7 +318,7 @@ computerReservation.o: computerReservation.cpp.o
 
 # target to build an object file
 computerReservation.cpp.o:
-	cd /home/lzc/桌面/cmake_practice/project/build && $(MAKE) -f bin/CMakeFiles/main.dir/build.make bin/CMakeFiles/main.dir/computerReservation.cpp.o
+	cd /home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project/build && $(MAKE) -f bin/CMakeFiles/main.dir/build.make bin/CMakeFiles/main.dir/computerReservation.cpp.o
 .PHONY : computerReservation.cpp.o
 
 computerReservation.i: computerReservation.cpp.i
@@ -327,7 +327,7 @@ computerReservation.i: computerReservation.cpp.i
 
 # target to preprocess a source file
 computerReservation.cpp.i:
-	cd /home/lzc/桌面/cmake_practice/project/build && $(MAKE) -f bin/CMakeFiles/main.dir/build.make bin/CMakeFiles/main.dir/computerReservation.cpp.i
+	cd /home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project/build && $(MAKE) -f bin/CMakeFiles/main.dir/build.make bin/CMakeFiles/main.dir/computerReservation.cpp.i
 .PHONY : computerReservation.cpp.i
 
 computerReservation.s: computerReservation.cpp.s
@@ -336,7 +336,7 @@ computerReservation.s: computerReservation.cpp.s
 
 # target to generate assembly for a file
 computerReservation.cpp.s:
-	cd /home/lzc/桌面/cmake_practice/project/build && $(MAKE) -f bin/CMakeFiles/main.dir/build.make bin/CMakeFiles/main.dir/computerReservation.cpp.s
+	cd /home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project/build && $(MAKE) -f bin/CMakeFiles/main.dir/build.make bin/CMakeFiles/main.dir/computerReservation.cpp.s
 .PHONY : computerReservation.cpp.s
 
 orderFile.o: orderFile.cpp.o
@@ -345,7 +345,7 @@ orderFile.o: orderFile.cpp.o
 
 # target to build an object file
 orderFile.cpp.o:
-	cd /home/lzc/桌面/cmake_practice/project/build && $(MAKE) -f bin/CMakeFiles/orderFile.dir/build.make bin/CMakeFiles/orderFile.dir/orderFile.cpp.o
+	cd /home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project/build && $(MAKE) -f bin/CMakeFiles/orderFile.dir/build.make bin/CMakeFiles/orderFile.dir/orderFile.cpp.o
 .PHONY : orderFile.cpp.o
 
 orderFile.i: orderFile.cpp.i
@@ -354,7 +354,7 @@ orderFile.i: orderFile.cpp.i
 
 # target to preprocess a source file
 orderFile.cpp.i:
-	cd /home/lzc/桌面/cmake_practice/project/build && $(MAKE) -f bin/CMakeFiles/orderFile.dir/build.make bin/CMakeFiles/orderFile.dir/orderFile.cpp.i
+	cd /home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project/build && $(MAKE) -f bin/CMakeFiles/orderFile.dir/build.make bin/CMakeFiles/orderFile.dir/orderFile.cpp.i
 .PHONY : orderFile.cpp.i
 
 orderFile.s: orderFile.cpp.s
@@ -363,7 +363,7 @@ orderFile.s: orderFile.cpp.s
 
 # target to generate assembly for a file
 orderFile.cpp.s:
-	cd /home/lzc/桌面/cmake_practice/project/build && $(MAKE) -f bin/CMakeFiles/orderFile.dir/build.make bin/CMakeFiles/orderFile.dir/orderFile.cpp.s
+	cd /home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project/build && $(MAKE) -f bin/CMakeFiles/orderFile.dir/build.make bin/CMakeFiles/orderFile.dir/orderFile.cpp.s
 .PHONY : orderFile.cpp.s
 
 # Help Target
@@ -409,6 +409,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/lzc/桌面/cmake_practice/project/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

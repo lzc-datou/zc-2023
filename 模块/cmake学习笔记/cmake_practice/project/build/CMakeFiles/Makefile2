@@ -44,10 +44,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/lzc/桌面/cmake_practice/project
+CMAKE_SOURCE_DIR = /home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/lzc/桌面/cmake_practice/project/build
+CMAKE_BINARY_DIR = /home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project/build
 
 #=============================================================================
 # Directory level rules for the build root directory
@@ -100,14 +100,14 @@ bin/clean: bin/CMakeFiles/main.dir/clean
 bin/CMakeFiles/orderFile.dir/all:
 	$(MAKE) -f bin/CMakeFiles/orderFile.dir/build.make bin/CMakeFiles/orderFile.dir/depend
 	$(MAKE) -f bin/CMakeFiles/orderFile.dir/build.make bin/CMakeFiles/orderFile.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/lzc/桌面/cmake_practice/project/build/CMakeFiles --progress-num=5,6 "Built target orderFile"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project/build/CMakeFiles --progress-num=5,6 "Built target orderFile"
 .PHONY : bin/CMakeFiles/orderFile.dir/all
 
 # Build rule for subdir invocation for target.
 bin/CMakeFiles/orderFile.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/lzc/桌面/cmake_practice/project/build/CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project/build/CMakeFiles 2
 	$(MAKE) -f CMakeFiles/Makefile2 bin/CMakeFiles/orderFile.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/lzc/桌面/cmake_practice/project/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project/build/CMakeFiles 0
 .PHONY : bin/CMakeFiles/orderFile.dir/rule
 
 # Convenience name for target.
@@ -127,14 +127,14 @@ bin/CMakeFiles/orderFile.dir/clean:
 bin/CMakeFiles/manager.dir/all:
 	$(MAKE) -f bin/CMakeFiles/manager.dir/build.make bin/CMakeFiles/manager.dir/depend
 	$(MAKE) -f bin/CMakeFiles/manager.dir/build.make bin/CMakeFiles/manager.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/lzc/桌面/cmake_practice/project/build/CMakeFiles --progress-num=3,4 "Built target manager"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project/build/CMakeFiles --progress-num=3,4 "Built target manager"
 .PHONY : bin/CMakeFiles/manager.dir/all
 
 # Build rule for subdir invocation for target.
 bin/CMakeFiles/manager.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/lzc/桌面/cmake_practice/project/build/CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project/build/CMakeFiles 2
 	$(MAKE) -f CMakeFiles/Makefile2 bin/CMakeFiles/manager.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/lzc/桌面/cmake_practice/project/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project/build/CMakeFiles 0
 .PHONY : bin/CMakeFiles/manager.dir/rule
 
 # Convenience name for target.
@@ -154,14 +154,14 @@ bin/CMakeFiles/manager.dir/clean:
 bin/CMakeFiles/student.dir/all:
 	$(MAKE) -f bin/CMakeFiles/student.dir/build.make bin/CMakeFiles/student.dir/depend
 	$(MAKE) -f bin/CMakeFiles/student.dir/build.make bin/CMakeFiles/student.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/lzc/桌面/cmake_practice/project/build/CMakeFiles --progress-num=7,8 "Built target student"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project/build/CMakeFiles --progress-num=7,8 "Built target student"
 .PHONY : bin/CMakeFiles/student.dir/all
 
 # Build rule for subdir invocation for target.
 bin/CMakeFiles/student.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/lzc/桌面/cmake_practice/project/build/CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project/build/CMakeFiles 2
 	$(MAKE) -f CMakeFiles/Makefile2 bin/CMakeFiles/student.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/lzc/桌面/cmake_practice/project/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project/build/CMakeFiles 0
 .PHONY : bin/CMakeFiles/student.dir/rule
 
 # Convenience name for target.
@@ -181,14 +181,14 @@ bin/CMakeFiles/student.dir/clean:
 bin/CMakeFiles/teacher.dir/all:
 	$(MAKE) -f bin/CMakeFiles/teacher.dir/build.make bin/CMakeFiles/teacher.dir/depend
 	$(MAKE) -f bin/CMakeFiles/teacher.dir/build.make bin/CMakeFiles/teacher.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/lzc/桌面/cmake_practice/project/build/CMakeFiles --progress-num=9,10 "Built target teacher"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project/build/CMakeFiles --progress-num=9,10 "Built target teacher"
 .PHONY : bin/CMakeFiles/teacher.dir/all
 
 # Build rule for subdir invocation for target.
 bin/CMakeFiles/teacher.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/lzc/桌面/cmake_practice/project/build/CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project/build/CMakeFiles 2
 	$(MAKE) -f CMakeFiles/Makefile2 bin/CMakeFiles/teacher.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/lzc/桌面/cmake_practice/project/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project/build/CMakeFiles 0
 .PHONY : bin/CMakeFiles/teacher.dir/rule
 
 # Convenience name for target.
@@ -205,20 +205,20 @@ bin/CMakeFiles/teacher.dir/clean:
 # Target rules for target bin/CMakeFiles/main.dir
 
 # All Build rule for target.
-bin/CMakeFiles/main.dir/all: bin/CMakeFiles/orderFile.dir/all
 bin/CMakeFiles/main.dir/all: bin/CMakeFiles/manager.dir/all
 bin/CMakeFiles/main.dir/all: bin/CMakeFiles/student.dir/all
 bin/CMakeFiles/main.dir/all: bin/CMakeFiles/teacher.dir/all
+bin/CMakeFiles/main.dir/all: bin/CMakeFiles/orderFile.dir/all
 	$(MAKE) -f bin/CMakeFiles/main.dir/build.make bin/CMakeFiles/main.dir/depend
 	$(MAKE) -f bin/CMakeFiles/main.dir/build.make bin/CMakeFiles/main.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/lzc/桌面/cmake_practice/project/build/CMakeFiles --progress-num=1,2 "Built target main"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project/build/CMakeFiles --progress-num=1,2 "Built target main"
 .PHONY : bin/CMakeFiles/main.dir/all
 
 # Build rule for subdir invocation for target.
 bin/CMakeFiles/main.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/lzc/桌面/cmake_practice/project/build/CMakeFiles 10
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project/build/CMakeFiles 10
 	$(MAKE) -f CMakeFiles/Makefile2 bin/CMakeFiles/main.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/lzc/桌面/cmake_practice/project/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project/build/CMakeFiles 0
 .PHONY : bin/CMakeFiles/main.dir/rule
 
 # Convenience name for target.

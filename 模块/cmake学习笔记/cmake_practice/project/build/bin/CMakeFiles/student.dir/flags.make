@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_FLAGS = -fPIC  
 
-CXX_DEFINES = -DCMAKE_INSTALL_PREFIX=\"/home/lzc/桌面/cmake_practice/project/install\" -Dstudent_EXPORTS
+CXX_DEFINES = -DCMAKE_INSTALL_PREFIX=\"/home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project/install\" -Dstudent_EXPORTS
 
 CXX_INCLUDES = 
 
