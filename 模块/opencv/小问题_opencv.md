@@ -7,4 +7,8 @@
 1. [Opencv 中 waitkey（）& 0xFF，“0xFF”的作用解释](https://blog.csdn.net/hao5119266/article/details/104173400)
 2. [用python opencv 调用摄像头之if cv2.waitKey(1) & 0xFF == ord('q')分析](https://blog.csdn.net/weixin_42480593/article/details/82751180)
 
-注意：如果imshow()函数后没有跟waitKey()，则无法正常显示视频流内容。详细解释见文章[OpenCV： imshow后不加waitkey无法显示视频](https://www.cnblogs.com/kissfu/p/3608016.html)
+注意：如果imshow()函数后没有跟waitKey()，则无法正常显示视频流内容。详细解释见文章[OpenCV： imshow后不加waitkey无法显示视频](https://www.cnblogs.com/kissfu/p/3608016.html)。还有一个问题，如果在 `cv2.waitKey(1) & 0xFF == ord('q')`前没有`imshow()`的窗口操作的话，按q不能达到跳出循环的目的
+
+## 2. cv2.VideoWriter()详解
+1. 函数详解见文章[python opencv写视频——cv2.VideoWriter()](https://blog.csdn.net/mao_hui_fei/article/details/107573021)
+2. 有关视频的基本知识见文章[视频基本知识](https://blog.csdn.net/weixin_36670529/article/details/100977537)
