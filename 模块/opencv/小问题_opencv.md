@@ -18,3 +18,6 @@
 
 ## 4.opencv显示图像方式
 opencv读取和显示彩色图像的顺序为b,g,r。而Matplotlib显示图像的顺序为r,g,b。注意区别
+
+## 5. opencv旋转图像方法
+见文章[使用OpenCV进行图像旋转和平移](https://blog.csdn.net/weixin_38346042/article/details/122595084)
