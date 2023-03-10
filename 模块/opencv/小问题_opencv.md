@@ -12,3 +12,9 @@
 ## 2. cv2.VideoWriter()详解
 1. 函数详解见文章[python opencv写视频——cv2.VideoWriter()](https://blog.csdn.net/mao_hui_fei/article/details/107573021)
 2. 有关视频的基本知识见文章[视频基本知识](https://blog.csdn.net/weixin_36670529/article/details/100977537)
+
+## 3. np.zeros使用方法
+详见文章[np.zeros函数知识大全（numpy.zeros()）](https://blog.csdn.net/qq_39072607/article/details/89321495)
+
+## 4.opencv显示图像方式
+opencv读取和显示彩色图像的顺序为b,g,r。而Matplotlib显示图像的顺序为r,g,b。注意区别
