@@ -24,7 +24,7 @@ def process(image_name):
     show_img("target",img_big)
     
 
-    # 高斯滤波
+    # # 高斯滤波
     img_filtered = cv2.GaussianBlur(img_big, (3,3),0.3)
     show_img("target",img_filtered)
 
@@ -35,8 +35,8 @@ def process(image_name):
     img_canny = cv2.Canny(img_filtered,120,250)
     show_img("target",img_canny)
     # 二值化
-    ret, thres = cv2.threshold(img_canny,200,255,cv2.THRESH_BINARY_INV)
-    show_img("target",thres)
+    # ret, thres = cv2.threshold(img_canny,200,255,cv2.THRESH_BINARY_INV)
+    # show_img("target",thres)
 
 
     # # 膨胀
@@ -70,7 +70,7 @@ def process(image_name):
     # cv2.imshow("target",img_big)
     # cv2.waitKey(0)
 
-    result = thres
+    result = img_canny
     return result
 if __name__ == "__main__":
 
