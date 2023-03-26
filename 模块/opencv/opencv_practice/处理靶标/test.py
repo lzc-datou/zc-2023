@@ -127,6 +127,6 @@ if __name__ == "__main__":
     img_list = os.listdir(image_path)
     for img_name in img_list:
         # result
-        res = rotate_target(image_path + img_name)
+        res = rotate_target_1(image_path + img_name)
         # cv2.imwrite("./processed/" + img_name, res)
         
