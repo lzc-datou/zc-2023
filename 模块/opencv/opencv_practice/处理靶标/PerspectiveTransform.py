@@ -9,34 +9,35 @@ def show_img(img_name):
     cv2.imshow("target",img_name)
     cv2.waitKey(0)
 # 输入要求：yolov5框出的完整靶标图片
-def rotate_target_1(target_img):
-    target = target_img.copy()
+def rotate_target(img_name):
+    target = cv2.imread(img_name ,cv2.IMREAD_GRAYSCALE)
+    
     # 创建核
     kernal = np.ones((2,2),np.uint8)
     # 腐蚀
-    target = cv2.erode(target,kernal,iterations=1)
-    cv2.imshow("target",target)
+    img_erode = cv2.erode(target,kernal,iterations=1)
+    cv2.imshow("target",img_erode)
+    cv2.waitKey(0)
     # 膨胀
-    target = cv2.dilate(target,kernal, iterations=1)
+    target = cv2.dilate(img_erode,kernal, iterations=1)
     cv2.imshow("target",target)
     cv2.waitKey(0)
     #边缘检测
-    target = cv2.Canny(target,120,200)
-    show_img(target)
-    # 获取图像总面积
-    img_area = target.shape[0] * target.shape[1]
+    canny_img = cv2.Canny(target,120,200)
+    show_img(canny_img)
+    img_area = canny_img.shape[0] * canny_img.shape[1]
     print("img_area = ",img_area)
 
     # 创建空白图片绘制外轮廓
     im_test = np.zeros(target.shape,dtype=np.float32)
 
     # 寻找最大面积轮廓和数字底板外轮廓
-    contours, __ = cv2.findContours(target, cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+    contours, hierarchy = cv2.findContours(canny_img, cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
     areas = []
     for c in range(len(contours)):
         area = cv2.contourArea(contours[c])
         
-
+        print("area = ",area) # 测试用
 
         areas.append(area)
     max_id = areas.index(max(areas))
@@ -68,11 +69,11 @@ def rotate_target_1(target_img):
     # 绘制最小外接矩形
     min_rect = cv2.minAreaRect(contours[max_id])
     numBoard_rect = cv2.minAreaRect(contours[numBoard_id])
+    numBoard_box = cv2.boxPoints(numBoard_rect)
+    numBoard_box = np.int32(numBoard_box)
     # 获取最小外接矩形的四个角点 其中x坐标最小的点为第0个，以顺时针依次排序
     min_box = cv2.boxPoints(min_rect)
     min_box = np.int32(min_box)
-    numBoard_box = cv2.boxPoints(numBoard_rect)
-    numBoard_box = np.int32(numBoard_box)
     # 找外轮廓角点
     corners = cv2.goodFeaturesToTrack(im_test, 9, 0.1, 20)
     for point in corners:
@@ -81,14 +82,17 @@ def rotate_target_1(target_img):
         for i in range(4):
             if abs(x - min_box[i][0]) <=10 and abs(y - min_box[i][1]) <=10:
                 box_index.append(i)
+                print(i) # 测试用
+        
+        cv2.circle(im_test,(x,y),3,[255,0,0],5) # 测试用
+
+    
     cv2.drawContours(im_test,[min_box],0,255,2) 
     cv2.drawContours(im_test,[numBoard_box],0,255,2) 
-    cv2.imshow("target",im_test)
-    cv2.waitKey(10)
+    show_img(im_test)  # 测试用
     # 如果重合角点不是两个，直接弃用
     if len(box_index) != 2:
-        print("same point less than 2")
-        return False
+        return
     # 外接矩形宽  数据类型:double  转成int32使用
     width = np.int32(numBoard_rect[1][0])
     # 外接矩形高
@@ -117,7 +121,10 @@ def rotate_target_1(target_img):
     #透视变换转正靶标
     transformMat = cv2.getPerspectiveTransform(src,dst)  # source 和 destination  原图片和目标图片
     transform_img = cv2.warpPerspective(target,transformMat,(short_side,long_side))
-    cv2.imwrite("./processed/",transform_img)
+    show_img(transform_img)
+
+    print("max_area/img_area = ",max_area/img_area)
+    print("numBoard_area/max_area = ",numBoard_area/max_area)
 
     return transform_img
 if __name__ == "__main__":
