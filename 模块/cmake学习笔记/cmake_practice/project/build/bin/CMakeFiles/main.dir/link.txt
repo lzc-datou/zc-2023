@@ -1,1 +1,1 @@
-/usr/bin/c++    -rdynamic CMakeFiles/main.dir/computerReservation.cpp.o  -o main  -Wl,-rpath,/home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project/install/lib ../lib/libstudent.so ../lib/libteacher.so ../lib/libmanager.so ../lib/liborderFile.so 
+/usr/bin/c++ -rdynamic CMakeFiles/main.dir/computerReservation.cpp.o -o main  -Wl,-rpath,/home/lzc/lzc-doc/模块/cmake学习笔记/cmake_practice/project/install/lib ../lib/libstudent.so ../lib/libteacher.so ../lib/libmanager.so ../lib/liborderFile.so 

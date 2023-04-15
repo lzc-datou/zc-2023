@@ -17,3 +17,11 @@ def f():
 
 a, __ = f()  # a接收第一个返回值，第二个返回值被丢弃
 ```
+## pip3安装失败的问题
+报错一堆红字
+```
+raise packaging.version.InvalidVersion(f"{str(ex)} {info}") from None
+pkg_resources.extern.packaging.version.InvalidVersion: Invalid version: '0.23ubuntu1' (package: distro-info)
+```
+错误原因：setuptools版本过高，卸载后重新安装低版本即可。
+详见文章[【linux】报错pkg_resources.extern.packaging.version.InvalidVersion: Invalid version: ‘0.23ubuntu1’](https://blog.csdn.net/weixin_44244190/article/details/128863818)

@@ -2,6 +2,7 @@ file(REMOVE_RECURSE
   "../lib/libmanager.pdb"
   "../lib/libmanager.so"
   "CMakeFiles/manager.dir/Manager.cpp.o"
+  "CMakeFiles/manager.dir/Manager.cpp.o.d"
 )
 
 # Per-language clean rules from dependency scanning.

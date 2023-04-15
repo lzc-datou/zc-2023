@@ -1,1 +1,1 @@
-/usr/bin/c++ -fPIC   -shared -Wl,-soname,libteacher.so -o ../lib/libteacher.so CMakeFiles/teacher.dir/Teacher.cpp.o  -Wl,-rpath,/home/lzc/lzc-zc-2023/模块/cmake学习笔记/cmake_practice/project/install/lib 
+/usr/bin/c++ -fPIC -shared -Wl,-soname,libteacher.so -o ../lib/libteacher.so CMakeFiles/teacher.dir/Teacher.cpp.o  -Wl,-rpath,/home/lzc/lzc-doc/模块/cmake学习笔记/cmake_practice/project/install/lib 
