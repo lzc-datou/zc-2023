@@ -8,11 +8,16 @@ import os
 import numpy as np
 import sys
 import signal
+def show_img(windows_name,img_name):
+    cv2.imshow(windows_name,img_name)
+    cv2.waitKey(1)
+# 定义类：识别单个数字
 class RecoNum:
+
     # 使用LetNet5神经网络模型
     model = LetNet5()
     # 训练好的权重路径
-    weight_path = "./model_5_100.pth"
+    weight_path = "./best.pth"
 
     # 如果有cuda，就用cuda，否则使用cpu
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -22,20 +27,9 @@ class RecoNum:
         # 加载该权重到模型
         self.model.load_state_dict(torch.load(self.weight_path,map_location=self.device))
         pass
-   # 识别数字 recognize number
-    def reco_num(self,num_img):
-        # 把图片变成可以在网络中传递的变量
-        transf = torchvision.transforms.ToTensor() # 实例化类
-        num_img = transf(num_img) # 变成张量
-        num_img = Variable(num_img) # 使之可求梯度
-        
-        # 获得网络输出，注意：网络输出不直接是数字
-        outputs = self.model(num_img)
-        # 将网络输出变成具体数字
-        predicted = torch.max(outputs.data, 1)[1]
-        num = int(predicted)
-        return num
-    def rotate_target_1(self,Ori_target):
+    def rotate_target(self,Ori_target:cv2.Mat):
+        '直接透视变换转正数字底板。返回值有两种情况，返回(原图，False)和返回(转正图，True)'
+
         # 中间处理时不对原图操作，对原图的操作只有最后的转正   Ori_target表示 Origin target
         # 拷贝一份副本进行操作
         target = Ori_target.copy()
@@ -47,15 +41,15 @@ class RecoNum:
         kernal = np.ones((2,2),np.uint8)
         # 膨胀
         target = cv2.dilate(target,kernal, iterations=2)
-        show_img("dilate",target)
+        # show_img("dilate",target) # 测试用
         # 腐蚀
-        target = cv2.erode(target,kernal,iterations=erode_iter)
-        show_img("erode",target)
+        target = cv2.erode(target,kernal,iterations=1)
+        # show_img("erode",target) # 测试用
     
         
         #边缘检测
         target = cv2.Canny(target,120,200)
-        show_img("canny_img",target)
+        # show_img("canny_img",target) # 测试用
 
         img_area = target.shape[0] * target.shape[1]
         # print("img_area = ",img_area)
@@ -71,12 +65,17 @@ class RecoNum:
             # print("area = ",area) # 测试用
 
             areas.append(area)
-        max_id = areas.index(max(areas))
-        max_area = max(areas)
+        
+        if len(areas) != 0:
+            max_id = areas.index(max(areas))
+            max_area = max(areas)
+        else:
+            return Ori_target,False
+        
         # 判断最大外轮廓是否合理
         if max_area/img_area < 0.2:
             # print("max_area not find")
-            return None
+            return Ori_target,False
         # 获取数字底板外轮廓
         areas_copy = areas.copy()
         while(True):
@@ -85,7 +84,7 @@ class RecoNum:
                 areas_copy.remove(numBoard_area)
             elif numBoard_area < 0.1*max_area:
                 # print("number_board not find")
-                return None
+                return Ori_target,False
             else:
                 numBoard_id = areas.index(numBoard_area)
                 break
@@ -124,7 +123,7 @@ class RecoNum:
         # 如果重合角点不是两个，直接弃用
         if len(box_index) != 2:
             # print("same point less than 2")
-            return None
+            return Ori_target,False
         # 外接矩形宽  数据类型:double  转成int32使用
         width = np.int32(numBoard_rect[1][0])
         # 外接矩形高
@@ -152,64 +151,164 @@ class RecoNum:
         #透视变换转正靶标
         transformMat = cv2.getPerspectiveTransform(src,dst)  # source 和 destination  原图片和目标图片
         transform_img = cv2.warpPerspective(Ori_target,transformMat,(side_len,side_len))
-        show_img("transform_img",transform_img)
+        # show_img("transform_img",transform_img)
 
         # print("max_area/img_area = ",max_area/img_area)
         # print("numBoard_area/max_area = ",numBoard_area/max_area)
         if transform_img.shape[0] < 0.5*transform_img.shape[1]:
-            return None
+            return Ori_target,False
         else:
-            return transform_img
-    # 将正方形数字底板分成左右两份，分别送入网络识别
-    def split_num(self,transform_img):
+            return transform_img,True
+  
+    
+    def reco_num(self,num_img:cv2.Mat)->int:
+        '识别数字(recognize number) 。输入的图像为28*28的黑底白字图 '
+
+        # 把图片变成可以在网络中传递的变量
+        transf = torchvision.transforms.ToTensor() # 实例化类
+        num_img = transf(num_img) # 变成张量
+        num_img = Variable(num_img) # 使之可求梯度
+        
+        # 获得网络输出，注意：网络输出不直接是数字
+        outputs = self.model(num_img)
+        # 将网络输出变成具体数字
+        predicted = torch.max(outputs.data, 1)[1]
+        num = int(predicted)
+        return num
+
+    def split_num(self,transform_img:cv2.Mat):
+        '''函数功能:将正方形数字底板分成左右两份，分别送入网络识别'''
+
+        # 转成灰度图
         transform_img = cv2.cvtColor(transform_img,cv2.COLOR_RGB2GRAY)
         # 图片数组的列数
-        colomns = transform_img.shape[0]
-
-        left_num_img = transform_img[:,0:int(0.5*colomns)]
-        right_num_img = transform_img[:,int(0.5*colomns):colomns]
-        # 去除噪声，转换成黑底白字图片（网络训练的是黑底白字图片的识别）
-        left_num_img = self.process_num_img(left_num_img)
-        right_num_img = self.process_num_img(right_num_img)
+        columns = transform_img.shape[0]
+        # 将图片从中间分成两份
+        left_num_img = transform_img[:,0:int(0.5*columns)]
+        right_num_img = transform_img[:,int(0.5*columns):columns]
+        # 调整图片为28*28的黑底白字图
+        left_num_img = self.my_resize(left_num_img)
+        right_num_img = self.my_resize(right_num_img)
 
         return left_num_img,right_num_img
-    def process_num_img(self,num_img):
-        # 创建核
+    
+     
+    def my_resize(self,img:cv2.Mat):
+        '函数功能:将图片调整为28*28的黑底白字图(网络训练的是28*28黑底白字图片的识别)'
+        
+        # 直方图均衡
+        clahe = cv2.createCLAHE(clipLimit=3.0, tileGridSize=(2,2))
+        img = clahe.apply(img)
+
+
+
+
+        show_img("zhifangtu",img)
+        # 二值化，使得白底黑字变成黑底白字。使用OTSU二值化
+        __,img = cv2.threshold(img,0,255,cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
+        # img = cv2.adaptiveThreshold(img,125,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY_INV,9,0)
+        
+        # show_img("erzhihua",img) # 测试用
+
+        # 获取图片的行数（rows）和列数(columns)
+        r = img.shape[0]
+        c = img.shape[1]
+
+        # 截取图片，宽，高均取0.1-0.9范围，去除图片边缘的干扰。
+        img = img[int(0.1*r):int(0.9*r),int(0.1*c):int(0.9*c)]
+
+        # 这部分放缩重点是不能使得数字变形。单个数字图片高：宽=2：1，要把这个图片调整为一个1：1的正方形图片
+        # 获取图片高度与28的比值，等比例将原图放缩为高度为28的图片（此时宽度小于28）
+        ratio = img.shape[0] / 28
+        new_c = int(img.shape[1] / ratio) # 新的宽度
+        img = cv2.resize(img,(new_c,28))
+        # show_img("to_28_h",img) 测试用
+
+        # 根据新宽度与28的差值，将宽度扩展到28   int()函数向下取整
+        long = (28 - new_c)/2
+        if long % 1 != 0:
+            long_l = int(long)
+            long_r = int(long)+1
+        else:
+            long_l = int(long)
+            long_r = int(long)
+
+        # 使用0将图片两边扩展到28
+        img = cv2.copyMakeBorder(img,0,0,long_l,long_r,cv2.BORDER_CONSTANT,0)
+        # show_img("kuobian",img) # 测试用
+
+        # 腐蚀膨胀，消除一些噪声
         kernal = np.ones((2,2),np.uint8)
-        __,num_img = cv2.threshold(num_img,10,255,cv2.THRESH_BINARY_INV)
-         # resize大小
-        num_img = cv2.resize(num_img,(28,28),interpolation= cv2.INTER_CUBIC)
-        show_img("resize",num_img)
-      
-        # num_img = cv2.erode(num_img,kernal,iterations=1)
-        # num_img = cv2.dilate(num_img,kernal,iterations=1)
-        return num_img
+        img = cv2.erode(img,kernal,iterations=1)
+        img = cv2.dilate(img,kernal,iterations=1)
+        show_img("xingtai",img) #测试用
+
+        return img
     pass
+
 def process_img(img):
-    r = img.shape[0]
-    c = img.shape[1]
-    img = img[int(0.1*r):int(0.9*r),int(0.1*c):int(0.9*c)]
-    ratio = img.shape[0] / 28
-    new_c = int(img.shape[1] / ratio)
-    
-    img = cv2.resize(img,(new_c,28))
-    show_img("to_28_h",img)
-    long = (28 - new_c)/2
-    
-    if long % 1 != 0:
-        long_l = int(long)
-        long_r = int(long)+1
-    else:
-        long_l = int(long)
-        long_r = int(long)
-    img = cv2.copyMakeBorder(img,0,0,long_l,long_r,cv2.BORDER_CONSTANT,0)
-    show_img("kuobian",img)
-    kernal = np.ones((2,2),np.uint8)
-    img = cv2.morphologyEx(img,cv2.MORPH_OPEN,kernal)
-        #
-    show_img("xingtai",img)
+         # 二值化，使得白底黑字变成黑底白字
+        # __,img = cv2.threshold(img,0,255,cv2.THRESH_BINARY_INV+cv2.THRESH_OTSU)
+       
+        __,img = cv2.threshold(img,100,255,cv2.THRESH_BINARY_INV)
+        # show_img("erzhihua",img) # 测试用
 
+        # 获取图片的行数（rows）和列数(columns)
+        r = img.shape[0]
+        c = img.shape[1]
 
+        # 截取图片，宽，高均取0.1-0.9范围，去除图片边缘的干扰。
+        img = img[int(0.1*r):int(0.9*r),int(0.1*c):int(0.9*c)]
+
+        # 这部分放缩重点是不能使得数字变形。单个数字图片高：宽=2：1，要把这个图片调整为一个1：1的正方形图片
+        # 获取图片高度与28的比值，等比例将原图放缩为高度为28的图片（此时宽度小于28）
+        ratio = img.shape[0] / 28
+        new_c = int(img.shape[1] / ratio) # 新的宽度
+        img = cv2.resize(img,(new_c,28))
+        # show_img("to_28_h",img) 测试用
+
+        # 根据新宽度与28的差值，将宽度扩展到28   int()函数向下取整
+        long = (28 - new_c)/2
+        if long % 1 != 0:
+            long_l = int(long)
+            long_r = int(long)+1
+        else:
+            long_l = int(long)
+            long_r = int(long)
+
+        # 使用0将图片两边扩展到28
+        img = cv2.copyMakeBorder(img,0,0,long_l,long_r,cv2.BORDER_CONSTANT,0)
+        # show_img("kuobian",img) # 测试用
+
+        # 腐蚀膨胀，消除一些噪声
+        kernal = np.ones((2,2),np.uint8)
+        img = cv2.erode(img,kernal,iterations=1)
+        img = cv2.dilate(img,kernal,iterations=1)
+        show_img("xingtai",img) #测试用
+
+        return img
+    # r = img.shape[0]
+    # c = img.shape[1]
+    # img = img[int(0.1*r):int(0.9*r),int(0.1*c):int(0.9*c)]
+    # ratio = img.shape[0] / 28
+    # new_c = int(img.shape[1] / ratio)
+    
+    # img = cv2.resize(img,(new_c,28))
+    # show_img("to_28_h",img)
+    # long = (28 - new_c)/2
+    
+    # if long % 1 != 0:
+    #     long_l = int(long)
+    #     long_r = int(long)+1
+    # else:
+    #     long_l = int(long)
+    #     long_r = int(long)
+    # img = cv2.copyMakeBorder(img,0,0,long_l,long_r,cv2.BORDER_CONSTANT,0)
+    # show_img("kuobian",img)
+    # kernal = np.ones((2,2),np.uint8)
+    # img = cv2.morphologyEx(img,cv2.MORPH_OPEN,kernal)
+    #     #
+    # show_img("xingtai",img)
 
     # print("img_shape = ",img.shape)
     # long = int((28-img.shape[1])/2)
@@ -227,8 +326,8 @@ def process_img(img):
     # show_img("erode",img)
     # img = cv2.erode(img,dilate_kernel,iterations=1)
     # show_img("dialate",img)
-    return img
-    pass
+    # return img
+    # pass
 
 def show_img(name,img):
     cv2.imshow(name,img)
@@ -241,13 +340,17 @@ if __name__ == "__main__":
 
     for img_name in os.listdir("./images"):
         signal.signal(signal.SIGINT, quit) # 用于ctrl + c退出程序
-        img = cv2.imread("./images/" + img_name,cv2.IMREAD_GRAYSCALE)
+        img = cv2.imread("./images/" + img_name)
         # img = cv2.Canny(img,120,200)
-        show_img("Ori_img",img)
-        img = process_img(img)
         recoNum = RecoNum()
-        num = recoNum.reco_num(img)
-        print("num = ",num)
+        show_img("Ori_img",img)
+        left_num_img,right_num_img = recoNum.split_num(img)
+        
+        left_num = recoNum.reco_num(left_num_img)
+        right_num = recoNum.reco_num(right_num_img)
+        number = left_num*10+right_num
+
+        print("num = ",number)
 
        
         

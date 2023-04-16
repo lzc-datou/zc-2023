@@ -43,6 +43,7 @@ def call_back(boxs_and_image):
             # cv2.imwrite("./src/process_imgs/images/left_" + str(boxs_and_image.header.seq) + ".jpg",left_num_img)
             # cv2.imwrite("./src/process_imgs/images/right_" + str(boxs_and_image.header.seq) + ".jpg",right_num_img)
             show_img("cv_img",cv_image)
+            # cv2.imwrite("./src/process_imgs/images/transform_img_"+str(boxs_and_image.header.seq) + ".jpg",transform_img)
             show_img("transform_img",transform_img)
 
     pass
@@ -218,9 +219,10 @@ class RecoNum:
         transform_img = cv2.cvtColor(transform_img,cv2.COLOR_RGB2GRAY)
         # 图片数组的列数
         columns = transform_img.shape[0]
-        # 将图片从中间分成两份
-        left_num_img = transform_img[:,0:int(0.5*columns)]
-        right_num_img = transform_img[:,int(0.5*columns):columns]
+        rows = transform_img.shape[1]
+        # 将图片从中间分成两份,并做适量裁剪，去除边缘干扰  截取比例根据实际情况调整
+        left_num_img = transform_img[int(0.1*rows):int(0.9*rows),int(0.1*columns):int(0.5*columns)]
+        right_num_img = transform_img[int(0.1*rows):int(0.9*rows),int(0.5*columns):int(0.9*columns)]
         # 调整图片为28*28的黑底白字图
         left_num_img = self.my_resize(left_num_img)
         right_num_img = self.my_resize(right_num_img)
@@ -230,24 +232,27 @@ class RecoNum:
      
     def my_resize(self,img:cv2.Mat):
         '函数功能:将图片调整为28*28的黑底白字图(网络训练的是28*28黑底白字图片的识别)'
+        # 直方图均衡 实现图像增强
+        clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(2,2))
+        img = clahe.apply(img)
+        show_img("zengqiang_1",img)
+        # 二值化，使得白底黑字变成黑底白字。使用OTSU二值化
+        __,img = cv2.threshold(img,0,255,cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
+        show_img("erzhihua",img) # 测试用
 
-        # 二值化，使得白底黑字变成黑底白字
-        __,img = cv2.threshold(img,100,255,cv2.THRESH_BINARY_INV)
-        # show_img("erzhihua",img) # 测试用
-
-        # 获取图片的行数（rows）和列数(columns)
-        r = img.shape[0]
-        c = img.shape[1]
-
-        # 截取图片，宽，高均取0.1-0.9范围，去除图片边缘的干扰。
-        img = img[int(0.1*r):int(0.9*r),int(0.1*c):int(0.9*c)]
 
         # 这部分放缩重点是不能使得数字变形。单个数字图片高：宽=2：1，要把这个图片调整为一个1：1的正方形图片
         # 获取图片高度与28的比值，等比例将原图放缩为高度为28的图片（此时宽度小于28）
         ratio = img.shape[0] / 28
         new_c = int(img.shape[1] / ratio) # 新的宽度
-        img = cv2.resize(img,(new_c,28))
-        # show_img("to_28_h",img) 测试用
+        if ratio >=1:
+            # 缩小，使用下采样最合适的方法
+            img = cv2.resize(img,(new_c,28),cv2.INTER_AREA)
+            show_img("to_28_h",img) #测试用
+        else:
+            # 放大，使用上采样最合适的方法
+            img = cv2.resize(img,(new_c,28),cv2.INTER_LINEAR)
+            show_img("to_28_h",img) #测试用
 
         # 根据新宽度与28的差值，将宽度扩展到28   int()函数向下取整
         long = (28 - new_c)/2
@@ -267,7 +272,9 @@ class RecoNum:
         img = cv2.erode(img,kernal,iterations=1)
         img = cv2.dilate(img,kernal,iterations=1)
         show_img("xingtai",img) #测试用
-
+         # 直方图均衡 最后图像增强一波，再送入网络检测
+        img = clahe.apply(img)
+        show_img("zhifangtu_2",img)
         return img
     pass
 if __name__ == "__main__":
