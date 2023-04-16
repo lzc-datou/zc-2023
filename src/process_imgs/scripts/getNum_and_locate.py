@@ -228,8 +228,8 @@ class RecoNum:
         right_num_img = self.my_resize(right_num_img)
 
         return left_num_img,right_num_img
-    
-     
+        pass
+
     def my_resize(self,img:cv2.Mat):
         '函数功能:将图片调整为28*28的黑底白字图(网络训练的是28*28黑底白字图片的识别)'
         # 自适应均衡化图像 实现图像增强
@@ -274,6 +274,6 @@ class RecoNum:
     pass
 if __name__ == "__main__":
     
-    rospy.init_node("get_data")
+    rospy.init_node("num_and_location")
     rospy.Subscriber("/yolov5/Boundingboxs_and_image",Boundingboxs_and_image,call_back,queue_size=20)
     rospy.spin()

@@ -366,7 +366,7 @@ if __name__ == '__main__':
     # 初始化ros节点
     rospy.init_node("yolov5")
     # 定义发布对象    # 发布图片的对象  队列容量20（完全是随意定的）
-    pub_Boudingboxs_and_image = rospy.Publisher("/yolov5/Boundingboxs_and_image",Boundingboxs_and_image,queue_size=20)
+    pub_Boudingboxs_and_image = rospy.Publisher("yolov5/Boundingboxs_and_image",Boundingboxs_and_image,queue_size=20)
     # 定义数据对象
     boxs_and_image = Boundingboxs_and_image()
     # 初始序列号为0

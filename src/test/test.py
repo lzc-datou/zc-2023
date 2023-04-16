@@ -199,10 +199,6 @@ class RecoNum:
         # 直方图均衡
         clahe = cv2.createCLAHE(clipLimit=3.0, tileGridSize=(2,2))
         img = clahe.apply(img)
-
-
-
-
         show_img("zhifangtu",img)
         # 二值化，使得白底黑字变成黑底白字。使用OTSU二值化
         __,img = cv2.threshold(img,0,255,cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
