@@ -24,7 +24,7 @@ from torch.autograd import Variable
 # 测试：展示图片
 def show_img(windows_name,img_name):
     cv2.imshow(windows_name,img_name)
-    cv2.waitKey(1)
+    cv2.waitKey(5)
 # 测试： 接收图片并保存
 def call_back(boxs_and_image):
     bridge = CvBridge()
@@ -232,15 +232,13 @@ class RecoNum:
      
     def my_resize(self,img:cv2.Mat):
         '函数功能:将图片调整为28*28的黑底白字图(网络训练的是28*28黑底白字图片的识别)'
-        # 直方图均衡 实现图像增强
-        clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(2,2))
+        # 自适应均衡化图像 实现图像增强
+        clahe = cv2.createCLAHE(clipLimit=2, tileGridSize=(2,2))
         img = clahe.apply(img)
         show_img("zengqiang_1",img)
-        # 二值化，使得白底黑字变成黑底白字。使用OTSU二值化
+        # # 二值化，使得白底黑字变成黑底白字。使用OTSU二值化
         __,img = cv2.threshold(img,0,255,cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
         show_img("erzhihua",img) # 测试用
-
-
         # 这部分放缩重点是不能使得数字变形。单个数字图片高：宽=2：1，要把这个图片调整为一个1：1的正方形图片
         # 获取图片高度与28的比值，等比例将原图放缩为高度为28的图片（此时宽度小于28）
         ratio = img.shape[0] / 28
@@ -253,7 +251,7 @@ class RecoNum:
             # 放大，使用上采样最合适的方法
             img = cv2.resize(img,(new_c,28),cv2.INTER_LINEAR)
             show_img("to_28_h",img) #测试用
-
+        
         # 根据新宽度与28的差值，将宽度扩展到28   int()函数向下取整
         long = (28 - new_c)/2
         if long % 1 != 0:
@@ -272,9 +270,6 @@ class RecoNum:
         img = cv2.erode(img,kernal,iterations=1)
         img = cv2.dilate(img,kernal,iterations=1)
         show_img("xingtai",img) #测试用
-         # 直方图均衡 最后图像增强一波，再送入网络检测
-        img = clahe.apply(img)
-        show_img("zhifangtu_2",img)
         return img
     pass
 if __name__ == "__main__":
