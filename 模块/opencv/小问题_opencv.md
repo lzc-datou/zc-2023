@@ -22,5 +22,9 @@ opencv读取和显示彩色图像的顺序为b,g,r。而Matplotlib显示图像�
 ## 5. opencv旋转图像方法
 见文章[使用OpenCV进行图像旋转和平移](https://blog.csdn.net/weixin_38346042/article/details/122595084)
 
-## 5.opencv二值化方法汇总
+## 6.opencv二值化方法汇总
 见文章[python图像二值化方法汇总](https://cloud.tencent.com/developer/article/1722736)
+
+## cv2.solvepnp中世界坐标系的坐标采用什么单位
+你输入的单位是什么，最后返回的相对坐标的单位就是什么。用什么单位最后计算的结果也是什么单位。
+见[用solvepnp求距离和角度](https://www.jianshu.com/p/1bf329da535b)
