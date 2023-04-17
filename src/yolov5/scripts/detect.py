@@ -380,3 +380,4 @@ if __name__ == '__main__':
 
     # 在主函数中循环发布image 和 Bounding_boxs两条消息
     main(opt)
+   

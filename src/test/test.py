@@ -113,12 +113,12 @@ class RecoNum:
                     box_index.append(i)
                     # print(i) # 测试用
             
-        #     cv2.circle(im_test,(x,y),3,[255,0,0],5) # 测试用
+            cv2.circle(im_test,(x,y),3,[255,0,0],5) # 测试用
 
         
-        # cv2.drawContours(im_test,[min_box],0,255,2) 
-        # cv2.drawContours(im_test,[numBoard_box],0,255,2) 
-        # show_img("after draw",im_test)  # 测试用
+        cv2.drawContours(im_test,[min_box],0,255,2) 
+        cv2.drawContours(im_test,[numBoard_box],0,255,2) 
+        show_img("after draw",im_test)  # 测试用
 
         # 如果重合角点不是两个，直接弃用
         if len(box_index) != 2:
@@ -332,21 +332,37 @@ def show_img(name,img):
 def quit(signum, frame):
     print("Keyboard interruption by yourself")
     sys.exit(0)
+class Locate:
+    img_points = []
+    obj_points = []
+
+    cameraMatrix = []
+    distCoeffs = []
+    def get_imgPoints(self,Ori_point:list,min_box: list):
+        for point in min_box:
+            point[0] = point[0] + Ori_point[0] 
+            point[1] = point[1] + Ori_point[1]
+            self.img_points.append(point)
+        pass
+
+    pass
 if __name__ == "__main__":
-
-    for img_name in os.listdir("./images"):
-        signal.signal(signal.SIGINT, quit) # 用于ctrl + c退出程序
-        img = cv2.imread("./images/" + img_name)
-        # img = cv2.Canny(img,120,200)
-        recoNum = RecoNum()
-        show_img("Ori_img",img)
-        left_num_img,right_num_img = recoNum.split_num(img)
+    locate = Locate()
+    locate.get_imgPoints([10,20],[[1,2],[3,4],[5,6],[7,8]])
+    print(locate.img_points)
+    # for img_name in os.listdir("./images"):
+    #     signal.signal(signal.SIGINT, quit) # 用于ctrl + c退出程序
+    #     img = cv2.imread("./images/" + img_name)
+    #     # img = cv2.Canny(img,120,200)
+    #     recoNum = RecoNum()
+    #     show_img("Ori_img",img)
+    #     left_num_img,right_num_img = recoNum.split_num(img)
         
-        left_num = recoNum.reco_num(left_num_img)
-        right_num = recoNum.reco_num(right_num_img)
-        number = left_num*10+right_num
+    #     left_num = recoNum.reco_num(left_num_img)
+    #     right_num = recoNum.reco_num(right_num_img)
+    #     number = left_num*10+right_num
 
-        print("num = ",number)
+    #     print("num = ",number)
 
        
         
