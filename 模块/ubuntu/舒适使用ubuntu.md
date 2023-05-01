@@ -48,3 +48,7 @@ ubuntu支持同时打开多个工作区工作，切换流畅，方便舒适
 > `markdown pdf` 使用方法： 按`F1` 输入`export`即可选择导出的格式
 3. `office Viewer` 可以以纯阅读的模式打开markdown文件进行阅读（超强的功能），也可以将markdown文件转换成pdf，此扩展还使得vscode可以打开word,excel，pdf文件，还有其他一些小功能。（此扩展功能过多，为了有一个简洁的vscode，建议平时禁用，只在需要使用时启用）
 
+## 鱼香ROS官网
+1. 这个网站有一些宝藏，比如说最后一版免费的Typora（强烈建议下载使用）,ros教程等等,值得一看
+2. [鱼香ROS官网地址](http://fishros.com)
+

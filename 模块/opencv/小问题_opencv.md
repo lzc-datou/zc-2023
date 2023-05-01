@@ -25,6 +25,9 @@ opencv读取和显示彩色图像的顺序为b,g,r。而Matplotlib显示图像�
 ## 6.opencv二值化方法汇总
 见文章[python图像二值化方法汇总](https://cloud.tencent.com/developer/article/1722736)
 
-## cv2.solvepnp中世界坐标系的坐标采用什么单位
+## 7.cv2.solvepnp中世界坐标系的坐标采用什么单位
 你输入的单位是什么，最后返回的相对坐标的单位就是什么。用什么单位最后计算的结果也是什么单位。
 见[用solvepnp求距离和角度](https://www.jianshu.com/p/1bf329da535b)
+
+## 8.相机标定
+见[opencv教程](https://www.opencv.org.cn/opencvdoc/2.3.2/html/doc/tutorials/calib3d/table_of_content_calib3d/table_of_content_calib3d.html)
