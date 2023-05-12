@@ -17,6 +17,12 @@
 2. `apt`查找方法：`sudo apt list | grep 包名`或者 `apt search 包名`
 3. `pip`查找方法：`pip show 包名`
 4. `pip3`查找方法：`pip3 show 包名`
+    - pip安装指定版本的包： `pip install package==version` 
+    - pip安装指定版本范围的包： `pip install 'package>=version'`其中，`>=`换成`<=,<,>`均可以使用。注意：`>=`前后不能有空格，命令行的命令只有每个选项间有空格，其余部分均要求连续无空格
+  
+    |package|version|
+    |---    |---    |
+    |包名   |  版本号 |
 
 ## 3.安装ros包的方法
 可以使用apt直接安装，也可以使用ros的包管理器rosdep安装
