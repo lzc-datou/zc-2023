@@ -312,7 +312,8 @@ def parse_opt():
     # parser.add_argument('--weights', nargs='+', type=str, default='./src/yolov5/weights/last_3.pt', help='model path or triton URL')
     # parser.add_argument('--source', type=str, default='./src/yolov5/video/input/grass_num_11.mp4', help='file/dir/URL/glob/screen/0(webcam)')
     parser.add_argument('--weights', nargs='+', type=str, default='./src/yolov5/weights/best.pt', help='model path or triton URL')
-    parser.add_argument('--source', type=str, default=0, help='file/dir/URL/glob/screen/0(webcam)  path = "./src/yolov5/video/input/grass_num_7.mp4"')
+    # 打开usb摄像头 设置default=2
+    parser.add_argument('--source', type=str, default=2, help='file/dir/URL/glob/screen/0(webcam)  path = "./src/yolov5/video/input/grass_num_7.mp4"')
     #
     parser.add_argument('--data', type=str, default=ROOT / 'data/coco128.yaml', help='(optional) dataset.yaml path')
     parser.add_argument('--imgsz', '--img', '--img-size', nargs='+', type=int, default=[640], help='inference size h,w')
@@ -366,7 +367,7 @@ if __name__ == '__main__':
     # 初始化ros节点
     rospy.init_node("yolov5")
     # 定义发布对象    # 发布图片的对象  队列容量20（完全是随意定的）
-    pub_Boudingboxs_and_image = rospy.Publisher("/yolov5/Boundingboxs_and_image",Boundingboxs_and_image,queue_size=20)
+    pub_Boudingboxs_and_image = rospy.Publisher("yolov5/Boundingboxs_and_image",Boundingboxs_and_image,queue_size=20)
     # 定义数据对象
     boxs_and_image = Boundingboxs_and_image()
     # 初始序列号为0
@@ -380,3 +381,4 @@ if __name__ == '__main__':
 
     # 在主函数中循环发布image 和 Bounding_boxs两条消息
     main(opt)
+   

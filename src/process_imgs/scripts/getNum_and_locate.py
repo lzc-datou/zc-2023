@@ -20,32 +20,7 @@ import torch
 import torchvision
 from torch.autograd import Variable
 
-# 测试：展示图片
-def show_img(windows_name,img_name):
-    cv2.imshow(windows_name,img_name)
-    cv2.waitKey(5)
-# 测试： 接收图片并保存
-def call_back(boxs_and_image):
-    bridge = CvBridge()
-    reco = RecoNum()
-    for image in boxs_and_image.image_list:
-        cv_image = bridge.imgmsg_to_cv2(image,"bgr8")
-        flag,transform_img,min_box = reco.rotate_target(cv_image)
-        if flag == False:
-            continue
-        else:
-            left_num_img,right_num_img = reco.split_num(transform_img)
-            left_num = reco.reco_num(left_num_img)
-            right_num = reco.reco_num(right_num_img)
-            number = left_num *10 + right_num
-            print("num = ",number)
-            # cv2.imwrite("./src/process_imgs/images/left_" + str(boxs_and_image.header.seq) + ".jpg",left_num_img)
-            # cv2.imwrite("./src/process_imgs/images/right_" + str(boxs_and_image.header.seq) + ".jpg",right_num_img)
-            show_img("cv_img",cv_image)
-            # cv2.imwrite("./src/process_imgs/images/transform_img_"+str(boxs_and_image.header.seq) + ".jpg",transform_img)
-            show_img("transform_img",transform_img)
 
-    pass
 # 定义类：识别单个数字
 class RecoNum:
 
@@ -106,12 +81,12 @@ class RecoNum:
             max_id = areas.index(max(areas))
             max_area = max(areas)
         else:
-            return False,Ori_target,[]
+            return False,Ori_target,np.empty(0)
         
         # 判断最大外轮廓是否合理
         if max_area/img_area < 0.2:
             # print("max_area not find")
-            return False,Ori_target,[]
+            return False,Ori_target,np.empty(0)
         # 获取数字底板外轮廓
         areas_copy = areas.copy()
         while(True):
@@ -120,7 +95,7 @@ class RecoNum:
                 areas_copy.remove(numBoard_area)
             elif numBoard_area < 0.1*max_area:
                 # print("number_board not find")
-                return Ori_target,False,[]
+                return False,Ori_target,np.empty(0)
             else:
                 numBoard_id = areas.index(numBoard_area)
                 break
@@ -138,6 +113,7 @@ class RecoNum:
         numBoard_box = np.int32(numBoard_box)
         # 获取最小外接矩形的四个角点 其中x坐标最小的点为第0个，以顺时针依次排序
         min_box = cv2.boxPoints(min_rect)
+        
         min_box = np.int32(min_box)
         # 找外轮廓角点
         corners = cv2.goodFeaturesToTrack(im_test, 9, 0.01, 10)
@@ -150,8 +126,9 @@ class RecoNum:
                     # print(i) # 测试用
             
             cv2.circle(im_test,(x,y),3,[255,0,0],5) # 测试用
-        print(im_test.shape)
-        print(min_box)
+        # 测试用
+        # print(im_test.shape)
+        # print(min_box)
         cv2.drawContours(im_test,[min_box],0,255,2) 
         cv2.drawContours(im_test,[numBoard_box],0,255,2) 
         show_img("after draw",im_test)  # 测试用
@@ -159,7 +136,7 @@ class RecoNum:
         # 如果重合角点不是两个，直接弃用
         if len(box_index) != 2:
             # print("same point less than 2")
-            return False,Ori_target,[]
+            return False,Ori_target,np.empty(0)
         # 外接矩形宽  数据类型:double  转成int32使用
         width = np.int32(numBoard_rect[1][0])
         # 外接矩形高
@@ -192,10 +169,10 @@ class RecoNum:
         # print("max_area/img_area = ",max_area/img_area)
         # print("numBoard_area/max_area = ",numBoard_area/max_area)
         if transform_img.shape[0] < 0.5*transform_img.shape[1]:
-            return False,Ori_target,[]
+            return False,Ori_target,np.empty(0)
         else:
-            # 返回的min_box用于pnp算法定位
-            return True,transform_img,min_box
+            # 返回的src用于pnp算法定位
+            return True,transform_img,src
   
     
     def split_num(self,transform_img:cv2.Mat):
@@ -277,24 +254,100 @@ class RecoNum:
 class Locate:
     img_points = []
     # 根据靶标大小直接得出世界坐标系（以靶标正方形中心为原点）下靶标最小外接矩形的坐标
-    obj_points = [[-0.5,1.366,0],[0.5,1.366,0],[0.5,-0.5,0],[-0.5,-0.5,0]]
+    # obj_points = np.float32([[-0.5,1.366,0],[0.5,1.366,0],[0.5,-0.5,0],[-0.5,-0.5,0]]) # 最小外接矩形世界坐标
+    obj_points = np.float32([[-1,1,0],[1,1,0],[1,-1,0],[-1,-1,0]])
+    # 相机内参
+    cameraMatrix = np.float32([[755.74684643,   0. ,        453.27087484],
+ [  0.    ,     755.48113315, 298.77898827],
+ [  0.     ,      0.      ,     1.        ]])
+    # 相机畸变系数
+    distCoeffs = np.float32([ 0.00482361,  0.1217625 , -0.00093535 , 0.00044296, -0.40165563])
 
-    cameraMatrix = []
-    distCoeffs = []
-    def get_imgPoints(self,Ori_point:list,min_box: list):
-        '获取到图像坐标系下的坐标并将结果保存至self.img_points'
-        for point in min_box:
-            point[0] = point[0] + Ori_point[0] 
-            point[1] = point[1] + Ori_point[1]
+    def get_imgPoints(self,Ori_point,num_board):
+        '获取到图像坐标系下的坐标并将结果保存至self.img_points，成功获取则返回True，否则返回False'
+        # 如果数字底板坐标未获取到,即num_board为空，则返回False
+        if num_board.any() == False:
+            return False
+        # 清除上一次循环获取的图像坐标
+        self.img_points.clear()
+        for i in range(4):
+            point = [Ori_point[0] + num_board[i][0],Ori_point[1]+num_board[i][1]]
             self.img_points.append(point)
+        return True
+        
+    def get_xyz(self):
+        '获取相对坐标（靶标相对于相机）'
+        __,rvecs,tvecs,__=cv2.solvePnPRansac(self.obj_points,np.float32(self.img_points),self.cameraMatrix,self.distCoeffs)
+        # r,__ = cv2.Rodrigues(rvecs)
+        # 放置时相机朝向正下方，相机坐标系： x朝向相机平面右边，z朝向相机平面正前方，y朝向相机平面下方。
+        x = tvecs[0][0]
+        y = tvecs[1][0]
+        z = tvecs[2][0]
+        print(x,y,z)
+        return x,y,z
         pass
-
+        
+    pass
+class filter:
     pass
 
 
+# 测试： 接收图片并保存
+def call_back(boxs_and_image):
+    bridge = CvBridge()
+    reco = RecoNum()
+    locate = Locate()
+    for i in range(len(boxs_and_image.image_list)):
+        cv_image = bridge.imgmsg_to_cv2(boxs_and_image.image_list[i],"bgr8")
+        flag1,transform_img,num_board = reco.rotate_target(cv_image)
+        box = boxs_and_image.bounding_boxs[i]
+        # Ori_point = [[box.x1,box.y1],[box.x2,box.y1],[box.x1,box.y2],[box.x2,box.y2]]
+        Ori_point = [box.x1,box.y1]
+        flag2 = locate.get_imgPoints(Ori_point,num_board)
+        if flag1 == False:
+            continue
+        else:
+            left_num_img,right_num_img = reco.split_num(transform_img)
+            left_num = reco.reco_num(left_num_img)
+            right_num = reco.reco_num(right_num_img)
+            number = left_num *10 + right_num
+            print("num = ",number)
+            # cv2.imwrite("./src/process_imgs/images/left_" + str(boxs_and_image.header.seq) + ".jpg",left_num_img)
+            # cv2.imwrite("./src/process_imgs/images/right_" + str(boxs_and_image.header.seq) + ".jpg",right_num_img)
+            show_img("cv_img",cv_image)
+            # cv2.imwrite("./src/process_imgs/images/transform_img_"+str(boxs_and_image.header.seq) + ".jpg",transform_img)
+            show_img("transform_img",transform_img)
+        if flag2 == True:
+            locate.get_xyz()
+    # for image in boxs_and_image.image_list:
+    #     cv_image = bridge.imgmsg_to_cv2(image,"bgr8")
+    #     flag,transform_img,box = reco.rotate_target(cv_image)
+    #     if flag == False:
+    #         continue
+    #     else:
+    #         left_num_img,right_num_img = reco.split_num(transform_img)
+    #         left_num = reco.reco_num(left_num_img)
+    #         right_num = reco.reco_num(right_num_img)
+    #         number = left_num *10 + right_num
+    #         print("num = ",number)
+    #         # cv2.imwrite("./src/process_imgs/images/left_" + str(boxs_and_image.header.seq) + ".jpg",left_num_img)
+    #         # cv2.imwrite("./src/process_imgs/images/right_" + str(boxs_and_image.header.seq) + ".jpg",right_num_img)
+    #         show_img("cv_img",cv_image)
+    #         # cv2.imwrite("./src/process_imgs/images/transform_img_"+str(boxs_and_image.header.seq) + ".jpg",transform_img)
+    #         show_img("transform_img",transform_img)
+    # for box in boxs_and_image.bounding_boxs:
+    #     # Ori_point = [[box.x1,box.y1],[box.x2,box.y1],[box.x1,box.y2],[box.x2,box.y2]]
+    #     Ori_point = [box.x1,box.y1]
+    #     flag = locate.get_imgPoints(Ori_point,box)
+    #     if flag == True:
+    #         locate.get_xyz()
 
+    pass
+# 测试：展示图片
+def show_img(windows_name,img_name):
+    cv2.imshow(windows_name,img_name)
+    cv2.waitKey(5)
 if __name__ == "__main__":
-    
     rospy.init_node("num_and_location")
     rospy.Subscriber("/yolov5/Boundingboxs_and_image",Boundingboxs_and_image,call_back,queue_size=20)
     rospy.spin()
