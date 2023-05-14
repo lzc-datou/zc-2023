@@ -366,7 +366,43 @@
 
        
 import numpy as np
+import random
 
-a = 2.88061559e-01
-b = a+1
-print(a,b)
+class filter:
+    # 使用字典来存储识别到的各数字总数
+    num_dict = dict()
+    def num_dict_add(self,input_num):
+        for key in self.num_dict.keys():
+            if key == input_num:
+                # 该数字计数增加
+                self.num_dict[key] = self.num_dict[key] + 1
+                return True
+        # 如果字典里没有该数字，则添加该数字并且将其计数调为1
+        self.num_dict[input_num] = 1
+        return False
+            
+    # 获取出现次数最多的三个数字
+    def get_3_nums(self):
+        num_list = list()
+        for count in self.num_dict.values():
+            num_list.append(count)
+        # 对value值进行排序
+        num_list.sort(reverse=True)
+        # 通过排序后的value值找到对应的key值
+        num1 = list(self.num_dict.keys())[list(self.num_dict.values()).index(num_list[0])]
+        self.num_dict.pop(num1)
+        num2 = list(self.num_dict.keys())[list(self.num_dict.values()).index(num_list[1])]
+        self.num_dict.pop(num2)
+        num3 = list(self.num_dict.keys())[list(self.num_dict.values()).index(num_list[2])]
+        
+        return num1,num2,num3
+
+        pass
+        
+    pass
+f = filter()
+for times in range(100):
+    num = random.randint(0,5)
+    f.num_dict_add(num)
+print(f.num_dict)
+print(f.get_3_nums())

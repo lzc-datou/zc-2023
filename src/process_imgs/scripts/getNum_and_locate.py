@@ -264,7 +264,7 @@ class Locate:
     distCoeffs = np.float32([ 0.00482361,  0.1217625 , -0.00093535 , 0.00044296, -0.40165563])
 
     def get_imgPoints(self,Ori_point,num_board):
-        '获取到图像坐标系下的坐标并将结果保存至self.img_points，成功获取则返回True，否则返回False'
+        '函数功能：获取到图像坐标系下的坐标并将结果保存至self.img_points，成功获取则返回True，否则返回False'
         # 如果数字底板坐标未获取到,即num_board为空，则返回False
         if num_board.any() == False:
             return False
@@ -276,7 +276,7 @@ class Locate:
         return True
         
     def get_xyz(self):
-        '获取相对坐标（靶标相对于相机）'
+        '函数功能：获取相对坐标（靶标相对于相机）'
         __,rvecs,tvecs,__=cv2.solvePnPRansac(self.obj_points,np.float32(self.img_points),self.cameraMatrix,self.distCoeffs)
         # r,__ = cv2.Rodrigues(rvecs)
         # 放置时相机朝向正下方，相机坐标系： x朝向相机平面右边，z朝向相机平面正前方，y朝向相机平面下方。
@@ -289,6 +289,43 @@ class Locate:
         
     pass
 class filter:
+    # 使用字典来存储识别到的各数字总数
+    num_dict = dict()
+    def num_dict_add(self,input_num):
+        ''' 函数功能：将识别到的数字添加到字典中计数\n
+            输入：识别到的数字\n
+            输出：True,则该数字在字典中已存在，输出为False，则该数字在字典中还没存在\n
+        '''
+        for key in self.num_dict.keys():
+            if key == input_num:
+                # 该数字计数增加,返回true
+                self.num_dict[key] = self.num_dict[key] + 1
+                return True
+        # 如果字典里没有该数字，则添加该数字并且将其计数调为1，返回false
+        self.num_dict[input_num] = 1
+        return False
+    # 获取出现次数最多的三个数字
+    def get_3_nums(self):
+        ''' 函数功能：返回识别次数最多的三个数字（元组）\n
+            输入：无输入值\n
+            输出：三个数字（元组）
+        '''
+        num_list = list()
+        for count in self.num_dict.values():
+            num_list.append(count)
+        # 对value值进行排序
+        num_list.sort(reverse=True)
+        # 通过排序后的value值找到对应的key值
+        num1 = list(self.num_dict.keys())[list(self.num_dict.values()).index(num_list[0])]
+        self.num_dict.pop(num1) # 注意，一定要把已获取的key删除掉，避免两个key对应相同的value时通过value获取不到后一个key值
+        num2 = list(self.num_dict.keys())[list(self.num_dict.values()).index(num_list[1])]
+        self.num_dict.pop(num2)
+        num3 = list(self.num_dict.keys())[list(self.num_dict.values()).index(num_list[2])]
+        
+        return num1,num2,num3
+
+        pass
+        
     pass
 
 
