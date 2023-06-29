@@ -19,7 +19,10 @@ from LetNet import LetNet5
 import torch
 import torchvision
 from torch.autograd import Variable
+import math
 
+CONSTANTS_RADIUS_OF_EARTH = 6371000.     # meters (m)
+'''地球半径，相对坐标转化为gps坐标时使用'''
 
 # 定义类：识别单个数字
 class RecoNum:
@@ -255,7 +258,7 @@ class Locate:
     img_points = []
     # 根据靶标大小直接得出世界坐标系（以靶标正方形中心为原点）下靶标最小外接矩形的坐标
     # obj_points = np.float32([[-0.5,1.366,0],[0.5,1.366,0],[0.5,-0.5,0],[-0.5,-0.5,0]]) # 最小外接矩形世界坐标
-    obj_points = np.float32([[-1,1,0],[1,1,0],[1,-1,0],[-1,-1,0]])
+    obj_points = np.float32([[-1,1,0],[1,1,0],[1,-1,0],[-1,-1,0]])  #
     # 相机内参
     cameraMatrix = np.float32([[755.74684643,   0. ,        453.27087484],
  [  0.    ,     755.48113315, 298.77898827],
@@ -280,13 +283,66 @@ class Locate:
         __,rvecs,tvecs,__=cv2.solvePnPRansac(self.obj_points,np.float32(self.img_points),self.cameraMatrix,self.distCoeffs)
         # r,__ = cv2.Rodrigues(rvecs)
         # 放置时相机朝向正下方，相机坐标系： x朝向相机平面右边，z朝向相机平面正前方，y朝向相机平面下方。
+        # 偏航角：飞机机头与正北方向夹角（0-360°），向东顺时针转动为正
+        # 俯仰角：-180°——+180°，机头仰起为正，低头为负
+        # 滚转角：-180°——+180°，向右转为正，向左为负
         x = tvecs[0][0]
         y = tvecs[1][0]
         z = tvecs[2][0]
         print(x,y,z)
         return x,y,z
+    
+    def rotate_xyz(self,x,y,z,roll,pitch,yaw):
+        '''
+        函数功能：将pnp算法获取到的相对坐标系通过旋转变换为X轴正方向为北，Y轴正方向为东的直角坐标系\n
+        参数说明：\n
+        x,y,z:分别是pnp算法获取到的靶标在相机坐标系下的相对坐标x,y,z\n
+        roll:飞机的滚转角\n
+        pitch:飞机的俯仰角\n
+        yaw:飞机的偏航角\n
+
+        '''
+        rotated_x = 1
+        rotated_y = 2
+        # 订阅飞控gps坐标 gps_sub = rospy.Subscriber('/mavros/global_position/global', NavSatFix, gps_callback)
+        # 订阅飞控姿态信息（俯仰，偏航，滚转） attitude_sub = rospy.Subscriber('/mavros/local_position/pose', PoseStamped, attitude_callback)
+        return rotated_x,rotated_y
         pass
-        
+    def xy_to_gps(self,x, y, ref_lat, ref_lon):
+        '''
+        函数功能：将旋转变换后的相对坐标转化为靶标的GPS坐标\n
+        参数说明：\n
+        x:rotate_xyz函数返回的rotated_x值\n
+        y:rotate_xyz函数返回的rotated_y值\n
+        ref_lat:飞机自身的纬度\n
+        ref_lon:飞机自身的经度
+        '''
+        x_rad = float(x) / self.CONSTANTS_RADIUS_OF_EARTH
+        y_rad = float(y) / self.CONSTANTS_RADIUS_OF_EARTH
+        c = math.sqrt(x_rad * x_rad + y_rad * y_rad)
+
+        ref_lat_rad = math.radians(ref_lat)
+        ref_lon_rad = math.radians(ref_lon)
+
+        ref_sin_lat = math.sin(ref_lat_rad)
+        ref_cos_lat = math.cos(ref_lat_rad)
+
+        if abs(c) > 0:
+            sin_c = math.sin(c)
+            cos_c = math.cos(c)
+
+            lat_rad = math.asin(cos_c * ref_sin_lat + (x_rad * sin_c * ref_cos_lat) / c)
+            lon_rad = (ref_lon_rad + math.atan2(y_rad * sin_c, c * ref_cos_lat * cos_c - x_rad * ref_sin_lat * sin_c))
+
+            lat = math.degrees(lat_rad)
+            lon = math.degrees(lon_rad)
+
+        else:
+            lat = math.degrees(ref_lat)
+            lon = math.degrees(ref_lon)
+
+        return lat, lon
+
     pass
 class filter:
     # 使用字典来存储识别到的各数字总数
@@ -324,7 +380,7 @@ class filter:
         
         return num1,num2,num3
 
-        pass
+        
         
     pass
 
