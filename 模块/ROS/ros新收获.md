@@ -77,5 +77,31 @@ rospy.logerr("hello,error")  #默认红色字体
 
 ```
 
+## 7. roscd进入自己创建的包
+要使用roscd命令进入自己创建的ROS包，需要按照以下步骤操作：
+
+1. 首先，打开终端窗口。
+
+2. 输入以下命令来激活ROS环境：
+```
+source /opt/ros/<YOUR_ROS_VERSION>/setup.bash
+```
+请确保将 `<YOUR_ROS_VERSION>` 替换为你实际使用的ROS版本，例如 `melodic` 或 `noetic`。
+
+3. 输入以下命令进入ROS工作空间的根目录：
+```
+cd ~/catkin_ws
+```
+请根据你的ROS工作空间实际路径进行替换。
+
+4. 然后，你可以使用roscd命令进入自己创建的包。假设你的包名为`my_package`，输入以下命令：
+```
+roscd my_package
+```
+这会自动切换到你的包所在的目录。
+
+请注意，使用roscd命令需要先构建（编译）你的ROS包，确保在运行roscd之前，你的包已经被编译成功。如果你的包尚未编译，可以在ROS工作空间的根目录中执行`catkin_make`命令进行编译。
+
+
 
 
