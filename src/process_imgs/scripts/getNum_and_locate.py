@@ -20,13 +20,26 @@ import torch
 import torchvision
 from torch.autograd import Variable
 import math
-
+from message_filters import ApproximateTimeSynchronizer,Subscriber
+from sensor_msgs.msg import NavSatFix
+from mavros_msgs.msg import AttitudeTarget
+from tf.transformations import euler_from_quaternion
 CONSTANTS_RADIUS_OF_EARTH = 6371000.     # meters (m)
 '''地球半径，相对坐标转化为gps坐标时使用'''
 
-# 定义类：识别单个数字
+num_and_location = dict()
+'存储每个数字出现的次数及多次定位到的gps坐标'
+class Times_and_GPS:
+    '单个数字出现的次数和多次获取到的该数字的经纬度'
+    times = 0
+    '次数'
+    longitude = []
+    '经度列表'
+    latitude = []
+    '纬度列表'
+    pass
 class RecoNum:
-
+    '定义类：识别单个数字'
     # 使用LetNet5神经网络模型
     model = LetNet5()
     # 训练好的权重路径
@@ -34,6 +47,9 @@ class RecoNum:
 
     # 如果有cuda，就用cuda，否则使用cpu
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
+    print("LetNet5 device = ",device)
+
     # 构造函数传参：纯数字图片
     def __init__(self) -> None:
         # 加载该权重到模型
@@ -253,18 +269,35 @@ class RecoNum:
         num = int(predicted)
         return num
     pass
-# 定义类：定位，获取相对坐标
+
 class Locate:
+    '定义类：定位，获取相对坐标'
+    ref_longitude = 0.
+    '飞机的经度'
+    ref_latitude = 0.
+    '飞机的纬度'
+    ref_altitude = 0.
+    '飞机的海拔'
+    roll = 0.
+    '飞机滚转角'
+    pitch = 0.
+    '飞机俯仰角'
+    yaw = 0.
+    '飞机偏航角'
+
+
     img_points = []
     # 根据靶标大小直接得出世界坐标系（以靶标正方形中心为原点）下靶标最小外接矩形的坐标
     # obj_points = np.float32([[-0.5,1.366,0],[0.5,1.366,0],[0.5,-0.5,0],[-0.5,-0.5,0]]) # 最小外接矩形世界坐标
-    obj_points = np.float32([[-1,1,0],[1,1,0],[1,-1,0],[-1,-1,0]])  #
+
+    obj_points = np.float32([[-1,1,0],[1,1,0],[1,-1,0],[-1,-1,0]])  #目前参数为IR 1080P 18.0mm 1/2.7''相机的参数
     # 相机内参
-    cameraMatrix = np.float32([[755.74684643,   0. ,        453.27087484],
- [  0.    ,     755.48113315, 298.77898827],
+    cameraMatrix = np.float32([[1312.071067,   0. ,        446.061005
+],
+ [  0.    ,     1313.617388, 309.887004],
  [  0.     ,      0.      ,     1.        ]])
     # 相机畸变系数
-    distCoeffs = np.float32([ 0.00482361,  0.1217625 , -0.00093535 , 0.00044296, -0.40165563])
+    distCoeffs = np.float32([ -0.505909,  0.469929 , -0.021110 , -0.018548, 0])
 
     def get_imgPoints(self,Ori_point,num_board):
         '函数功能：获取到图像坐标系下的坐标并将结果保存至self.img_points，成功获取则返回True，否则返回False'
@@ -285,44 +318,84 @@ class Locate:
         # 放置时相机朝向正下方，相机坐标系： x朝向相机平面右边，z朝向相机平面正前方，y朝向相机平面下方。
         # 偏航角：飞机机头与正北方向夹角（0-360°），向东顺时针转动为正
         # 俯仰角：-180°——+180°，机头仰起为正，低头为负
-        # 滚转角：-180°——+180°，向右转为正，向左为负
+        # 滚转角：-90°——+90°，向右转为正，向左为负
         x = tvecs[0][0]
         y = tvecs[1][0]
         z = tvecs[2][0]
         print(x,y,z)
         return x,y,z
     
-    def rotate_xyz(self,x,y,z,roll,pitch,yaw):
+    def rotate_xyz(self,x,y,z):
         '''
         函数功能：将pnp算法获取到的相对坐标系通过旋转变换为X轴正方向为北，Y轴正方向为东的直角坐标系\n
+        放置时相机朝向正下方，相机坐标系： x朝向相机平面右边，z朝向相机平面正前方，y朝向相机平面下方。\n
         参数说明：\n
         x,y,z:分别是pnp算法获取到的靶标在相机坐标系下的相对坐标x,y,z\n
-        roll:飞机的滚转角\n
-        pitch:飞机的俯仰角\n
-        yaw:飞机的偏航角\n
+        self.roll:飞机的滚转角\n
+        self.pitch:飞机的俯仰角\n
+        self.yaw:飞机的偏航角\n
+        返回值：旋转过后的x,y,z坐标\n
+        说明：ros使用的世界坐标系均为北东地（对应XYZ轴）坐标系，不管是东北天还是北东地坐标系，导航坐标系->载体坐标系旋转顺序（即姿态角旋转顺序）均为偏航-俯仰-滚转(ZYX顺序为北东地，ZXY顺序为东北天)
 
         '''
-        rotated_x = 1
-        rotated_y = 2
-        # 订阅飞控gps坐标 gps_sub = rospy.Subscriber('/mavros/global_position/global', NavSatFix, gps_callback)
+         # 订阅飞控gps坐标 gps_sub = rospy.Subscriber('/mavros/global_position/global', NavSatFix, gps_callback)
         # 订阅飞控姿态信息（俯仰，偏航，滚转） attitude_sub = rospy.Subscriber('/mavros/local_position/pose', PoseStamped, attitude_callback)
-        return rotated_x,rotated_y
+
+
+        # 角度转弧度
+        roll = math.radians(self.roll)
+        pitch = math.radians(self.pitch)
+        # 绕偏航轴旋转时，由于相机坐标系与飞控坐标系的差别，所以需要多转0.5*pi
+        yaw = math.radians(self.yaw) + 0.5 * math.pi
+        
+        
+        # 绕滚转轴旋转
+        Rx = np.array(
+            [[math.cos(roll),0,math.sin(roll)],
+             [0,1,0],
+             [-math.sin(roll),0,math.cos(roll)]]
+            )
+        # 绕俯仰轴旋转
+        Ry = np.array(
+            [[1,0,0],
+             [0,math.cos(pitch),-math.sin(pitch)],
+             [0,math.sin(pitch),math.cos(pitch)]]
+            )
+        # 绕偏航轴旋转
+        Rz = np.array(
+            [[math.cos(yaw),-math.sin(yaw),0],
+             [math.sin(yaw),math.cos(yaw),0],
+             [0,0,1]]
+             )
+        R = np.dot(np.dot(Rx,Ry),Rz)
+        xyz = np.array(
+            [[x],
+             [y],
+             [z]]
+             )
+        rotated_xyz = np.dot(R,xyz)
+
+        rotated_x = rotated_xyz[0,0]
+        rotated_y = rotated_xyz[1,0]
+        rotated_z = rotated_xyz[2,0]
+       
+        return rotated_x,rotated_y,rotated_z
         pass
-    def xy_to_gps(self,x, y, ref_lat, ref_lon):
+    def xy_to_gps(self,x, y):
         '''
-        函数功能：将旋转变换后的相对坐标转化为靶标的GPS坐标\n
+        函数功能：将旋转变换后的相对坐标转化为靶标的GPS坐标。实质为北东地相对坐标系转gps坐标系\n
         参数说明：\n
         x:rotate_xyz函数返回的rotated_x值\n
         y:rotate_xyz函数返回的rotated_y值\n
-        ref_lat:飞机自身的纬度\n
-        ref_lon:飞机自身的经度
+        self.latitude:飞机自身的纬度\n
+        self.longitude:飞机自身的经度\n
         '''
         x_rad = float(x) / self.CONSTANTS_RADIUS_OF_EARTH
         y_rad = float(y) / self.CONSTANTS_RADIUS_OF_EARTH
         c = math.sqrt(x_rad * x_rad + y_rad * y_rad)
 
-        ref_lat_rad = math.radians(ref_lat)
-        ref_lon_rad = math.radians(ref_lon)
+        ref_lat_rad = math.radians(self.ref_latitude)
+        ref_lon_rad = math.radians(self.ref_longitude)
 
         ref_sin_lat = math.sin(ref_lat_rad)
         ref_cos_lat = math.cos(ref_lat_rad)
@@ -338,109 +411,161 @@ class Locate:
             lon = math.degrees(lon_rad)
 
         else:
-            lat = math.degrees(ref_lat)
-            lon = math.degrees(ref_lon)
+            lat = math.degrees(self.ref_latitude)
+            lon = math.degrees(self.ref_longitude)
 
         return lat, lon
 
     pass
-class filter:
-    # 使用字典来存储识别到的各数字总数
-    num_dict = dict()
-    def num_dict_add(self,input_num):
-        ''' 函数功能：将识别到的数字添加到字典中计数\n
-            输入：识别到的数字\n
-            输出：True,则该数字在字典中已存在，输出为False，则该数字在字典中还没存在\n
+class Filter:
+    '过滤器，执行全局变量num_and_location的相关操作'
+    def num_dict_add(self,input_num,longitude,latitude):
+        ''' 函数功能：将定位到的数字及其经纬度放入全局变量num_and_location中\n
+            input_num：识别到的数字\n
+            longitude:定位得到的数字靶标经度\n
+            latitude:定位得到的数字靶标纬度\n
+            返回值：True,则该数字在字典中已存在，输出为False，则该数字在字典中还没存在\n
         '''
-        for key in self.num_dict.keys():
+        global num_and_location
+        for key in num_and_location.keys():
             if key == input_num:
                 # 该数字计数增加,返回true
-                self.num_dict[key] = self.num_dict[key] + 1
+                num_and_location[key].times = num_and_location[key].times + 1
+                num_and_location[key].longitude.append(longitude)
+                num_and_location[key].latitude.append(latitude)
                 return True
-        # 如果字典里没有该数字，则添加该数字并且将其计数调为1，返回false
-        self.num_dict[input_num] = 1
+        # 如果字典里没有该数字，则添加该数字及其位置并且将其计数调为1，返回false
+        times_and_gps = Times_and_GPS()
+        times_and_gps.times = 1
+        times_and_gps.longitude.append(longitude)
+        times_and_gps.latitude.append(latitude)
+        num_and_location[input_num] = times_and_gps
         return False
-    # 获取出现次数最多的三个数字
     def get_3_nums(self):
-        ''' 函数功能：返回识别次数最多的三个数字（元组）\n
+        ''' 函数功能：获取出现次数最多的三个数字及其多次定位的经纬度平均值\n
             输入：无输入值\n
-            输出：三个数字（元组）
+            返回值：三个数字及其对应的经纬度平均值（字典），具体结构为{num:[longitude,latitude]}
         '''
+        global num_and_location
         num_list = list()
-        for count in self.num_dict.values():
+        for value in num_and_location.values():
+            count = value.times
             num_list.append(count)
-        # 对value值进行排序
+        # 对times值进行排序
         num_list.sort(reverse=True)
-        # 通过排序后的value值找到对应的key值
-        num1 = list(self.num_dict.keys())[list(self.num_dict.values()).index(num_list[0])]
-        self.num_dict.pop(num1) # 注意，一定要把已获取的key删除掉，避免两个key对应相同的value时通过value获取不到后一个key值
-        num2 = list(self.num_dict.keys())[list(self.num_dict.values()).index(num_list[1])]
-        self.num_dict.pop(num2)
-        num3 = list(self.num_dict.keys())[list(self.num_dict.values()).index(num_list[2])]
-        
-        return num1,num2,num3
+        # 通过排序后的times值找到对应的key值,并对出现次数最多的三个数字的经纬度值进行处理
+        num1 = self.times_to_key(num_list[0],num_and_location)
+        # 处理经纬度列表数据
+        num1_longitude = self.data_process(num_and_location[num1].longitude)
+        num1_latitude = self.data_process(num_and_location[num1].latitude)
+        num_and_location.pop(num1) # 注意，一定要把已获取的key删除掉，避免两个key对应相同的value时通过value获取不到后一个key值
 
+        num2 = self.times_to_key(num_list[1],num_and_location)
+        num2_longitude = self.data_process(num_and_location[num2].longitude)
+        num2_latitude = self.data_process(num_and_location[num2].latitude)
+        num_and_location.pop(num2)
+
+        num3 = self.times_to_key(num_list[2],num_and_location)
+        num3_longitude = self.data_process(num_and_location[num3].longitude)
+        num3_latitude = self.data_process(num_and_location[num3].latitude)
+
+        num_gps = {num1:[num1_longitude,num1_latitude],num2:[num2_longitude,num2_latitude],num3:[num3_longitude,num3_latitude]}
         
-        
+        return num_gps
+    def times_to_key(self,times,num_and_location):
+        '''
+        说明：此函数配合get_3_nums()使用\n
+        函数功能：在字典中根据出现的次数找到对应数字\n
+        times:出现的次数\n
+        num_and_location:全局变量，存储每个数字出现的次数及多次定位到的gps坐标\n
+        返回值：与该出现次数匹配的数字值（key值），获取失败则返回False\n
+        '''
+        for key,value in num_and_location.items():
+            if value.times == times:
+                return key
+
+        else:
+            print("times to key failure")
+            return False
+    def data_process(self,data):
+        '''
+        函数功能：处理定位得到的经纬度数据,目前处理方法暂时为求所有数据平均值\n
+        '''
+        mean_value = sum(data)/len(data)
+        return mean_value
     pass
 
 
 # 测试： 接收图片并保存
-def call_back(boxs_and_image):
-    bridge = CvBridge()
-    reco = RecoNum()
-    locate = Locate()
-    for i in range(len(boxs_and_image.image_list)):
-        cv_image = bridge.imgmsg_to_cv2(boxs_and_image.image_list[i],"bgr8")
-        flag1,transform_img,num_board = reco.rotate_target(cv_image)
-        box = boxs_and_image.bounding_boxs[i]
-        # Ori_point = [[box.x1,box.y1],[box.x2,box.y1],[box.x1,box.y2],[box.x2,box.y2]]
-        Ori_point = [box.x1,box.y1]
-        flag2 = locate.get_imgPoints(Ori_point,num_board)
-        if flag1 == False:
-            continue
-        else:
-            left_num_img,right_num_img = reco.split_num(transform_img)
-            left_num = reco.reco_num(left_num_img)
-            right_num = reco.reco_num(right_num_img)
-            number = left_num *10 + right_num
-            print("num = ",number)
-            # cv2.imwrite("./src/process_imgs/images/left_" + str(boxs_and_image.header.seq) + ".jpg",left_num_img)
-            # cv2.imwrite("./src/process_imgs/images/right_" + str(boxs_and_image.header.seq) + ".jpg",right_num_img)
-            show_img("cv_img",cv_image)
-            # cv2.imwrite("./src/process_imgs/images/transform_img_"+str(boxs_and_image.header.seq) + ".jpg",transform_img)
-            show_img("transform_img",transform_img)
-        if flag2 == True:
-            locate.get_xyz()
-    # for image in boxs_and_image.image_list:
-    #     cv_image = bridge.imgmsg_to_cv2(image,"bgr8")
-    #     flag,transform_img,box = reco.rotate_target(cv_image)
-    #     if flag == False:
-    #         continue
-    #     else:
-    #         left_num_img,right_num_img = reco.split_num(transform_img)
-    #         left_num = reco.reco_num(left_num_img)
-    #         right_num = reco.reco_num(right_num_img)
-    #         number = left_num *10 + right_num
-    #         print("num = ",number)
-    #         # cv2.imwrite("./src/process_imgs/images/left_" + str(boxs_and_image.header.seq) + ".jpg",left_num_img)
-    #         # cv2.imwrite("./src/process_imgs/images/right_" + str(boxs_and_image.header.seq) + ".jpg",right_num_img)
-    #         show_img("cv_img",cv_image)
-    #         # cv2.imwrite("./src/process_imgs/images/transform_img_"+str(boxs_and_image.header.seq) + ".jpg",transform_img)
-    #         show_img("transform_img",transform_img)
-    # for box in boxs_and_image.bounding_boxs:
-    #     # Ori_point = [[box.x1,box.y1],[box.x2,box.y1],[box.x1,box.y2],[box.x2,box.y2]]
-    #     Ori_point = [box.x1,box.y1]
-    #     flag = locate.get_imgPoints(Ori_point,box)
-    #     if flag == True:
-    #         locate.get_xyz()
+# def call_back(boxs_and_image):
+#     bridge = CvBridge()
+#     reco = RecoNum()
+#     locate = Locate()
+#     for i in range(len(boxs_and_image.image_list)):
+#         cv_image = bridge.imgmsg_to_cv2(boxs_and_image.image_list[i],"bgr8")
+#         flag1,transform_img,num_board = reco.rotate_target(cv_image)
+#         box = boxs_and_image.bounding_boxs[i]
+#         # Ori_point = [[box.x1,box.y1],[box.x2,box.y1],[box.x1,box.y2],[box.x2,box.y2]]
+#         Ori_point = [box.x1,box.y1]
+#         flag2 = locate.get_imgPoints(Ori_point,num_board)
+#         if flag1 == False:
+#             continue
+#         else:
+#             left_num_img,right_num_img = reco.split_num(transform_img)
+#             left_num = reco.reco_num(left_num_img)
+#             right_num = reco.reco_num(right_num_img)
+#             number = left_num *10 + right_num
+#             print("num = ",number)
+#             # cv2.imwrite("./src/process_imgs/images/left_" + str(boxs_and_image.header.seq) + ".jpg",left_num_img)
+#             # cv2.imwrite("./src/process_imgs/images/right_" + str(boxs_and_image.header.seq) + ".jpg",right_num_img)
+#             show_img("cv_img",cv_image)
+#             # cv2.imwrite("./src/process_imgs/images/transform_img_"+str(boxs_and_image.header.seq) + ".jpg",transform_img)
+#             show_img("transform_img",transform_img)
+#         if flag2 == True:
+#             locate.get_xyz()
+#     pass
 
-    pass
 # 测试：展示图片
 def show_img(windows_name,img_name):
     cv2.imshow(windows_name,img_name)
     cv2.waitKey(5)
+# 生成对象
+reco = RecoNum()
+locate = Locate()
+filter = Filter()
+
+def ts_callback(msg1,msg2,msg3):
+    global locate
+    locate.ref_longitude = msg2.longitude
+    locate.ref_latitude = msg2.latitude
+    locate.ref_altitude = msg2.altitude
+    
+    # 四元数转姿态角
+    quaternion = (
+        msg3.orientation.x,
+        msg3.orientation.y,
+        msg3.orientation.z,
+        msg3.orientation.w
+                  )
+    locate.roll,locate.pitch,locate.yaw = euler_from_quaternion(quaternion)
+
+
+
 if __name__ == "__main__":
+    # 初始化ros节点
     rospy.init_node("num_and_location")
-    rospy.Subscriber("/yolov5/Boundingboxs_and_image",Boundingboxs_and_image,call_back,queue_size=20)
-    rospy.spin()
+
+    
+    # rospy.Subscriber("/yolov5/Boundingboxs_and_image",Boundingboxs_and_image,call_back,queue_size=20) # 测试用，可删除
+    # 订阅飞控gps坐标 gps_sub = rospy.Subscriber('/mavros/global_position/global', NavSatFix, gps_callback)
+    # 订阅飞控姿态信息（俯仰，偏航，滚转） attitude_sub = rospy.Subscriber('/mavros/local_position/pose', PoseStamped, attitude_callback)
+
+    # 创建消息订阅者
+    box_sub = Subscriber("/yolov5/Boundingboxs_and_image",Boundingboxs_and_image)
+    gps_sub = Subscriber('/mavros/global_position/global',NavSatFix)
+    pose_sub = Subscriber('/mavros/imu/data', AttitudeTarget)
+
+    # 创建时间同步器
+    ts = ApproximateTimeSynchronizer([box_sub,gps_sub,pose_sub],queue_size=10,slop=time_error)
+
+    # 注册回调函数
