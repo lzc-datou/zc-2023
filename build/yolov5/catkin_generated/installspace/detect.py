@@ -239,6 +239,10 @@ def run(
 
                 # 给数据打上时间戳并标明序列号
                 boxs_and_image.header.stamp = rospy.Time.now()
+                # # 测试用
+                # boxs_and_image.header.stamp.secs = 0
+                # boxs_and_image.header.stamp.nsecs = 0
+
                 boxs_and_image.header.seq = boxs_and_image.header.seq + 1
                 boxs_and_image.header.frame_id = "camera"
 
@@ -313,7 +317,7 @@ def parse_opt():
     # parser.add_argument('--source', type=str, default='./src/yolov5/video/input/grass_num_11.mp4', help='file/dir/URL/glob/screen/0(webcam)')
     parser.add_argument('--weights', nargs='+', type=str, default='./src/yolov5/weights/best.pt', help='model path or triton URL')
     # 打开usb摄像头 设置default=2
-    parser.add_argument('--source', type=str, default=2, help='file/dir/URL/glob/screen/0(webcam)  path = "./src/yolov5/video/input/grass_num_7.mp4"')
+    parser.add_argument('--source', type=str, default=0, help='file/dir/URL/glob/screen/0(webcam)  path = "./src/yolov5/video/input/grass_num_7.mp4"')
     #
     parser.add_argument('--data', type=str, default=ROOT / 'data/coco128.yaml', help='(optional) dataset.yaml path')
     parser.add_argument('--imgsz', '--img', '--img-size', nargs='+', type=int, default=[640], help='inference size h,w')

@@ -46,6 +46,8 @@ if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/my_msgs/msg" TYPE FILE FILES
     "/home/lzc/lzc-code/src/my_msgs/msg/Bounding_box.msg"
     "/home/lzc/lzc-code/src/my_msgs/msg/Boundingboxs_and_image.msg"
+    "/home/lzc/lzc-code/src/my_msgs/msg/Signal.msg"
+    "/home/lzc/lzc-code/src/my_msgs/msg/Median_gps.msg"
     )
 endif()
 

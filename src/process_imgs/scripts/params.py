@@ -2,7 +2,7 @@
 # 本文件用于保存getNum_and_locate.py程序中的参数，便于在不同的环境下进行调参
 # 自定义变量均为小写，库自带变量一般均为全大写
 
-
+locate_error = 0.1
 time_error = 0.1
 '时间同步器允许的时间误差范围'
 # rotate_target()函数转正靶标时的相关参数  

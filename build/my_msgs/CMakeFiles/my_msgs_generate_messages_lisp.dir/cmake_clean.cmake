@@ -1,6 +1,8 @@
 file(REMOVE_RECURSE
   "/home/lzc/lzc-code/devel/share/common-lisp/ros/my_msgs/msg/Bounding_box.lisp"
   "/home/lzc/lzc-code/devel/share/common-lisp/ros/my_msgs/msg/Boundingboxs_and_image.lisp"
+  "/home/lzc/lzc-code/devel/share/common-lisp/ros/my_msgs/msg/Median_gps.lisp"
+  "/home/lzc/lzc-code/devel/share/common-lisp/ros/my_msgs/msg/Signal.lisp"
   "CMakeFiles/my_msgs_generate_messages_lisp"
 )
 

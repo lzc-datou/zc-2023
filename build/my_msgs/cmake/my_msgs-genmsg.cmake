@@ -1,6 +1,6 @@
 # generated from genmsg/cmake/pkg-genmsg.cmake.em
 
-message(STATUS "my_msgs: 2 messages, 0 services")
+message(STATUS "my_msgs: 4 messages, 0 services")
 
 set(MSG_I_FLAGS "-Imy_msgs:/home/lzc/lzc-code/src/my_msgs/msg;-Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg;-Isensor_msgs:/opt/ros/noetic/share/sensor_msgs/cmake/../msg;-Igeometry_msgs:/opt/ros/noetic/share/geometry_msgs/cmake/../msg")
 
@@ -24,7 +24,17 @@ add_custom_target(_my_msgs_generate_messages_check_deps_${_filename}
 
 get_filename_component(_filename "/home/lzc/lzc-code/src/my_msgs/msg/Boundingboxs_and_image.msg" NAME_WE)
 add_custom_target(_my_msgs_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "my_msgs" "/home/lzc/lzc-code/src/my_msgs/msg/Boundingboxs_and_image.msg" "sensor_msgs/Image:my_msgs/Bounding_box:std_msgs/Header"
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "my_msgs" "/home/lzc/lzc-code/src/my_msgs/msg/Boundingboxs_and_image.msg" "sensor_msgs/Image:std_msgs/Header:my_msgs/Bounding_box"
+)
+
+get_filename_component(_filename "/home/lzc/lzc-code/src/my_msgs/msg/Signal.msg" NAME_WE)
+add_custom_target(_my_msgs_generate_messages_check_deps_${_filename}
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "my_msgs" "/home/lzc/lzc-code/src/my_msgs/msg/Signal.msg" "std_msgs/Header"
+)
+
+get_filename_component(_filename "/home/lzc/lzc-code/src/my_msgs/msg/Median_gps.msg" NAME_WE)
+add_custom_target(_my_msgs_generate_messages_check_deps_${_filename}
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "my_msgs" "/home/lzc/lzc-code/src/my_msgs/msg/Median_gps.msg" ""
 )
 
 #
@@ -42,7 +52,19 @@ _generate_msg_cpp(my_msgs
 _generate_msg_cpp(my_msgs
   "/home/lzc/lzc-code/src/my_msgs/msg/Boundingboxs_and_image.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/sensor_msgs/cmake/../msg/Image.msg;/home/lzc/lzc-code/src/my_msgs/msg/Bounding_box.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg"
+  "/opt/ros/noetic/share/sensor_msgs/cmake/../msg/Image.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/home/lzc/lzc-code/src/my_msgs/msg/Bounding_box.msg"
+  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/my_msgs
+)
+_generate_msg_cpp(my_msgs
+  "/home/lzc/lzc-code/src/my_msgs/msg/Signal.msg"
+  "${MSG_I_FLAGS}"
+  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg"
+  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/my_msgs
+)
+_generate_msg_cpp(my_msgs
+  "/home/lzc/lzc-code/src/my_msgs/msg/Median_gps.msg"
+  "${MSG_I_FLAGS}"
+  ""
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/my_msgs
 )
 
@@ -64,6 +86,10 @@ get_filename_component(_filename "/home/lzc/lzc-code/src/my_msgs/msg/Bounding_bo
 add_dependencies(my_msgs_generate_messages_cpp _my_msgs_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/lzc/lzc-code/src/my_msgs/msg/Boundingboxs_and_image.msg" NAME_WE)
 add_dependencies(my_msgs_generate_messages_cpp _my_msgs_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/lzc/lzc-code/src/my_msgs/msg/Signal.msg" NAME_WE)
+add_dependencies(my_msgs_generate_messages_cpp _my_msgs_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/lzc/lzc-code/src/my_msgs/msg/Median_gps.msg" NAME_WE)
+add_dependencies(my_msgs_generate_messages_cpp _my_msgs_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
 add_custom_target(my_msgs_gencpp)
@@ -83,7 +109,19 @@ _generate_msg_eus(my_msgs
 _generate_msg_eus(my_msgs
   "/home/lzc/lzc-code/src/my_msgs/msg/Boundingboxs_and_image.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/sensor_msgs/cmake/../msg/Image.msg;/home/lzc/lzc-code/src/my_msgs/msg/Bounding_box.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg"
+  "/opt/ros/noetic/share/sensor_msgs/cmake/../msg/Image.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/home/lzc/lzc-code/src/my_msgs/msg/Bounding_box.msg"
+  ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/my_msgs
+)
+_generate_msg_eus(my_msgs
+  "/home/lzc/lzc-code/src/my_msgs/msg/Signal.msg"
+  "${MSG_I_FLAGS}"
+  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg"
+  ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/my_msgs
+)
+_generate_msg_eus(my_msgs
+  "/home/lzc/lzc-code/src/my_msgs/msg/Median_gps.msg"
+  "${MSG_I_FLAGS}"
+  ""
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/my_msgs
 )
 
@@ -105,6 +143,10 @@ get_filename_component(_filename "/home/lzc/lzc-code/src/my_msgs/msg/Bounding_bo
 add_dependencies(my_msgs_generate_messages_eus _my_msgs_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/lzc/lzc-code/src/my_msgs/msg/Boundingboxs_and_image.msg" NAME_WE)
 add_dependencies(my_msgs_generate_messages_eus _my_msgs_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/lzc/lzc-code/src/my_msgs/msg/Signal.msg" NAME_WE)
+add_dependencies(my_msgs_generate_messages_eus _my_msgs_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/lzc/lzc-code/src/my_msgs/msg/Median_gps.msg" NAME_WE)
+add_dependencies(my_msgs_generate_messages_eus _my_msgs_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
 add_custom_target(my_msgs_geneus)
@@ -124,7 +166,19 @@ _generate_msg_lisp(my_msgs
 _generate_msg_lisp(my_msgs
   "/home/lzc/lzc-code/src/my_msgs/msg/Boundingboxs_and_image.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/sensor_msgs/cmake/../msg/Image.msg;/home/lzc/lzc-code/src/my_msgs/msg/Bounding_box.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg"
+  "/opt/ros/noetic/share/sensor_msgs/cmake/../msg/Image.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/home/lzc/lzc-code/src/my_msgs/msg/Bounding_box.msg"
+  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/my_msgs
+)
+_generate_msg_lisp(my_msgs
+  "/home/lzc/lzc-code/src/my_msgs/msg/Signal.msg"
+  "${MSG_I_FLAGS}"
+  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg"
+  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/my_msgs
+)
+_generate_msg_lisp(my_msgs
+  "/home/lzc/lzc-code/src/my_msgs/msg/Median_gps.msg"
+  "${MSG_I_FLAGS}"
+  ""
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/my_msgs
 )
 
@@ -146,6 +200,10 @@ get_filename_component(_filename "/home/lzc/lzc-code/src/my_msgs/msg/Bounding_bo
 add_dependencies(my_msgs_generate_messages_lisp _my_msgs_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/lzc/lzc-code/src/my_msgs/msg/Boundingboxs_and_image.msg" NAME_WE)
 add_dependencies(my_msgs_generate_messages_lisp _my_msgs_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/lzc/lzc-code/src/my_msgs/msg/Signal.msg" NAME_WE)
+add_dependencies(my_msgs_generate_messages_lisp _my_msgs_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/lzc/lzc-code/src/my_msgs/msg/Median_gps.msg" NAME_WE)
+add_dependencies(my_msgs_generate_messages_lisp _my_msgs_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
 add_custom_target(my_msgs_genlisp)
@@ -165,7 +223,19 @@ _generate_msg_nodejs(my_msgs
 _generate_msg_nodejs(my_msgs
   "/home/lzc/lzc-code/src/my_msgs/msg/Boundingboxs_and_image.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/sensor_msgs/cmake/../msg/Image.msg;/home/lzc/lzc-code/src/my_msgs/msg/Bounding_box.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg"
+  "/opt/ros/noetic/share/sensor_msgs/cmake/../msg/Image.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/home/lzc/lzc-code/src/my_msgs/msg/Bounding_box.msg"
+  ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/my_msgs
+)
+_generate_msg_nodejs(my_msgs
+  "/home/lzc/lzc-code/src/my_msgs/msg/Signal.msg"
+  "${MSG_I_FLAGS}"
+  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg"
+  ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/my_msgs
+)
+_generate_msg_nodejs(my_msgs
+  "/home/lzc/lzc-code/src/my_msgs/msg/Median_gps.msg"
+  "${MSG_I_FLAGS}"
+  ""
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/my_msgs
 )
 
@@ -187,6 +257,10 @@ get_filename_component(_filename "/home/lzc/lzc-code/src/my_msgs/msg/Bounding_bo
 add_dependencies(my_msgs_generate_messages_nodejs _my_msgs_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/lzc/lzc-code/src/my_msgs/msg/Boundingboxs_and_image.msg" NAME_WE)
 add_dependencies(my_msgs_generate_messages_nodejs _my_msgs_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/lzc/lzc-code/src/my_msgs/msg/Signal.msg" NAME_WE)
+add_dependencies(my_msgs_generate_messages_nodejs _my_msgs_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/lzc/lzc-code/src/my_msgs/msg/Median_gps.msg" NAME_WE)
+add_dependencies(my_msgs_generate_messages_nodejs _my_msgs_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
 add_custom_target(my_msgs_gennodejs)
@@ -206,7 +280,19 @@ _generate_msg_py(my_msgs
 _generate_msg_py(my_msgs
   "/home/lzc/lzc-code/src/my_msgs/msg/Boundingboxs_and_image.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/sensor_msgs/cmake/../msg/Image.msg;/home/lzc/lzc-code/src/my_msgs/msg/Bounding_box.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg"
+  "/opt/ros/noetic/share/sensor_msgs/cmake/../msg/Image.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/home/lzc/lzc-code/src/my_msgs/msg/Bounding_box.msg"
+  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/my_msgs
+)
+_generate_msg_py(my_msgs
+  "/home/lzc/lzc-code/src/my_msgs/msg/Signal.msg"
+  "${MSG_I_FLAGS}"
+  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg"
+  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/my_msgs
+)
+_generate_msg_py(my_msgs
+  "/home/lzc/lzc-code/src/my_msgs/msg/Median_gps.msg"
+  "${MSG_I_FLAGS}"
+  ""
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/my_msgs
 )
 
@@ -227,6 +313,10 @@ add_dependencies(my_msgs_generate_messages my_msgs_generate_messages_py)
 get_filename_component(_filename "/home/lzc/lzc-code/src/my_msgs/msg/Bounding_box.msg" NAME_WE)
 add_dependencies(my_msgs_generate_messages_py _my_msgs_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/lzc/lzc-code/src/my_msgs/msg/Boundingboxs_and_image.msg" NAME_WE)
+add_dependencies(my_msgs_generate_messages_py _my_msgs_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/lzc/lzc-code/src/my_msgs/msg/Signal.msg" NAME_WE)
+add_dependencies(my_msgs_generate_messages_py _my_msgs_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/lzc/lzc-code/src/my_msgs/msg/Median_gps.msg" NAME_WE)
 add_dependencies(my_msgs_generate_messages_py _my_msgs_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility

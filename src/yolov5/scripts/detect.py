@@ -239,6 +239,10 @@ def run(
 
                 # 给数据打上时间戳并标明序列号
                 boxs_and_image.header.stamp = rospy.Time.now()
+                # # 测试用
+                # boxs_and_image.header.stamp.secs = 0
+                # boxs_and_image.header.stamp.nsecs = 0
+
                 boxs_and_image.header.seq = boxs_and_image.header.seq + 1
                 boxs_and_image.header.frame_id = "camera"
 

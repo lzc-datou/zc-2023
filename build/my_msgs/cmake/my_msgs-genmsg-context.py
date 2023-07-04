@@ -1,6 +1,6 @@
 # generated from genmsg/cmake/pkg-genmsg.context.in
 
-messages_str = "/home/lzc/lzc-code/src/my_msgs/msg/Bounding_box.msg;/home/lzc/lzc-code/src/my_msgs/msg/Boundingboxs_and_image.msg"
+messages_str = "/home/lzc/lzc-code/src/my_msgs/msg/Bounding_box.msg;/home/lzc/lzc-code/src/my_msgs/msg/Boundingboxs_and_image.msg;/home/lzc/lzc-code/src/my_msgs/msg/Signal.msg;/home/lzc/lzc-code/src/my_msgs/msg/Median_gps.msg"
 services_str = ""
 pkg_name = "my_msgs"
 dependencies_str = "std_msgs;sensor_msgs"

@@ -54,6 +54,8 @@ add_message_files(
   FILES
   Bounding_box.msg
   Boundingboxs_and_image.msg
+  Signal.msg
+  Median_gps.msg
 )
 
 ## Generate services in the 'srv' folder

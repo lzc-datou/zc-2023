@@ -137,6 +137,7 @@ if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
   include("/home/lzc/lzc-code/build/gtest/cmake_install.cmake")
   include("/home/lzc/lzc-code/build/my_msgs/cmake_install.cmake")
+  include("/home/lzc/lzc-code/build/test/cmake_install.cmake")
   include("/home/lzc/lzc-code/build/process_imgs/cmake_install.cmake")
   include("/home/lzc/lzc-code/build/yolov5/cmake_install.cmake")
 

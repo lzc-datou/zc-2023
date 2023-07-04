@@ -68,6 +68,8 @@ include my_msgs/CMakeFiles/my_msgs_generate_messages_nodejs.dir/progress.make
 
 my_msgs/CMakeFiles/my_msgs_generate_messages_nodejs: /home/lzc/lzc-code/devel/share/gennodejs/ros/my_msgs/msg/Bounding_box.js
 my_msgs/CMakeFiles/my_msgs_generate_messages_nodejs: /home/lzc/lzc-code/devel/share/gennodejs/ros/my_msgs/msg/Boundingboxs_and_image.js
+my_msgs/CMakeFiles/my_msgs_generate_messages_nodejs: /home/lzc/lzc-code/devel/share/gennodejs/ros/my_msgs/msg/Signal.js
+my_msgs/CMakeFiles/my_msgs_generate_messages_nodejs: /home/lzc/lzc-code/devel/share/gennodejs/ros/my_msgs/msg/Median_gps.js
 
 /home/lzc/lzc-code/devel/share/gennodejs/ros/my_msgs/msg/Bounding_box.js: /opt/ros/noetic/lib/gennodejs/gen_nodejs.py
 /home/lzc/lzc-code/devel/share/gennodejs/ros/my_msgs/msg/Bounding_box.js: /home/lzc/lzc-code/src/my_msgs/msg/Bounding_box.msg
@@ -77,14 +79,27 @@ my_msgs/CMakeFiles/my_msgs_generate_messages_nodejs: /home/lzc/lzc-code/devel/sh
 /home/lzc/lzc-code/devel/share/gennodejs/ros/my_msgs/msg/Boundingboxs_and_image.js: /opt/ros/noetic/lib/gennodejs/gen_nodejs.py
 /home/lzc/lzc-code/devel/share/gennodejs/ros/my_msgs/msg/Boundingboxs_and_image.js: /home/lzc/lzc-code/src/my_msgs/msg/Boundingboxs_and_image.msg
 /home/lzc/lzc-code/devel/share/gennodejs/ros/my_msgs/msg/Boundingboxs_and_image.js: /opt/ros/noetic/share/sensor_msgs/msg/Image.msg
-/home/lzc/lzc-code/devel/share/gennodejs/ros/my_msgs/msg/Boundingboxs_and_image.js: /home/lzc/lzc-code/src/my_msgs/msg/Bounding_box.msg
 /home/lzc/lzc-code/devel/share/gennodejs/ros/my_msgs/msg/Boundingboxs_and_image.js: /opt/ros/noetic/share/std_msgs/msg/Header.msg
+/home/lzc/lzc-code/devel/share/gennodejs/ros/my_msgs/msg/Boundingboxs_and_image.js: /home/lzc/lzc-code/src/my_msgs/msg/Bounding_box.msg
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/lzc/lzc-code/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Generating Javascript code from my_msgs/Boundingboxs_and_image.msg"
 	cd /home/lzc/lzc-code/build/my_msgs && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/gennodejs/cmake/../../../lib/gennodejs/gen_nodejs.py /home/lzc/lzc-code/src/my_msgs/msg/Boundingboxs_and_image.msg -Imy_msgs:/home/lzc/lzc-code/src/my_msgs/msg -Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg -Isensor_msgs:/opt/ros/noetic/share/sensor_msgs/cmake/../msg -Igeometry_msgs:/opt/ros/noetic/share/geometry_msgs/cmake/../msg -p my_msgs -o /home/lzc/lzc-code/devel/share/gennodejs/ros/my_msgs/msg
+
+/home/lzc/lzc-code/devel/share/gennodejs/ros/my_msgs/msg/Median_gps.js: /opt/ros/noetic/lib/gennodejs/gen_nodejs.py
+/home/lzc/lzc-code/devel/share/gennodejs/ros/my_msgs/msg/Median_gps.js: /home/lzc/lzc-code/src/my_msgs/msg/Median_gps.msg
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/lzc/lzc-code/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Generating Javascript code from my_msgs/Median_gps.msg"
+	cd /home/lzc/lzc-code/build/my_msgs && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/gennodejs/cmake/../../../lib/gennodejs/gen_nodejs.py /home/lzc/lzc-code/src/my_msgs/msg/Median_gps.msg -Imy_msgs:/home/lzc/lzc-code/src/my_msgs/msg -Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg -Isensor_msgs:/opt/ros/noetic/share/sensor_msgs/cmake/../msg -Igeometry_msgs:/opt/ros/noetic/share/geometry_msgs/cmake/../msg -p my_msgs -o /home/lzc/lzc-code/devel/share/gennodejs/ros/my_msgs/msg
+
+/home/lzc/lzc-code/devel/share/gennodejs/ros/my_msgs/msg/Signal.js: /opt/ros/noetic/lib/gennodejs/gen_nodejs.py
+/home/lzc/lzc-code/devel/share/gennodejs/ros/my_msgs/msg/Signal.js: /home/lzc/lzc-code/src/my_msgs/msg/Signal.msg
+/home/lzc/lzc-code/devel/share/gennodejs/ros/my_msgs/msg/Signal.js: /opt/ros/noetic/share/std_msgs/msg/Header.msg
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/lzc/lzc-code/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Generating Javascript code from my_msgs/Signal.msg"
+	cd /home/lzc/lzc-code/build/my_msgs && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/gennodejs/cmake/../../../lib/gennodejs/gen_nodejs.py /home/lzc/lzc-code/src/my_msgs/msg/Signal.msg -Imy_msgs:/home/lzc/lzc-code/src/my_msgs/msg -Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg -Isensor_msgs:/opt/ros/noetic/share/sensor_msgs/cmake/../msg -Igeometry_msgs:/opt/ros/noetic/share/geometry_msgs/cmake/../msg -p my_msgs -o /home/lzc/lzc-code/devel/share/gennodejs/ros/my_msgs/msg
 
 my_msgs_generate_messages_nodejs: my_msgs/CMakeFiles/my_msgs_generate_messages_nodejs
 my_msgs_generate_messages_nodejs: /home/lzc/lzc-code/devel/share/gennodejs/ros/my_msgs/msg/Bounding_box.js
 my_msgs_generate_messages_nodejs: /home/lzc/lzc-code/devel/share/gennodejs/ros/my_msgs/msg/Boundingboxs_and_image.js
+my_msgs_generate_messages_nodejs: /home/lzc/lzc-code/devel/share/gennodejs/ros/my_msgs/msg/Median_gps.js
+my_msgs_generate_messages_nodejs: /home/lzc/lzc-code/devel/share/gennodejs/ros/my_msgs/msg/Signal.js
 my_msgs_generate_messages_nodejs: my_msgs/CMakeFiles/my_msgs_generate_messages_nodejs.dir/build.make
 .PHONY : my_msgs_generate_messages_nodejs
 
