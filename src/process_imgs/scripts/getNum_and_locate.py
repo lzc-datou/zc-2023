@@ -345,39 +345,46 @@ class Locate:
         # 角度转弧度
         roll = math.radians(self.roll)
         pitch = math.radians(self.pitch)
-        # 绕偏航轴旋转时，由于相机坐标系与飞控坐标系的差别，所以需要多转0.5*pi
+        # 绕偏航轴旋转时，由于飞控用的是东北天，而我们的目标坐标系是北东地，所以需要多转0.5*pi
         yaw = math.radians(self.yaw) + 0.5 * math.pi
         
-        
-        # 绕滚转轴旋转
-        Rx = np.array(
+        # 飞控使用的是东北天导航坐标系，对应载体坐标系为右前上坐标系
+        # 相机坐标系->载体坐标系（右前上）
+        x = x
+        y = -y
+        z = -z
+        # 绕滚转轴旋转，对应载体坐标系Y轴
+        Ry = np.array(
             [[math.cos(roll),0,math.sin(roll)],
              [0,1,0],
              [-math.sin(roll),0,math.cos(roll)]]
             )
-        # 绕俯仰轴旋转
-        Ry = np.array(
+        # 绕俯仰轴旋转，对应载体坐标系X轴
+        Rx = np.array(
             [[1,0,0],
              [0,math.cos(pitch),-math.sin(pitch)],
              [0,math.sin(pitch),math.cos(pitch)]]
             )
-        # 绕偏航轴旋转
+        # 绕偏航轴旋转，对应载体坐标系Z轴
         Rz = np.array(
             [[math.cos(yaw),-math.sin(yaw),0],
              [math.sin(yaw),math.cos(yaw),0],
              [0,0,1]]
              )
-        R = np.dot(np.dot(Rx,Ry),Rz)
+        # 旋转矩阵顺序为 ZXY
+        R = np.dot(np.dot(Rz,Rx),Ry)
         xyz = np.array(
             [[x],
              [y],
              [z]]
              )
+        # 载体坐标系->东北天坐标系逆时针多转90度得到的坐标系（简称坐标系1）
         rotated_xyz = np.dot(R,xyz)
-
+        # 坐标系1->北东地坐标
+        # 没多转90度前，结果应为X轴朝东，Y轴朝北，Z轴朝天。多转90度后，变为X轴朝北，Y轴朝西，Z轴朝天。所以还需要将Y轴和Z轴反向从而得到北东地坐标
         rotated_x = rotated_xyz[0,0]
-        rotated_y = rotated_xyz[1,0]
-        rotated_z = rotated_xyz[2,0]
+        rotated_y = -rotated_xyz[1,0]
+        rotated_z = -rotated_xyz[2,0]
        
         return rotated_x,rotated_y,rotated_z
         pass
