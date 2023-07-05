@@ -162,6 +162,7 @@ include_directories(
 catkin_install_python(PROGRAMS
   scripts/test.py
   scripts/test_1.py
+  scripts/test_2.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 

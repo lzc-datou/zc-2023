@@ -14,7 +14,7 @@ from LetNet import LetNet5
 # 导入python库
 import rospy
 import cv2
-from cv_bridge import CvBridge,CvBridgeError
+from cv_bridge import CvBridge
 import numpy as np
 import torch
 import torchvision
@@ -26,12 +26,13 @@ import threading
 from my_msgs.msg import Boundingboxs_and_image
 from my_msgs.msg import Signal
 from my_msgs.msg import Median_gps
-from sensor_msgs.msg import Image
 from message_filters import ApproximateTimeSynchronizer,Subscriber
 from sensor_msgs.msg import NavSatFix
 from mavros_msgs.msg import AttitudeTarget
+
+# 导入四元数转欧拉角函数
 from tf.transformations import euler_from_quaternion
-from std_msgs.msg import Int32
+
 
 # 定义全局变量
 CONSTANTS_RADIUS_OF_EARTH = 6371000.     # meters (m)
@@ -39,7 +40,7 @@ CONSTANTS_RADIUS_OF_EARTH = 6371000.     # meters (m)
 num_and_location = dict()
 '存储每个数字出现的次数及多次定位到的gps坐标'
 stop_ts_callback = 0
-'标志变量：判断侦查航线是否结束，如果结束，该变量值赋为1，停止消息同步器的回调函数，并汇总处理所有得到的数据'
+'标志变量：判断侦查航线是否结束，如果结束，该变量值赋为1，则停止执行消息同步器的回调函数的逻辑，并汇总处理所有得到的数据'
 class Times_and_GPS:
     '单个数字出现的次数和多次获取到的该数字的经纬度'
     times = 0
@@ -301,14 +302,16 @@ class Locate:
     # 根据靶标大小直接得出世界坐标系（以靶标正方形中心为原点）下靶标最小外接矩形的坐标
     # obj_points = np.float32([[-0.5,1.366,0],[0.5,1.366,0],[0.5,-0.5,0],[-0.5,-0.5,0]]) # 最小外接矩形世界坐标
 
-    obj_points = np.float32([[-1,1,0],[1,1,0],[1,-1,0],[-1,-1,0]])  #目前参数为IR 1080P 18.0mm 1/2.7''相机的参数
+    obj_points = np.float32([[-1,1,0],[1,1,0],
+                             [1,-1,0],[-1,-1,0]
+                            ])  #目前参数为IR 1080P 18.0mm 1/2.7''相机的参数
     # 相机内参
-    cameraMatrix = np.float32([[1312.071067,   0. ,        446.061005
-],
- [  0.    ,     1313.617388, 309.887004],
- [  0.     ,      0.      ,     1.        ]])
+    cameraMatrix = np.float32([ [1312.071067,       0.          , 446.061005],
+                                [   0.      ,   1313.617388     , 309.887004],
+                                [   0.      ,       0.          ,     1.    ]
+                                ])
     # 相机畸变系数
-    distCoeffs = np.float32([ -0.505909,  0.469929 , -0.021110 , -0.018548, 0])
+    distCoeffs = np.float32([ -0.505909,    0.469929,   -0.021110,  -0.018548,  0])
 
     def get_imgPoints(self,Ori_point,num_board):
         '函数功能：获取到图像坐标系下的坐标并将结果保存至self.img_points，成功获取则返回True，否则返回False'
@@ -463,7 +466,7 @@ class Filter:
             times_and_gps.latitude.append(latitude)
         num_and_location[input_num] = times_and_gps
         return False
-    def get_3_nums(self):
+    def get_3_nums_gps(self):
         ''' 函数功能：获取出现次数最多的三个数字及其多次定位的经纬度平均值\n
             输入：无输入值\n
             返回值：三个数字及其对应的经纬度平均值（字典），具体结构为{num:[longitude,latitude]}
@@ -496,7 +499,7 @@ class Filter:
         return num_gps
     def times_to_key(self,times,num_and_location):
         '''
-        说明：此函数配合get_3_nums()使用\n
+        说明：此函数配合get_3_nums_gps()使用\n
         函数功能：在字典中根据出现的次数找到对应数字\n
         times:出现的次数\n
         num_and_location:全局变量，存储每个数字出现的次数及多次定位到的gps坐标\n
@@ -519,38 +522,38 @@ class Filter:
 
 
 # 测试： 接收图片并保存
-# def call_back(boxs_and_image):
-#     bridge = CvBridge()
-#     reco = RecoNum()
-#     locate = Locate()
-#     for i in range(len(boxs_and_image.image_list)):
-#         cv_image = bridge.imgmsg_to_cv2(boxs_and_image.image_list[i],"bgr8")
-#         flag1,transform_img,num_board = reco.rotate_target(cv_image)
-#         box = boxs_and_image.bounding_boxs[i]
-#         # Ori_point = [[box.x1,box.y1],[box.x2,box.y1],[box.x1,box.y2],[box.x2,box.y2]]
-#         Ori_point = [box.x1,box.y1]
-#         flag2 = locate.get_imgPoints(Ori_point,num_board)
-#         if flag1 == False:
-#             continue
-#         else:
-#             left_num_img,right_num_img = reco.split_num(transform_img)
-#             left_num = reco.reco_num(left_num_img)
-#             right_num = reco.reco_num(right_num_img)
-#             number = left_num *10 + right_num
-#             print("num = ",number)
-#             # cv2.imwrite("./src/process_imgs/images/left_" + str(boxs_and_image.header.seq) + ".jpg",left_num_img)
-#             # cv2.imwrite("./src/process_imgs/images/right_" + str(boxs_and_image.header.seq) + ".jpg",right_num_img)
-#             show_img("cv_img",cv_image)
-#             # cv2.imwrite("./src/process_imgs/images/transform_img_"+str(boxs_and_image.header.seq) + ".jpg",transform_img)
-#             show_img("transform_img",transform_img)
-#         if flag2 == True:
-#             locate.get_xyz()
-#     pass
+def call_back(boxs_and_image):
+    bridge = CvBridge()
+    reco = RecoNum()
+    locate = Locate()
+    for i in range(len(boxs_and_image.image_list)):
+        cv_image = bridge.imgmsg_to_cv2(boxs_and_image.image_list[i],"bgr8")
+        flag1,transform_img,num_board = reco.rotate_target(cv_image)
+        box = boxs_and_image.bounding_boxs[i]
+        # Ori_point = [[box.x1,box.y1],[box.x2,box.y1],[box.x1,box.y2],[box.x2,box.y2]]
+        Ori_point = [box.x1,box.y1]
+        flag2 = locate.get_imgPoints(Ori_point,num_board)
+        if flag1 == False:
+            continue
+        else:
+            left_num_img,right_num_img = reco.split_num(transform_img)
+            left_num = reco.reco_num(left_num_img)
+            right_num = reco.reco_num(right_num_img)
+            number = left_num *10 + right_num
+            print("num = ",number)
+            # cv2.imwrite("./src/process_imgs/images/left_" + str(boxs_and_image.header.seq) + ".jpg",left_num_img)
+            # cv2.imwrite("./src/process_imgs/images/right_" + str(boxs_and_image.header.seq) + ".jpg",right_num_img)
+            show_img("cv_img",cv_image)
+            # cv2.imwrite("./src/process_imgs/images/transform_img_"+str(boxs_and_image.header.seq) + ".jpg",transform_img)
+            show_img("transform_img",transform_img)
+        if flag2 == True:
+            locate.get_xyz()
+    pass
 
-# # 测试：展示图片
-# def show_img(windows_name,img_name):
-#     cv2.imshow(windows_name,img_name)
-#     cv2.waitKey(5)
+# 测试：展示图片
+def show_img(windows_name,img_name):
+    cv2.imshow(windows_name,img_name)
+    cv2.waitKey(5)
 
 # 实例化对象
 reco = RecoNum()
@@ -558,123 +561,109 @@ locate = Locate()
 filter = Filter()
 bridge = CvBridge()
 
-
-
-
-#     for i in range(len(boxs_and_image.image_list)):
-#         cv_image = bridge.imgmsg_to_cv2(boxs_and_image.image_list[i],"bgr8")
-#         flag1,transform_img,num_board = reco.rotate_target(cv_image)
-#         box = boxs_and_image.bounding_boxs[i]
-#         # Ori_point = [[box.x1,box.y1],[box.x2,box.y1],[box.x1,box.y2],[box.x2,box.y2]]
-#         Ori_point = [box.x1,box.y1]
-#         flag2 = locate.get_imgPoints(Ori_point,num_board)
-#         if flag1 == False:
-#             continue
-#         else:
-#             left_num_img,right_num_img = reco.split_num(transform_img)
-#             left_num = reco.reco_num(left_num_img)
-#             right_num = reco.reco_num(right_num_img)
-#             number = left_num *10 + right_num
-#             print("num = ",number)
-#             # cv2.imwrite("./src/process_imgs/images/left_" + str(boxs_and_image.header.seq) + ".jpg",left_num_img)
-#             # cv2.imwrite("./src/process_imgs/images/right_" + str(boxs_and_image.header.seq) + ".jpg",right_num_img)
-#             show_img("cv_img",cv_image)
-#             # cv2.imwrite("./src/process_imgs/images/transform_img_"+str(boxs_and_image.header.seq) + ".jpg",transform_img)
-#             show_img("transform_img",transform_img)
-#         if flag2 == True:
-#             locate.get_xyz()
-
-
 # 消息同步使用的回调函数  注意：该回调函数需要同时收到三个消息后方能触发
 def ts_callback(msg1,msg2,msg3):
 
     '回调函数功能：处理单张图片及定位该图片中的靶标，并把识别到的数字和靶标gps坐标放入全局变量num_and_location中'
-    # 判断同步器的回调函数是否执行，如果不执行直接关闭rospy并返回
+    # 判断同步器的回调函数是否执行，如果不执行直接返回
     if stop_ts_callback == 1:
-        rospy.signal_shutdown("ts_callback is stopped")
         return
-    # 1. 获取飞机自身gps坐标及姿态角
-    global locate
-    locate.ref_longitude = msg2.longitude
-    locate.ref_latitude = msg2.latitude
-    locate.ref_altitude = msg2.altitude
+    else:
+        # 1. 获取飞机自身gps坐标及姿态角
+        global locate
+        locate.ref_longitude = msg2.longitude
+        locate.ref_latitude = msg2.latitude
+        locate.ref_altitude = msg2.altitude
+        
+        # 测试用
+        print("longitude = ",locate.ref_longitude,"latitude = ",locate.ref_latitude,"altitude = ",locate.ref_altitude)
     
-    # 测试用
-    print("longitude = ",locate.ref_longitude,"latitude = ",locate.ref_latitude,"altitude = ",locate.ref_altitude)
-  
 
-    # 四元数转姿态角
-    quaternion = (
-        msg3.orientation.x,
-        msg3.orientation.y,
-        msg3.orientation.z,
-        msg3.orientation.w
-                  )
-    # 姿态角赋值
-    locate.roll,locate.pitch,locate.yaw = euler_from_quaternion(quaternion)
+        # 四元数转姿态角
+        quaternion = (
+            msg3.orientation.x,
+            msg3.orientation.y,
+            msg3.orientation.z,
+            msg3.orientation.w
+                    )
+        # 姿态角赋值
+        locate.roll,locate.pitch,locate.yaw = euler_from_quaternion(quaternion)
 
-    # 测试用
-    print("roll = ",locate.roll,"pitch = ",locate.pitch,"yaw = ",locate.yaw)
+        # 测试用
+        print("roll = ",locate.roll,"pitch = ",locate.pitch,"yaw = ",locate.yaw)
 
-    # 2. 图像处理
-    for i in range(len(msg1.image_list)):
-        # 将ros图片格式转为opencv图片格式
-        cv_image = bridge.imgmsg_to_cv2(msg1.image_list[i],'bgr8')
-        # 转正靶标
-        is_rotated,transform_img,num_board = reco.rotate_target(cv_image)
+        # 2. 图像处理
+        for i in range(len(msg1.image_list)):
+            # 将ros图片格式转为opencv图片格式
+            cv_image = bridge.imgmsg_to_cv2(msg1.image_list[i],'bgr8')
+            # 转正靶标
+            is_rotated,transform_img,num_board = reco.rotate_target(cv_image)
 
-        # 获取yolov5矩形框的左上角在原图中的坐标（现在处理的图片是yolov5从原图中截取出来的，靶标在原图中的坐标=yolov5矩形框左上角坐标+现在处理的图片中靶标的实际坐标（实际坐标所在坐标系的原点即为矩形框左上角））
-        box = msg1.bounding_boxs[i]
-        Ori_point = [box.x1,box.y1]
-        # 获取靶标中心正方形白色数字板的四个顶点坐标（在原图中的坐标）
-        imgPoints_is_got = locate.get_imgPoints(Ori_point,num_board)
-        # 如果靶标转正失败，发出警告消息，直接进入下次循环
-        if is_rotated == False:
-            rospy.logwarn("target rotated failure")
-            continue
-        # 如果转正成功，则识别数字
-        else: 
-            # 将转正图像分割为左右两个图像
-            left_num_img, right_num_img = reco.split_num(transform_img)
-            # 分别识别左右两个数字
-            left_num = reco.reco_num(left_num_img)
-            right_num = reco.reco_num(right_num_img)
-            # 得到最终结果
-            number = left_num * 10 + right_num
-            rospy.loginfo("num = %d",number)
-            
-        # 如果靶标中心正方形白色数字板的四个顶点坐标获取成功，则使用Pnp算法进行视觉定位
-        if imgPoints_is_got == True:
-            # pnp算法定位，获取相机坐标系下的靶标坐标
-            x,y,z = locate.get_xyz()
-            # 坐标系变换，将相机坐标系变换为北东地坐标系
-            rotated_x,rotated_y,rotated_z = locate.rotate_xyz(x,y,z)
-            # 如果视觉定位得到的飞机高度与飞控得到的飞机高度在误差范围内，则认为视觉定位准确，予以采用。否则，则舍弃此次定位
-            if rotated_z >= (1 - locate_error) * locate.ref_altitude and rotated_z <= (1 + locate_error) * locate.ref_altitude:
-                # 定位精确，予以采用
-                longitude,latitude = locate.xy_to_gps(rotated_x,rotated_y)
-                rospy.loginfo("longitude = %f  latitude = %f ",longitude,latitude)
-                filter.num_dict_add(number, True, longitude, latitude)
-                pass
-            else:
-                # 定位不精确，弃用
-                rospy.logwarn("inaccurate locate")
-                filter.num_dict_add(number, False, 0, 0)
+            # 获取yolov5矩形框的左上角在原图中的坐标（现在处理的图片是yolov5从原图中截取出来的，靶标在原图中的坐标=yolov5矩形框左上角坐标+现在处理的图片中靶标的实际坐标（实际坐标所在坐标系的原点即为矩形框左上角））
+            box = msg1.bounding_boxs[i]
+            Ori_point = [box.x1,box.y1]
+            # 获取靶标中心正方形白色数字板的四个顶点坐标（在原图中的坐标）
+            imgPoints_is_got = locate.get_imgPoints(Ori_point,num_board)
+            # 如果靶标转正失败，发出警告消息，直接进入下次循环
+            if is_rotated == False:
+                rospy.logwarn("target rotated failure")
+                continue
+            # 如果转正成功，则识别数字
+            else: 
+                # 将转正图像分割为左右两个图像
+                left_num_img, right_num_img = reco.split_num(transform_img)
+                # 分别识别左右两个数字
+                left_num = reco.reco_num(left_num_img)
+                right_num = reco.reco_num(right_num_img)
+                # 得到最终结果
+                number = left_num * 10 + right_num
+                rospy.loginfo("num = %d",number)
+                
+            # 如果靶标中心正方形白色数字板的四个顶点坐标获取成功，则使用Pnp算法进行视觉定位
+            if imgPoints_is_got == True:
+                # pnp算法定位，获取相机坐标系下的靶标坐标
+                x,y,z = locate.get_xyz()
+                # 坐标系变换，将相机坐标系变换为北东地坐标系
+                rotated_x,rotated_y,rotated_z = locate.rotate_xyz(x,y,z)
+                # 如果视觉定位得到的飞机高度与飞控得到的飞机高度在误差范围内，则认为视觉定位准确，予以采用。否则，则舍弃此次定位
+                if rotated_z >= (1 - locate_error) * locate.ref_altitude and rotated_z <= (1 + locate_error) * locate.ref_altitude:
+                    # 定位精确，予以采用
+                    longitude,latitude = locate.xy_to_gps(rotated_x,rotated_y)
+                    rospy.loginfo("longitude = %f  latitude = %f ",longitude,latitude)
+                    filter.num_dict_add(number, True, longitude, latitude)
+                    pass
+                else:
+                    # 定位不精确，弃用
+                    rospy.logwarn("inaccurate locate")
+                    filter.num_dict_add(number, False, 0, 0)
     pass
 def state_callback(msg):
-    # 如果接收到终止信号，则将该信号赋值给全局变量stop_ts_callback，否则啥也不做
+    # 如果接收到侦查终止信号，将全局变量sotp_ts_callback赋值为1，并发布中位数gps坐标
     if msg.signal == 1:
         global stop_ts_callback
         stop_ts_callback = 1
-        rospy.signal_shutdown("ts_callback is stopped")
+        # 获取得到的三个数字及其对应的精确gps坐标
+        num_gps = filter.get_3_nums_gps()
+        # 对三个数字进行排序
+        num_list = []
+        for key in num_gps.keys():
+            num_list.append(key)
+        num_list.sort(reverse=True)
+        median_num = num_list[1]
+        rospy.loginfo("results = %d %d %d",num_list[0],num_list[1],num_list[2])
+        rospy.loginfo("median number = %d",median_num)
+        # 发布中位数靶标的gps坐标（目前只发送一次）
 
-# 有待验证有效性
-def thread(*args):
-    '线程1：用于同时执行时间同步器的回调函数和state_sub的回调函数'
-    # 注册回调函数
-    args[0].registerCallback(ts_callback)
-    # 启动回调
-    rospy.spin()
+        # 赋值
+        median_gps = Median_gps()
+        median_gps.longitude = num_gps[median_num][0]
+        median_gps.latitude = num_gps[median_num][1]
+
+        # 发布  
+        gps_pub = rospy.Publisher("/median_gps",Median_gps,queue_size=10)
+        gps_pub.publish(median_gps)
+        
+        
 
 if __name__ == "__main__":
     # 初始化ros节点
@@ -682,8 +671,6 @@ if __name__ == "__main__":
 
     
     # rospy.Subscriber("/yolov5/Boundingboxs_and_image",Boundingboxs_and_image,call_back,queue_size=20) # 测试用，可删除
-    # 订阅飞控gps坐标 gps_sub = rospy.Subscriber('/mavros/global_position/global', NavSatFix, gps_callback)
-    # 订阅飞控姿态信息（俯仰，偏航，滚转） attitude_sub = rospy.Subscriber('/mavros/local_position/pose', PoseStamped, attitude_callback)
 
     # 创建消息订阅者
     box_sub = Subscriber("/yolov5/Boundingboxs_and_image",Boundingboxs_and_image) # 获取yolov5图像和坐标信息
@@ -693,34 +680,12 @@ if __name__ == "__main__":
     # 创建时间同步器
     ts = ApproximateTimeSynchronizer([box_sub,gps_sub,pose_sub],queue_size=10,slop=time_error)
     
-    # add_thread = threading.Thread(target=thread) # 有待测试有效性
-
     # 注册回调函数
     ts.registerCallback(ts_callback)
 
     # 启动回调
     rospy.spin()
     
-    # 获取得到的三个数字及其对应的精确gps坐标
-    num_gps = filter.get_3_nums()
-    # 对三个数字进行排序
-    num_list = []
-    for key in num_gps.keys():
-        num_list.append(key)
-    num_list.sort(reverse=True)
-    median_num = num_list[1]
-    rospy.loginfo("results = %d %d %d",num_list[0],num_list[1],num_list[2])
-    rospy.loginfo("median number = %d",median_num)
-    # 发布中位数靶标的gps坐标（目前只发送一次）
-
-    # 赋值
-    median_gps = Median_gps()
-    median_gps.longitude = num_gps[median_num][0]
-    median_gps.latitude = num_gps[median_num][1]
-
-    # 发布  （目前仅发布一次）
-    rospy.init_node("num_and_location")  # 由于在回调函数中关闭了节点，所以此处需要重新启动，方能发布
-    gps_pub = rospy.Publisher("/median_gps",Median_gps)
-    gps_pub.publish(median_gps)
+   
     
 

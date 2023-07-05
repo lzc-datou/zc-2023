@@ -25,6 +25,7 @@ import threading
 # 导入消息类型
 from my_msgs.msg import Boundingboxs_and_image
 from my_msgs.msg import Signal
+from my_msgs.msg import Median_gps
 from sensor_msgs.msg import Image
 from message_filters import ApproximateTimeSynchronizer,Subscriber
 from sensor_msgs.msg import NavSatFix
@@ -667,7 +668,7 @@ def state_callback(msg):
         stop_ts_callback = 1
         rospy.signal_shutdown("ts_callback is stopped")
 
-
+# 有待验证有效性
 def thread(*args):
     '线程1：用于同时执行时间同步器的回调函数和state_sub的回调函数'
     # 注册回调函数
@@ -688,7 +689,7 @@ if __name__ == "__main__":
     box_sub = Subscriber("/yolov5/Boundingboxs_and_image",Boundingboxs_and_image) # 获取yolov5图像和坐标信息
     gps_sub = Subscriber('/mavros/global_position/global',NavSatFix) # 获取飞控gps坐标
     pose_sub = Subscriber('/mavros/imu/data', AttitudeTarget) # 获取飞控姿态
-    state_sub = rospy.Subscriber('/is_investigation_over',Signal,state_callback,queue_size=10) # 获取侦查状态（正在侦查还是已侦查完毕）
+    state_sub = rospy.Subscriber('/node_name/is_investigation_over',Signal,state_callback,queue_size=10) # 获取侦查状态（正在侦查还是已侦查完毕）
     # 创建时间同步器
     ts = ApproximateTimeSynchronizer([box_sub,gps_sub,pose_sub],queue_size=10,slop=time_error)
     
@@ -707,11 +708,19 @@ if __name__ == "__main__":
     for key in num_gps.keys():
         num_list.append(key)
     num_list.sort(reverse=True)
+    median_num = num_list[1]
     rospy.loginfo("results = %d %d %d",num_list[0],num_list[1],num_list[2])
-    rospy.loginfo("median number = %d",num_list[1])
-    
+    rospy.loginfo("median number = %d",median_num)
+    # 发布中位数靶标的gps坐标（目前只发送一次）
 
-    
+    # 赋值
+    median_gps = Median_gps()
+    median_gps.longitude = num_gps[median_num][0]
+    median_gps.latitude = num_gps[median_num][1]
 
-    print("run after spin()")
+    # 发布  （目前仅发布一次）
+    rospy.init_node("num_and_location")  # 由于在回调函数中关闭了节点，所以此处需要重新启动，方能发布
+    gps_pub = rospy.Publisher("/median_gps",Median_gps)
+    gps_pub.publish(median_gps)
+    
 
