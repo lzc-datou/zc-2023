@@ -69,3 +69,7 @@ if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/test" TYPE PROGRAM FILES "/home/lzc/lzc-code/build/test/catkin_generated/installspace/test_2.py")
 endif()
 
+if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/test" TYPE PROGRAM FILES "/home/lzc/lzc-code/build/test/catkin_generated/installspace/test3.py")
+endif()
+

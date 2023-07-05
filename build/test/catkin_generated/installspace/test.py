@@ -1,6 +1,6 @@
 from my_msgs.msg import Signal
 import rospy
-
+# 测试多回调函数的启动与终止  test.py,test_1.py，test_2.py配合使用
 
 signal_1 = Signal()
 signal_2 = Signal()

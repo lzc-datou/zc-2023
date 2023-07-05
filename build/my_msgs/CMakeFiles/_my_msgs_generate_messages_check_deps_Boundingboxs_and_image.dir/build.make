@@ -67,7 +67,7 @@ include my_msgs/CMakeFiles/_my_msgs_generate_messages_check_deps_Boundingboxs_an
 include my_msgs/CMakeFiles/_my_msgs_generate_messages_check_deps_Boundingboxs_and_image.dir/progress.make
 
 my_msgs/CMakeFiles/_my_msgs_generate_messages_check_deps_Boundingboxs_and_image:
-	cd /home/lzc/lzc-code/build/my_msgs && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/genmsg/cmake/../../../lib/genmsg/genmsg_check_deps.py my_msgs /home/lzc/lzc-code/src/my_msgs/msg/Boundingboxs_and_image.msg my_msgs/Bounding_box:sensor_msgs/Image:std_msgs/Header
+	cd /home/lzc/lzc-code/build/my_msgs && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/genmsg/cmake/../../../lib/genmsg/genmsg_check_deps.py my_msgs /home/lzc/lzc-code/src/my_msgs/msg/Boundingboxs_and_image.msg std_msgs/Header:sensor_msgs/Image:my_msgs/Bounding_box
 
 _my_msgs_generate_messages_check_deps_Boundingboxs_and_image: my_msgs/CMakeFiles/_my_msgs_generate_messages_check_deps_Boundingboxs_and_image
 _my_msgs_generate_messages_check_deps_Boundingboxs_and_image: my_msgs/CMakeFiles/_my_msgs_generate_messages_check_deps_Boundingboxs_and_image.dir/build.make

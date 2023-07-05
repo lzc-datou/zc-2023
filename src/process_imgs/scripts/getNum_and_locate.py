@@ -41,6 +41,10 @@ num_and_location = dict()
 '存储每个数字出现的次数及多次定位到的gps坐标'
 stop_ts_callback = 0
 '标志变量：判断侦查航线是否结束，如果结束，该变量值赋为1，则停止执行消息同步器的回调函数的逻辑，并汇总处理所有得到的数据'
+is_processed = 0
+'标志变量：判断侦查获取到的数据是否已经处理过'
+median_gps = list()
+'存储中位数靶标gps坐标，方便侦查结束后循环发布中位数靶标gps坐标'
 class Times_and_GPS:
     '单个数字出现的次数和多次获取到的该数字的经纬度'
     times = 0
@@ -638,30 +642,41 @@ def ts_callback(msg1,msg2,msg3):
                     filter.num_dict_add(number, False, 0, 0)
     pass
 def state_callback(msg):
-    # 如果接收到侦查终止信号，将全局变量sotp_ts_callback赋值为1，并发布中位数gps坐标
+    # 如果接收到侦查终止信号，将全局变量stop_ts_callback赋值为1，并发布中位数gps坐标
     if msg.signal == 1:
         global stop_ts_callback
+        global is_processed
+        global median_gps
+
         stop_ts_callback = 1
-        # 获取得到的三个数字及其对应的精确gps坐标
-        num_gps = filter.get_3_nums_gps()
-        # 对三个数字进行排序
-        num_list = []
-        for key in num_gps.keys():
-            num_list.append(key)
-        num_list.sort(reverse=True)
-        median_num = num_list[1]
-        rospy.loginfo("results = %d %d %d",num_list[0],num_list[1],num_list[2])
-        rospy.loginfo("median number = %d",median_num)
-        # 发布中位数靶标的gps坐标（目前只发送一次）
+
+        
+        if is_processed == 0:
+            # 处理一次后，下次回调时不再处理
+            is_processed = 1
+            # 获取得到的三个数字及其对应的精确gps坐标
+            num_gps = filter.get_3_nums_gps()
+            # 对三个数字进行排序
+            num_list = []
+            for key in num_gps.keys():
+                num_list.append(key)
+            num_list.sort(reverse=True)
+
+            median_num = num_list[1]
+            rospy.loginfo("results = %d %d %d",num_list[0],num_list[1],num_list[2])
+            rospy.loginfo("median number = %d",median_num)
+
+            median_gps = [num_gps[median_num][0],num_gps[median_num][1]]
+        # 发布中位数靶标的gps坐标
 
         # 赋值
-        median_gps = Median_gps()
-        median_gps.longitude = num_gps[median_num][0]
-        median_gps.latitude = num_gps[median_num][1]
+        median_gps_1 = Median_gps()
+        median_gps_1.longitude = median_gps[0]
+        median_gps_1.latitude = median_gps[1]
 
         # 发布  
         gps_pub = rospy.Publisher("/median_gps",Median_gps,queue_size=10)
-        gps_pub.publish(median_gps)
+        gps_pub.publish(median_gps_1)
         
         
 
@@ -676,7 +691,7 @@ if __name__ == "__main__":
     box_sub = Subscriber("/yolov5/Boundingboxs_and_image",Boundingboxs_and_image) # 获取yolov5图像和坐标信息
     gps_sub = Subscriber('/mavros/global_position/global',NavSatFix) # 获取飞控gps坐标
     pose_sub = Subscriber('/mavros/imu/data', AttitudeTarget) # 获取飞控姿态
-    state_sub = rospy.Subscriber('/node_name/is_investigation_over',Signal,state_callback,queue_size=10) # 获取侦查状态（正在侦查还是已侦查完毕）
+    state_sub = rospy.Subscriber('/is_investigation_over',Signal,state_callback,queue_size=10) # 获取侦查状态（正在侦查还是已侦查完毕）
     # 创建时间同步器
     ts = ApproximateTimeSynchronizer([box_sub,gps_sub,pose_sub],queue_size=10,slop=time_error)
     
