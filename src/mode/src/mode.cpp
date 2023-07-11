@@ -13,7 +13,8 @@
 #include <cmath>
 #include <std_msgs/Int8.h>
 #include <my_msgs/Signal.h>
-#include "my_msgs/Median_gps.h"
+#include <my_msgs/Median_gps.h>
+
 #define CONSTANTS_RADIUS_OF_EARTH 6371000
 
 mavros_msgs::State CurrentState;

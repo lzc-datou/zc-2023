@@ -8,7 +8,9 @@
       "includePath": [
         "/home/lzc/lzc-code/src/yolov5/include/**",
         "/usr/include/**",
-        "./devel/include"
+        "./devel/include",
+        "/opt/ros/noetic/include/"
+
       ],
     
 
