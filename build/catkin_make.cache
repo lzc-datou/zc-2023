@@ -1,2 +1,2 @@
-my_msgs:process_imgs:test:yolov5
+mode:my_msgs:process_imgs:test:yolov5
 -DCATKIN_DEVEL_PREFIX=/home/lzc/lzc-code/devel -DCMAKE_INSTALL_PREFIX=/home/lzc/lzc-code/install -G Unix Makefiles

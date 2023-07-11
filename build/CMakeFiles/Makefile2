@@ -66,6 +66,7 @@ CMAKE_BINARY_DIR = /home/lzc/lzc-code/build
 all: gtest/all
 all: my_msgs/all
 all: test/all
+all: mode/all
 all: process_imgs/all
 all: yolov5/all
 .PHONY : all
@@ -74,6 +75,7 @@ all: yolov5/all
 preinstall: gtest/preinstall
 preinstall: my_msgs/preinstall
 preinstall: test/preinstall
+preinstall: mode/preinstall
 preinstall: process_imgs/preinstall
 preinstall: yolov5/preinstall
 .PHONY : preinstall
@@ -87,6 +89,7 @@ clean: CMakeFiles/doxygen.dir/clean
 clean: gtest/clean
 clean: my_msgs/clean
 clean: test/clean
+clean: mode/clean
 clean: process_imgs/clean
 clean: yolov5/clean
 .PHONY : clean
@@ -138,6 +141,36 @@ gtest/googletest/preinstall:
 gtest/googletest/clean: gtest/googletest/CMakeFiles/gtest.dir/clean
 gtest/googletest/clean: gtest/googletest/CMakeFiles/gtest_main.dir/clean
 .PHONY : gtest/googletest/clean
+
+#=============================================================================
+# Directory level rules for directory mode
+
+# Recursive "all" directory target.
+mode/all: mode/CMakeFiles/mode.dir/all
+.PHONY : mode/all
+
+# Recursive "preinstall" directory target.
+mode/preinstall:
+.PHONY : mode/preinstall
+
+# Recursive "clean" directory target.
+mode/clean: mode/CMakeFiles/mavros_msgs_generate_messages_cpp.dir/clean
+mode/clean: mode/CMakeFiles/mavros_msgs_generate_messages_eus.dir/clean
+mode/clean: mode/CMakeFiles/mavros_msgs_generate_messages_lisp.dir/clean
+mode/clean: mode/CMakeFiles/mavros_msgs_generate_messages_nodejs.dir/clean
+mode/clean: mode/CMakeFiles/mavros_msgs_generate_messages_py.dir/clean
+mode/clean: mode/CMakeFiles/geographic_msgs_generate_messages_cpp.dir/clean
+mode/clean: mode/CMakeFiles/geographic_msgs_generate_messages_eus.dir/clean
+mode/clean: mode/CMakeFiles/geographic_msgs_generate_messages_lisp.dir/clean
+mode/clean: mode/CMakeFiles/geographic_msgs_generate_messages_nodejs.dir/clean
+mode/clean: mode/CMakeFiles/geographic_msgs_generate_messages_py.dir/clean
+mode/clean: mode/CMakeFiles/uuid_msgs_generate_messages_cpp.dir/clean
+mode/clean: mode/CMakeFiles/uuid_msgs_generate_messages_eus.dir/clean
+mode/clean: mode/CMakeFiles/uuid_msgs_generate_messages_lisp.dir/clean
+mode/clean: mode/CMakeFiles/uuid_msgs_generate_messages_nodejs.dir/clean
+mode/clean: mode/CMakeFiles/uuid_msgs_generate_messages_py.dir/clean
+mode/clean: mode/CMakeFiles/mode.dir/clean
+.PHONY : mode/clean
 
 #=============================================================================
 # Directory level rules for directory my_msgs
@@ -1269,7 +1302,7 @@ my_msgs/CMakeFiles/my_msgs_generate_messages_cpp.dir/all: my_msgs/CMakeFiles/_my
 my_msgs/CMakeFiles/my_msgs_generate_messages_cpp.dir/all: my_msgs/CMakeFiles/_my_msgs_generate_messages_check_deps_Median_gps.dir/all
 	$(MAKE) $(MAKESILENT) -f my_msgs/CMakeFiles/my_msgs_generate_messages_cpp.dir/build.make my_msgs/CMakeFiles/my_msgs_generate_messages_cpp.dir/depend
 	$(MAKE) $(MAKESILENT) -f my_msgs/CMakeFiles/my_msgs_generate_messages_cpp.dir/build.make my_msgs/CMakeFiles/my_msgs_generate_messages_cpp.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/lzc/lzc-code/build/CMakeFiles --progress-num=9,10,11,12 "Built target my_msgs_generate_messages_cpp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/lzc/lzc-code/build/CMakeFiles --progress-num=11,12,13,14 "Built target my_msgs_generate_messages_cpp"
 .PHONY : my_msgs/CMakeFiles/my_msgs_generate_messages_cpp.dir/all
 
 # Build rule for subdir invocation for target.
@@ -1326,7 +1359,7 @@ my_msgs/CMakeFiles/my_msgs_generate_messages_eus.dir/all: my_msgs/CMakeFiles/_my
 my_msgs/CMakeFiles/my_msgs_generate_messages_eus.dir/all: my_msgs/CMakeFiles/_my_msgs_generate_messages_check_deps_Median_gps.dir/all
 	$(MAKE) $(MAKESILENT) -f my_msgs/CMakeFiles/my_msgs_generate_messages_eus.dir/build.make my_msgs/CMakeFiles/my_msgs_generate_messages_eus.dir/depend
 	$(MAKE) $(MAKESILENT) -f my_msgs/CMakeFiles/my_msgs_generate_messages_eus.dir/build.make my_msgs/CMakeFiles/my_msgs_generate_messages_eus.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/lzc/lzc-code/build/CMakeFiles --progress-num=13,14,15,16,17 "Built target my_msgs_generate_messages_eus"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/lzc/lzc-code/build/CMakeFiles --progress-num=15,16,17,18,19 "Built target my_msgs_generate_messages_eus"
 .PHONY : my_msgs/CMakeFiles/my_msgs_generate_messages_eus.dir/all
 
 # Build rule for subdir invocation for target.
@@ -1383,7 +1416,7 @@ my_msgs/CMakeFiles/my_msgs_generate_messages_lisp.dir/all: my_msgs/CMakeFiles/_m
 my_msgs/CMakeFiles/my_msgs_generate_messages_lisp.dir/all: my_msgs/CMakeFiles/_my_msgs_generate_messages_check_deps_Median_gps.dir/all
 	$(MAKE) $(MAKESILENT) -f my_msgs/CMakeFiles/my_msgs_generate_messages_lisp.dir/build.make my_msgs/CMakeFiles/my_msgs_generate_messages_lisp.dir/depend
 	$(MAKE) $(MAKESILENT) -f my_msgs/CMakeFiles/my_msgs_generate_messages_lisp.dir/build.make my_msgs/CMakeFiles/my_msgs_generate_messages_lisp.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/lzc/lzc-code/build/CMakeFiles --progress-num=18,19,20,21 "Built target my_msgs_generate_messages_lisp"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/lzc/lzc-code/build/CMakeFiles --progress-num=20,21,22,23 "Built target my_msgs_generate_messages_lisp"
 .PHONY : my_msgs/CMakeFiles/my_msgs_generate_messages_lisp.dir/all
 
 # Build rule for subdir invocation for target.
@@ -1440,7 +1473,7 @@ my_msgs/CMakeFiles/my_msgs_generate_messages_nodejs.dir/all: my_msgs/CMakeFiles/
 my_msgs/CMakeFiles/my_msgs_generate_messages_nodejs.dir/all: my_msgs/CMakeFiles/_my_msgs_generate_messages_check_deps_Median_gps.dir/all
 	$(MAKE) $(MAKESILENT) -f my_msgs/CMakeFiles/my_msgs_generate_messages_nodejs.dir/build.make my_msgs/CMakeFiles/my_msgs_generate_messages_nodejs.dir/depend
 	$(MAKE) $(MAKESILENT) -f my_msgs/CMakeFiles/my_msgs_generate_messages_nodejs.dir/build.make my_msgs/CMakeFiles/my_msgs_generate_messages_nodejs.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/lzc/lzc-code/build/CMakeFiles --progress-num=22,23,24,25 "Built target my_msgs_generate_messages_nodejs"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/lzc/lzc-code/build/CMakeFiles --progress-num=24,25,26,27 "Built target my_msgs_generate_messages_nodejs"
 .PHONY : my_msgs/CMakeFiles/my_msgs_generate_messages_nodejs.dir/all
 
 # Build rule for subdir invocation for target.
@@ -1497,7 +1530,7 @@ my_msgs/CMakeFiles/my_msgs_generate_messages_py.dir/all: my_msgs/CMakeFiles/_my_
 my_msgs/CMakeFiles/my_msgs_generate_messages_py.dir/all: my_msgs/CMakeFiles/_my_msgs_generate_messages_check_deps_Median_gps.dir/all
 	$(MAKE) $(MAKESILENT) -f my_msgs/CMakeFiles/my_msgs_generate_messages_py.dir/build.make my_msgs/CMakeFiles/my_msgs_generate_messages_py.dir/depend
 	$(MAKE) $(MAKESILENT) -f my_msgs/CMakeFiles/my_msgs_generate_messages_py.dir/build.make my_msgs/CMakeFiles/my_msgs_generate_messages_py.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/lzc/lzc-code/build/CMakeFiles --progress-num=26,27,28,29,30 "Built target my_msgs_generate_messages_py"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/lzc/lzc-code/build/CMakeFiles --progress-num=28,29,30,31,32 "Built target my_msgs_generate_messages_py"
 .PHONY : my_msgs/CMakeFiles/my_msgs_generate_messages_py.dir/all
 
 # Build rule for subdir invocation for target.
@@ -1541,6 +1574,422 @@ my_msgs_genpy: my_msgs/CMakeFiles/my_msgs_genpy.dir/rule
 my_msgs/CMakeFiles/my_msgs_genpy.dir/clean:
 	$(MAKE) $(MAKESILENT) -f my_msgs/CMakeFiles/my_msgs_genpy.dir/build.make my_msgs/CMakeFiles/my_msgs_genpy.dir/clean
 .PHONY : my_msgs/CMakeFiles/my_msgs_genpy.dir/clean
+
+#=============================================================================
+# Target rules for target mode/CMakeFiles/mavros_msgs_generate_messages_cpp.dir
+
+# All Build rule for target.
+mode/CMakeFiles/mavros_msgs_generate_messages_cpp.dir/all:
+	$(MAKE) $(MAKESILENT) -f mode/CMakeFiles/mavros_msgs_generate_messages_cpp.dir/build.make mode/CMakeFiles/mavros_msgs_generate_messages_cpp.dir/depend
+	$(MAKE) $(MAKESILENT) -f mode/CMakeFiles/mavros_msgs_generate_messages_cpp.dir/build.make mode/CMakeFiles/mavros_msgs_generate_messages_cpp.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/lzc/lzc-code/build/CMakeFiles --progress-num= "Built target mavros_msgs_generate_messages_cpp"
+.PHONY : mode/CMakeFiles/mavros_msgs_generate_messages_cpp.dir/all
+
+# Build rule for subdir invocation for target.
+mode/CMakeFiles/mavros_msgs_generate_messages_cpp.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/lzc/lzc-code/build/CMakeFiles 0
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 mode/CMakeFiles/mavros_msgs_generate_messages_cpp.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/lzc/lzc-code/build/CMakeFiles 0
+.PHONY : mode/CMakeFiles/mavros_msgs_generate_messages_cpp.dir/rule
+
+# Convenience name for target.
+mavros_msgs_generate_messages_cpp: mode/CMakeFiles/mavros_msgs_generate_messages_cpp.dir/rule
+.PHONY : mavros_msgs_generate_messages_cpp
+
+# clean rule for target.
+mode/CMakeFiles/mavros_msgs_generate_messages_cpp.dir/clean:
+	$(MAKE) $(MAKESILENT) -f mode/CMakeFiles/mavros_msgs_generate_messages_cpp.dir/build.make mode/CMakeFiles/mavros_msgs_generate_messages_cpp.dir/clean
+.PHONY : mode/CMakeFiles/mavros_msgs_generate_messages_cpp.dir/clean
+
+#=============================================================================
+# Target rules for target mode/CMakeFiles/mavros_msgs_generate_messages_eus.dir
+
+# All Build rule for target.
+mode/CMakeFiles/mavros_msgs_generate_messages_eus.dir/all:
+	$(MAKE) $(MAKESILENT) -f mode/CMakeFiles/mavros_msgs_generate_messages_eus.dir/build.make mode/CMakeFiles/mavros_msgs_generate_messages_eus.dir/depend
+	$(MAKE) $(MAKESILENT) -f mode/CMakeFiles/mavros_msgs_generate_messages_eus.dir/build.make mode/CMakeFiles/mavros_msgs_generate_messages_eus.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/lzc/lzc-code/build/CMakeFiles --progress-num= "Built target mavros_msgs_generate_messages_eus"
+.PHONY : mode/CMakeFiles/mavros_msgs_generate_messages_eus.dir/all
+
+# Build rule for subdir invocation for target.
+mode/CMakeFiles/mavros_msgs_generate_messages_eus.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/lzc/lzc-code/build/CMakeFiles 0
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 mode/CMakeFiles/mavros_msgs_generate_messages_eus.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/lzc/lzc-code/build/CMakeFiles 0
+.PHONY : mode/CMakeFiles/mavros_msgs_generate_messages_eus.dir/rule
+
+# Convenience name for target.
+mavros_msgs_generate_messages_eus: mode/CMakeFiles/mavros_msgs_generate_messages_eus.dir/rule
+.PHONY : mavros_msgs_generate_messages_eus
+
+# clean rule for target.
+mode/CMakeFiles/mavros_msgs_generate_messages_eus.dir/clean:
+	$(MAKE) $(MAKESILENT) -f mode/CMakeFiles/mavros_msgs_generate_messages_eus.dir/build.make mode/CMakeFiles/mavros_msgs_generate_messages_eus.dir/clean
+.PHONY : mode/CMakeFiles/mavros_msgs_generate_messages_eus.dir/clean
+
+#=============================================================================
+# Target rules for target mode/CMakeFiles/mavros_msgs_generate_messages_lisp.dir
+
+# All Build rule for target.
+mode/CMakeFiles/mavros_msgs_generate_messages_lisp.dir/all:
+	$(MAKE) $(MAKESILENT) -f mode/CMakeFiles/mavros_msgs_generate_messages_lisp.dir/build.make mode/CMakeFiles/mavros_msgs_generate_messages_lisp.dir/depend
+	$(MAKE) $(MAKESILENT) -f mode/CMakeFiles/mavros_msgs_generate_messages_lisp.dir/build.make mode/CMakeFiles/mavros_msgs_generate_messages_lisp.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/lzc/lzc-code/build/CMakeFiles --progress-num= "Built target mavros_msgs_generate_messages_lisp"
+.PHONY : mode/CMakeFiles/mavros_msgs_generate_messages_lisp.dir/all
+
+# Build rule for subdir invocation for target.
+mode/CMakeFiles/mavros_msgs_generate_messages_lisp.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/lzc/lzc-code/build/CMakeFiles 0
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 mode/CMakeFiles/mavros_msgs_generate_messages_lisp.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/lzc/lzc-code/build/CMakeFiles 0
+.PHONY : mode/CMakeFiles/mavros_msgs_generate_messages_lisp.dir/rule
+
+# Convenience name for target.
+mavros_msgs_generate_messages_lisp: mode/CMakeFiles/mavros_msgs_generate_messages_lisp.dir/rule
+.PHONY : mavros_msgs_generate_messages_lisp
+
+# clean rule for target.
+mode/CMakeFiles/mavros_msgs_generate_messages_lisp.dir/clean:
+	$(MAKE) $(MAKESILENT) -f mode/CMakeFiles/mavros_msgs_generate_messages_lisp.dir/build.make mode/CMakeFiles/mavros_msgs_generate_messages_lisp.dir/clean
+.PHONY : mode/CMakeFiles/mavros_msgs_generate_messages_lisp.dir/clean
+
+#=============================================================================
+# Target rules for target mode/CMakeFiles/mavros_msgs_generate_messages_nodejs.dir
+
+# All Build rule for target.
+mode/CMakeFiles/mavros_msgs_generate_messages_nodejs.dir/all:
+	$(MAKE) $(MAKESILENT) -f mode/CMakeFiles/mavros_msgs_generate_messages_nodejs.dir/build.make mode/CMakeFiles/mavros_msgs_generate_messages_nodejs.dir/depend
+	$(MAKE) $(MAKESILENT) -f mode/CMakeFiles/mavros_msgs_generate_messages_nodejs.dir/build.make mode/CMakeFiles/mavros_msgs_generate_messages_nodejs.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/lzc/lzc-code/build/CMakeFiles --progress-num= "Built target mavros_msgs_generate_messages_nodejs"
+.PHONY : mode/CMakeFiles/mavros_msgs_generate_messages_nodejs.dir/all
+
+# Build rule for subdir invocation for target.
+mode/CMakeFiles/mavros_msgs_generate_messages_nodejs.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/lzc/lzc-code/build/CMakeFiles 0
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 mode/CMakeFiles/mavros_msgs_generate_messages_nodejs.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/lzc/lzc-code/build/CMakeFiles 0
+.PHONY : mode/CMakeFiles/mavros_msgs_generate_messages_nodejs.dir/rule
+
+# Convenience name for target.
+mavros_msgs_generate_messages_nodejs: mode/CMakeFiles/mavros_msgs_generate_messages_nodejs.dir/rule
+.PHONY : mavros_msgs_generate_messages_nodejs
+
+# clean rule for target.
+mode/CMakeFiles/mavros_msgs_generate_messages_nodejs.dir/clean:
+	$(MAKE) $(MAKESILENT) -f mode/CMakeFiles/mavros_msgs_generate_messages_nodejs.dir/build.make mode/CMakeFiles/mavros_msgs_generate_messages_nodejs.dir/clean
+.PHONY : mode/CMakeFiles/mavros_msgs_generate_messages_nodejs.dir/clean
+
+#=============================================================================
+# Target rules for target mode/CMakeFiles/mavros_msgs_generate_messages_py.dir
+
+# All Build rule for target.
+mode/CMakeFiles/mavros_msgs_generate_messages_py.dir/all:
+	$(MAKE) $(MAKESILENT) -f mode/CMakeFiles/mavros_msgs_generate_messages_py.dir/build.make mode/CMakeFiles/mavros_msgs_generate_messages_py.dir/depend
+	$(MAKE) $(MAKESILENT) -f mode/CMakeFiles/mavros_msgs_generate_messages_py.dir/build.make mode/CMakeFiles/mavros_msgs_generate_messages_py.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/lzc/lzc-code/build/CMakeFiles --progress-num= "Built target mavros_msgs_generate_messages_py"
+.PHONY : mode/CMakeFiles/mavros_msgs_generate_messages_py.dir/all
+
+# Build rule for subdir invocation for target.
+mode/CMakeFiles/mavros_msgs_generate_messages_py.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/lzc/lzc-code/build/CMakeFiles 0
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 mode/CMakeFiles/mavros_msgs_generate_messages_py.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/lzc/lzc-code/build/CMakeFiles 0
+.PHONY : mode/CMakeFiles/mavros_msgs_generate_messages_py.dir/rule
+
+# Convenience name for target.
+mavros_msgs_generate_messages_py: mode/CMakeFiles/mavros_msgs_generate_messages_py.dir/rule
+.PHONY : mavros_msgs_generate_messages_py
+
+# clean rule for target.
+mode/CMakeFiles/mavros_msgs_generate_messages_py.dir/clean:
+	$(MAKE) $(MAKESILENT) -f mode/CMakeFiles/mavros_msgs_generate_messages_py.dir/build.make mode/CMakeFiles/mavros_msgs_generate_messages_py.dir/clean
+.PHONY : mode/CMakeFiles/mavros_msgs_generate_messages_py.dir/clean
+
+#=============================================================================
+# Target rules for target mode/CMakeFiles/geographic_msgs_generate_messages_cpp.dir
+
+# All Build rule for target.
+mode/CMakeFiles/geographic_msgs_generate_messages_cpp.dir/all:
+	$(MAKE) $(MAKESILENT) -f mode/CMakeFiles/geographic_msgs_generate_messages_cpp.dir/build.make mode/CMakeFiles/geographic_msgs_generate_messages_cpp.dir/depend
+	$(MAKE) $(MAKESILENT) -f mode/CMakeFiles/geographic_msgs_generate_messages_cpp.dir/build.make mode/CMakeFiles/geographic_msgs_generate_messages_cpp.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/lzc/lzc-code/build/CMakeFiles --progress-num= "Built target geographic_msgs_generate_messages_cpp"
+.PHONY : mode/CMakeFiles/geographic_msgs_generate_messages_cpp.dir/all
+
+# Build rule for subdir invocation for target.
+mode/CMakeFiles/geographic_msgs_generate_messages_cpp.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/lzc/lzc-code/build/CMakeFiles 0
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 mode/CMakeFiles/geographic_msgs_generate_messages_cpp.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/lzc/lzc-code/build/CMakeFiles 0
+.PHONY : mode/CMakeFiles/geographic_msgs_generate_messages_cpp.dir/rule
+
+# Convenience name for target.
+geographic_msgs_generate_messages_cpp: mode/CMakeFiles/geographic_msgs_generate_messages_cpp.dir/rule
+.PHONY : geographic_msgs_generate_messages_cpp
+
+# clean rule for target.
+mode/CMakeFiles/geographic_msgs_generate_messages_cpp.dir/clean:
+	$(MAKE) $(MAKESILENT) -f mode/CMakeFiles/geographic_msgs_generate_messages_cpp.dir/build.make mode/CMakeFiles/geographic_msgs_generate_messages_cpp.dir/clean
+.PHONY : mode/CMakeFiles/geographic_msgs_generate_messages_cpp.dir/clean
+
+#=============================================================================
+# Target rules for target mode/CMakeFiles/geographic_msgs_generate_messages_eus.dir
+
+# All Build rule for target.
+mode/CMakeFiles/geographic_msgs_generate_messages_eus.dir/all:
+	$(MAKE) $(MAKESILENT) -f mode/CMakeFiles/geographic_msgs_generate_messages_eus.dir/build.make mode/CMakeFiles/geographic_msgs_generate_messages_eus.dir/depend
+	$(MAKE) $(MAKESILENT) -f mode/CMakeFiles/geographic_msgs_generate_messages_eus.dir/build.make mode/CMakeFiles/geographic_msgs_generate_messages_eus.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/lzc/lzc-code/build/CMakeFiles --progress-num= "Built target geographic_msgs_generate_messages_eus"
+.PHONY : mode/CMakeFiles/geographic_msgs_generate_messages_eus.dir/all
+
+# Build rule for subdir invocation for target.
+mode/CMakeFiles/geographic_msgs_generate_messages_eus.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/lzc/lzc-code/build/CMakeFiles 0
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 mode/CMakeFiles/geographic_msgs_generate_messages_eus.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/lzc/lzc-code/build/CMakeFiles 0
+.PHONY : mode/CMakeFiles/geographic_msgs_generate_messages_eus.dir/rule
+
+# Convenience name for target.
+geographic_msgs_generate_messages_eus: mode/CMakeFiles/geographic_msgs_generate_messages_eus.dir/rule
+.PHONY : geographic_msgs_generate_messages_eus
+
+# clean rule for target.
+mode/CMakeFiles/geographic_msgs_generate_messages_eus.dir/clean:
+	$(MAKE) $(MAKESILENT) -f mode/CMakeFiles/geographic_msgs_generate_messages_eus.dir/build.make mode/CMakeFiles/geographic_msgs_generate_messages_eus.dir/clean
+.PHONY : mode/CMakeFiles/geographic_msgs_generate_messages_eus.dir/clean
+
+#=============================================================================
+# Target rules for target mode/CMakeFiles/geographic_msgs_generate_messages_lisp.dir
+
+# All Build rule for target.
+mode/CMakeFiles/geographic_msgs_generate_messages_lisp.dir/all:
+	$(MAKE) $(MAKESILENT) -f mode/CMakeFiles/geographic_msgs_generate_messages_lisp.dir/build.make mode/CMakeFiles/geographic_msgs_generate_messages_lisp.dir/depend
+	$(MAKE) $(MAKESILENT) -f mode/CMakeFiles/geographic_msgs_generate_messages_lisp.dir/build.make mode/CMakeFiles/geographic_msgs_generate_messages_lisp.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/lzc/lzc-code/build/CMakeFiles --progress-num= "Built target geographic_msgs_generate_messages_lisp"
+.PHONY : mode/CMakeFiles/geographic_msgs_generate_messages_lisp.dir/all
+
+# Build rule for subdir invocation for target.
+mode/CMakeFiles/geographic_msgs_generate_messages_lisp.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/lzc/lzc-code/build/CMakeFiles 0
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 mode/CMakeFiles/geographic_msgs_generate_messages_lisp.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/lzc/lzc-code/build/CMakeFiles 0
+.PHONY : mode/CMakeFiles/geographic_msgs_generate_messages_lisp.dir/rule
+
+# Convenience name for target.
+geographic_msgs_generate_messages_lisp: mode/CMakeFiles/geographic_msgs_generate_messages_lisp.dir/rule
+.PHONY : geographic_msgs_generate_messages_lisp
+
+# clean rule for target.
+mode/CMakeFiles/geographic_msgs_generate_messages_lisp.dir/clean:
+	$(MAKE) $(MAKESILENT) -f mode/CMakeFiles/geographic_msgs_generate_messages_lisp.dir/build.make mode/CMakeFiles/geographic_msgs_generate_messages_lisp.dir/clean
+.PHONY : mode/CMakeFiles/geographic_msgs_generate_messages_lisp.dir/clean
+
+#=============================================================================
+# Target rules for target mode/CMakeFiles/geographic_msgs_generate_messages_nodejs.dir
+
+# All Build rule for target.
+mode/CMakeFiles/geographic_msgs_generate_messages_nodejs.dir/all:
+	$(MAKE) $(MAKESILENT) -f mode/CMakeFiles/geographic_msgs_generate_messages_nodejs.dir/build.make mode/CMakeFiles/geographic_msgs_generate_messages_nodejs.dir/depend
+	$(MAKE) $(MAKESILENT) -f mode/CMakeFiles/geographic_msgs_generate_messages_nodejs.dir/build.make mode/CMakeFiles/geographic_msgs_generate_messages_nodejs.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/lzc/lzc-code/build/CMakeFiles --progress-num= "Built target geographic_msgs_generate_messages_nodejs"
+.PHONY : mode/CMakeFiles/geographic_msgs_generate_messages_nodejs.dir/all
+
+# Build rule for subdir invocation for target.
+mode/CMakeFiles/geographic_msgs_generate_messages_nodejs.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/lzc/lzc-code/build/CMakeFiles 0
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 mode/CMakeFiles/geographic_msgs_generate_messages_nodejs.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/lzc/lzc-code/build/CMakeFiles 0
+.PHONY : mode/CMakeFiles/geographic_msgs_generate_messages_nodejs.dir/rule
+
+# Convenience name for target.
+geographic_msgs_generate_messages_nodejs: mode/CMakeFiles/geographic_msgs_generate_messages_nodejs.dir/rule
+.PHONY : geographic_msgs_generate_messages_nodejs
+
+# clean rule for target.
+mode/CMakeFiles/geographic_msgs_generate_messages_nodejs.dir/clean:
+	$(MAKE) $(MAKESILENT) -f mode/CMakeFiles/geographic_msgs_generate_messages_nodejs.dir/build.make mode/CMakeFiles/geographic_msgs_generate_messages_nodejs.dir/clean
+.PHONY : mode/CMakeFiles/geographic_msgs_generate_messages_nodejs.dir/clean
+
+#=============================================================================
+# Target rules for target mode/CMakeFiles/geographic_msgs_generate_messages_py.dir
+
+# All Build rule for target.
+mode/CMakeFiles/geographic_msgs_generate_messages_py.dir/all:
+	$(MAKE) $(MAKESILENT) -f mode/CMakeFiles/geographic_msgs_generate_messages_py.dir/build.make mode/CMakeFiles/geographic_msgs_generate_messages_py.dir/depend
+	$(MAKE) $(MAKESILENT) -f mode/CMakeFiles/geographic_msgs_generate_messages_py.dir/build.make mode/CMakeFiles/geographic_msgs_generate_messages_py.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/lzc/lzc-code/build/CMakeFiles --progress-num= "Built target geographic_msgs_generate_messages_py"
+.PHONY : mode/CMakeFiles/geographic_msgs_generate_messages_py.dir/all
+
+# Build rule for subdir invocation for target.
+mode/CMakeFiles/geographic_msgs_generate_messages_py.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/lzc/lzc-code/build/CMakeFiles 0
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 mode/CMakeFiles/geographic_msgs_generate_messages_py.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/lzc/lzc-code/build/CMakeFiles 0
+.PHONY : mode/CMakeFiles/geographic_msgs_generate_messages_py.dir/rule
+
+# Convenience name for target.
+geographic_msgs_generate_messages_py: mode/CMakeFiles/geographic_msgs_generate_messages_py.dir/rule
+.PHONY : geographic_msgs_generate_messages_py
+
+# clean rule for target.
+mode/CMakeFiles/geographic_msgs_generate_messages_py.dir/clean:
+	$(MAKE) $(MAKESILENT) -f mode/CMakeFiles/geographic_msgs_generate_messages_py.dir/build.make mode/CMakeFiles/geographic_msgs_generate_messages_py.dir/clean
+.PHONY : mode/CMakeFiles/geographic_msgs_generate_messages_py.dir/clean
+
+#=============================================================================
+# Target rules for target mode/CMakeFiles/uuid_msgs_generate_messages_cpp.dir
+
+# All Build rule for target.
+mode/CMakeFiles/uuid_msgs_generate_messages_cpp.dir/all:
+	$(MAKE) $(MAKESILENT) -f mode/CMakeFiles/uuid_msgs_generate_messages_cpp.dir/build.make mode/CMakeFiles/uuid_msgs_generate_messages_cpp.dir/depend
+	$(MAKE) $(MAKESILENT) -f mode/CMakeFiles/uuid_msgs_generate_messages_cpp.dir/build.make mode/CMakeFiles/uuid_msgs_generate_messages_cpp.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/lzc/lzc-code/build/CMakeFiles --progress-num= "Built target uuid_msgs_generate_messages_cpp"
+.PHONY : mode/CMakeFiles/uuid_msgs_generate_messages_cpp.dir/all
+
+# Build rule for subdir invocation for target.
+mode/CMakeFiles/uuid_msgs_generate_messages_cpp.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/lzc/lzc-code/build/CMakeFiles 0
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 mode/CMakeFiles/uuid_msgs_generate_messages_cpp.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/lzc/lzc-code/build/CMakeFiles 0
+.PHONY : mode/CMakeFiles/uuid_msgs_generate_messages_cpp.dir/rule
+
+# Convenience name for target.
+uuid_msgs_generate_messages_cpp: mode/CMakeFiles/uuid_msgs_generate_messages_cpp.dir/rule
+.PHONY : uuid_msgs_generate_messages_cpp
+
+# clean rule for target.
+mode/CMakeFiles/uuid_msgs_generate_messages_cpp.dir/clean:
+	$(MAKE) $(MAKESILENT) -f mode/CMakeFiles/uuid_msgs_generate_messages_cpp.dir/build.make mode/CMakeFiles/uuid_msgs_generate_messages_cpp.dir/clean
+.PHONY : mode/CMakeFiles/uuid_msgs_generate_messages_cpp.dir/clean
+
+#=============================================================================
+# Target rules for target mode/CMakeFiles/uuid_msgs_generate_messages_eus.dir
+
+# All Build rule for target.
+mode/CMakeFiles/uuid_msgs_generate_messages_eus.dir/all:
+	$(MAKE) $(MAKESILENT) -f mode/CMakeFiles/uuid_msgs_generate_messages_eus.dir/build.make mode/CMakeFiles/uuid_msgs_generate_messages_eus.dir/depend
+	$(MAKE) $(MAKESILENT) -f mode/CMakeFiles/uuid_msgs_generate_messages_eus.dir/build.make mode/CMakeFiles/uuid_msgs_generate_messages_eus.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/lzc/lzc-code/build/CMakeFiles --progress-num= "Built target uuid_msgs_generate_messages_eus"
+.PHONY : mode/CMakeFiles/uuid_msgs_generate_messages_eus.dir/all
+
+# Build rule for subdir invocation for target.
+mode/CMakeFiles/uuid_msgs_generate_messages_eus.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/lzc/lzc-code/build/CMakeFiles 0
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 mode/CMakeFiles/uuid_msgs_generate_messages_eus.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/lzc/lzc-code/build/CMakeFiles 0
+.PHONY : mode/CMakeFiles/uuid_msgs_generate_messages_eus.dir/rule
+
+# Convenience name for target.
+uuid_msgs_generate_messages_eus: mode/CMakeFiles/uuid_msgs_generate_messages_eus.dir/rule
+.PHONY : uuid_msgs_generate_messages_eus
+
+# clean rule for target.
+mode/CMakeFiles/uuid_msgs_generate_messages_eus.dir/clean:
+	$(MAKE) $(MAKESILENT) -f mode/CMakeFiles/uuid_msgs_generate_messages_eus.dir/build.make mode/CMakeFiles/uuid_msgs_generate_messages_eus.dir/clean
+.PHONY : mode/CMakeFiles/uuid_msgs_generate_messages_eus.dir/clean
+
+#=============================================================================
+# Target rules for target mode/CMakeFiles/uuid_msgs_generate_messages_lisp.dir
+
+# All Build rule for target.
+mode/CMakeFiles/uuid_msgs_generate_messages_lisp.dir/all:
+	$(MAKE) $(MAKESILENT) -f mode/CMakeFiles/uuid_msgs_generate_messages_lisp.dir/build.make mode/CMakeFiles/uuid_msgs_generate_messages_lisp.dir/depend
+	$(MAKE) $(MAKESILENT) -f mode/CMakeFiles/uuid_msgs_generate_messages_lisp.dir/build.make mode/CMakeFiles/uuid_msgs_generate_messages_lisp.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/lzc/lzc-code/build/CMakeFiles --progress-num= "Built target uuid_msgs_generate_messages_lisp"
+.PHONY : mode/CMakeFiles/uuid_msgs_generate_messages_lisp.dir/all
+
+# Build rule for subdir invocation for target.
+mode/CMakeFiles/uuid_msgs_generate_messages_lisp.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/lzc/lzc-code/build/CMakeFiles 0
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 mode/CMakeFiles/uuid_msgs_generate_messages_lisp.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/lzc/lzc-code/build/CMakeFiles 0
+.PHONY : mode/CMakeFiles/uuid_msgs_generate_messages_lisp.dir/rule
+
+# Convenience name for target.
+uuid_msgs_generate_messages_lisp: mode/CMakeFiles/uuid_msgs_generate_messages_lisp.dir/rule
+.PHONY : uuid_msgs_generate_messages_lisp
+
+# clean rule for target.
+mode/CMakeFiles/uuid_msgs_generate_messages_lisp.dir/clean:
+	$(MAKE) $(MAKESILENT) -f mode/CMakeFiles/uuid_msgs_generate_messages_lisp.dir/build.make mode/CMakeFiles/uuid_msgs_generate_messages_lisp.dir/clean
+.PHONY : mode/CMakeFiles/uuid_msgs_generate_messages_lisp.dir/clean
+
+#=============================================================================
+# Target rules for target mode/CMakeFiles/uuid_msgs_generate_messages_nodejs.dir
+
+# All Build rule for target.
+mode/CMakeFiles/uuid_msgs_generate_messages_nodejs.dir/all:
+	$(MAKE) $(MAKESILENT) -f mode/CMakeFiles/uuid_msgs_generate_messages_nodejs.dir/build.make mode/CMakeFiles/uuid_msgs_generate_messages_nodejs.dir/depend
+	$(MAKE) $(MAKESILENT) -f mode/CMakeFiles/uuid_msgs_generate_messages_nodejs.dir/build.make mode/CMakeFiles/uuid_msgs_generate_messages_nodejs.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/lzc/lzc-code/build/CMakeFiles --progress-num= "Built target uuid_msgs_generate_messages_nodejs"
+.PHONY : mode/CMakeFiles/uuid_msgs_generate_messages_nodejs.dir/all
+
+# Build rule for subdir invocation for target.
+mode/CMakeFiles/uuid_msgs_generate_messages_nodejs.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/lzc/lzc-code/build/CMakeFiles 0
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 mode/CMakeFiles/uuid_msgs_generate_messages_nodejs.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/lzc/lzc-code/build/CMakeFiles 0
+.PHONY : mode/CMakeFiles/uuid_msgs_generate_messages_nodejs.dir/rule
+
+# Convenience name for target.
+uuid_msgs_generate_messages_nodejs: mode/CMakeFiles/uuid_msgs_generate_messages_nodejs.dir/rule
+.PHONY : uuid_msgs_generate_messages_nodejs
+
+# clean rule for target.
+mode/CMakeFiles/uuid_msgs_generate_messages_nodejs.dir/clean:
+	$(MAKE) $(MAKESILENT) -f mode/CMakeFiles/uuid_msgs_generate_messages_nodejs.dir/build.make mode/CMakeFiles/uuid_msgs_generate_messages_nodejs.dir/clean
+.PHONY : mode/CMakeFiles/uuid_msgs_generate_messages_nodejs.dir/clean
+
+#=============================================================================
+# Target rules for target mode/CMakeFiles/uuid_msgs_generate_messages_py.dir
+
+# All Build rule for target.
+mode/CMakeFiles/uuid_msgs_generate_messages_py.dir/all:
+	$(MAKE) $(MAKESILENT) -f mode/CMakeFiles/uuid_msgs_generate_messages_py.dir/build.make mode/CMakeFiles/uuid_msgs_generate_messages_py.dir/depend
+	$(MAKE) $(MAKESILENT) -f mode/CMakeFiles/uuid_msgs_generate_messages_py.dir/build.make mode/CMakeFiles/uuid_msgs_generate_messages_py.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/lzc/lzc-code/build/CMakeFiles --progress-num= "Built target uuid_msgs_generate_messages_py"
+.PHONY : mode/CMakeFiles/uuid_msgs_generate_messages_py.dir/all
+
+# Build rule for subdir invocation for target.
+mode/CMakeFiles/uuid_msgs_generate_messages_py.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/lzc/lzc-code/build/CMakeFiles 0
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 mode/CMakeFiles/uuid_msgs_generate_messages_py.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/lzc/lzc-code/build/CMakeFiles 0
+.PHONY : mode/CMakeFiles/uuid_msgs_generate_messages_py.dir/rule
+
+# Convenience name for target.
+uuid_msgs_generate_messages_py: mode/CMakeFiles/uuid_msgs_generate_messages_py.dir/rule
+.PHONY : uuid_msgs_generate_messages_py
+
+# clean rule for target.
+mode/CMakeFiles/uuid_msgs_generate_messages_py.dir/clean:
+	$(MAKE) $(MAKESILENT) -f mode/CMakeFiles/uuid_msgs_generate_messages_py.dir/build.make mode/CMakeFiles/uuid_msgs_generate_messages_py.dir/clean
+.PHONY : mode/CMakeFiles/uuid_msgs_generate_messages_py.dir/clean
+
+#=============================================================================
+# Target rules for target mode/CMakeFiles/mode.dir
+
+# All Build rule for target.
+mode/CMakeFiles/mode.dir/all:
+	$(MAKE) $(MAKESILENT) -f mode/CMakeFiles/mode.dir/build.make mode/CMakeFiles/mode.dir/depend
+	$(MAKE) $(MAKESILENT) -f mode/CMakeFiles/mode.dir/build.make mode/CMakeFiles/mode.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/lzc/lzc-code/build/CMakeFiles --progress-num=9,10 "Built target mode"
+.PHONY : mode/CMakeFiles/mode.dir/all
+
+# Build rule for subdir invocation for target.
+mode/CMakeFiles/mode.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/lzc/lzc-code/build/CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 mode/CMakeFiles/mode.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/lzc/lzc-code/build/CMakeFiles 0
+.PHONY : mode/CMakeFiles/mode.dir/rule
+
+# Convenience name for target.
+mode: mode/CMakeFiles/mode.dir/rule
+.PHONY : mode
+
+# clean rule for target.
+mode/CMakeFiles/mode.dir/clean:
+	$(MAKE) $(MAKESILENT) -f mode/CMakeFiles/mode.dir/build.make mode/CMakeFiles/mode.dir/clean
+.PHONY : mode/CMakeFiles/mode.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

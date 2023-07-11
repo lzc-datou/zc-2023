@@ -1,0 +1,8 @@
+prefix=/home/lzc/lzc-code/devel
+
+Name: mode
+Description: Description of mode
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

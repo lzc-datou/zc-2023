@@ -306,8 +306,8 @@ class Locate:
     # 根据靶标大小直接得出世界坐标系（以靶标正方形中心为原点）下靶标最小外接矩形的坐标
     # obj_points = np.float32([[-0.5,1.366,0],[0.5,1.366,0],[0.5,-0.5,0],[-0.5,-0.5,0]]) # 最小外接矩形世界坐标
 
-    obj_points = np.float32([[-1,1,0],[1,1,0],
-                             [1,-1,0],[-1,-1,0]
+    obj_points = np.float32([[-0.01,0.01,0],[0.01,0.01,0],
+                             [0.01,-0.01,0],[-0.01,-0.01,0]
                             ])  #目前参数为IR 1080P 18.0mm 1/2.7''相机的参数
     # 相机内参
     cameraMatrix = np.float32([ [1312.071067,       0.          , 446.061005],
@@ -579,9 +579,9 @@ def ts_callback(msg1,msg2,msg3):
         locate.ref_latitude = msg2.latitude
         locate.ref_altitude = msg2.altitude
         
-        # 测试用
-        print("longitude = ",locate.ref_longitude,"latitude = ",locate.ref_latitude,"altitude = ",locate.ref_altitude)
-    
+       
+        # 输出飞机自身gps坐标
+        rospy.loginfo("plane longitude = %d latitude = %d altitude = %d",locate.ref_longitude,locate.ref_latitude,locate.ref_altitude)
 
         # 四元数转姿态角
         quaternion = (
@@ -593,9 +593,8 @@ def ts_callback(msg1,msg2,msg3):
         # 姿态角赋值
         locate.roll,locate.pitch,locate.yaw = euler_from_quaternion(quaternion)
 
-        # 测试用
-        print("roll = ",locate.roll,"pitch = ",locate.pitch,"yaw = ",locate.yaw)
-
+        # 输出姿态角
+        rospy.loginfo("plane roll = %d pitch = %d yaw = %d",locate.roll, locate.pitch, locate.yaw)
         # 2. 图像处理
         for i in range(len(msg1.image_list)):
             # 将ros图片格式转为opencv图片格式
@@ -633,7 +632,7 @@ def ts_callback(msg1,msg2,msg3):
                 if rotated_z >= (1 - locate_error) * locate.ref_altitude and rotated_z <= (1 + locate_error) * locate.ref_altitude:
                     # 定位精确，予以采用
                     longitude,latitude = locate.xy_to_gps(rotated_x,rotated_y)
-                    rospy.loginfo("longitude = %f  latitude = %f ",longitude,latitude)
+                    rospy.loginfo("target longitude = %f  latitude = %f ",longitude,latitude)
                     filter.num_dict_add(number, True, longitude, latitude)
                     pass
                 else:

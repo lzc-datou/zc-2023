@@ -7,5 +7,6 @@
 subdirs("gtest")
 subdirs("my_msgs")
 subdirs("test")
+subdirs("mode")
 subdirs("process_imgs")
 subdirs("yolov5")
