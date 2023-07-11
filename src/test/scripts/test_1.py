@@ -7,6 +7,7 @@ after_spin.signal = 10
 stop = 0
 count = 0
 def ts_callback(msg1,msg2):
+    print("同步")
     if stop == 0:
         signal_1 = msg1.signal
         signal_2 = msg2.signal
@@ -42,7 +43,7 @@ if __name__ == "__main__":
     sub_1 = Subscriber("/signal_pub/signal_1",Signal)
     sub_2 = Subscriber("/signal_pub/signal_2",Signal)
     
-    ts = ApproximateTimeSynchronizer([sub_1,sub_2],queue_size=10,slop=0.001)
+    ts = ApproximateTimeSynchronizer([sub_1,sub_2],queue_size=10,slop=100)
     
     ts.registerCallback(ts_callback)
     

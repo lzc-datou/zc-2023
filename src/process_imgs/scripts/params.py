@@ -3,7 +3,7 @@
 # 自定义变量均为小写，库自带变量一般均为全大写
 
 locate_error = 0.1
-time_error = 0.1
+time_error = 100
 '时间同步器允许的时间误差范围'
 # rotate_target()函数转正靶标时的相关参数  
 kernal_size = (2,2)  

@@ -1,0 +1,54 @@
+//1.txt为测试侦察航线
+//2.txt为投靶和航线
+//3.txt为降落航线
+//1.txt中的5为投靶测试点
+
+ArduPilot custom modes
+APM:Plane
+Numeric
+String
+Description and notes
+0
+MANUAL
+1
+CIRCLE
+2
+STABILIZE
+3
+TRAINING
+4
+ACRO
+5
+FBWA
+Fly by wire A
+6
+FBWB
+Fly by wire B
+7
+CRUISE
+8
+AUTOTUNE
+10
+AUTO
+11
+RTL
+Return To Launch
+12
+LOITER
+14
+LAND
+not in list now
+15
+GUIDED
+16
+INITIALISING
+17
+QSTABILIZE
+18
+QHOVER
+19
+QLOITER
+20
+QLAND
+21
+QRTL
