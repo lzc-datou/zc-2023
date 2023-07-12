@@ -11,6 +11,8 @@ find_package(catkin REQUIRED COMPONENTS
   message_filters
   rospy
   std_msgs
+  geometry_msgs
+  
 )
 
 ## System dependencies are found with CMake's conventions
@@ -164,6 +166,7 @@ catkin_install_python(PROGRAMS
   scripts/test_1.py
   scripts/test_2.py
   scripts/test3.py
+  scripts/set_origin.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 

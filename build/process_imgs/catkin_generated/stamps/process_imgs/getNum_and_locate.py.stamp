@@ -20,7 +20,7 @@ import torch
 import torchvision
 from torch.autograd import Variable
 import math
-import threading
+
 
 # 导入消息类型
 from my_msgs.msg import Boundingboxs_and_image
@@ -28,7 +28,8 @@ from my_msgs.msg import Signal
 from my_msgs.msg import Median_gps
 from message_filters import ApproximateTimeSynchronizer,Subscriber
 from sensor_msgs.msg import NavSatFix
-from mavros_msgs.msg import AttitudeTarget
+from sensor_msgs.msg import Imu
+from geometry_msgs.msg import PoseStamped
 
 # 导入四元数转欧拉角函数
 from tf.transformations import euler_from_quaternion
@@ -355,11 +356,11 @@ class Locate:
         说明：ros使用的世界坐标系均为北东地（对应XYZ轴）坐标系，不管是东北天还是北东地坐标系，导航坐标系->载体坐标系旋转顺序（即姿态角旋转顺序）均为偏航-俯仰-滚转(ZYX顺序为北东地，ZXY顺序为东北天)
 
         '''
-         # 订阅飞控gps坐标 gps_sub = rospy.Subscriber('/mavros/global_position/global', NavSatFix, gps_callback)
+        # 订阅飞控gps坐标 gps_sub = rospy.Subscriber('/mavros/global_position/global', NavSatFix, gps_callback)
         # 订阅飞控姿态信息（俯仰，偏航，滚转） attitude_sub = rospy.Subscriber('/mavros/local_position/pose', PoseStamped, attitude_callback)
 
-
-        # 角度转弧度
+        # TODO: 待定，不知道获取到的是角度制还是弧度制
+        # 角度转弧度  
         roll = math.radians(self.roll)
         pitch = math.radians(self.pitch)
         # 绕偏航轴旋转时，由于飞控用的是东北天，而我们的目标坐标系是北东地，所以需要多转0.5*pi
@@ -569,10 +570,13 @@ bridge = CvBridge()
 def ts_callback(msg1,msg2,msg3):
 
     '回调函数功能：处理单张图片及定位该图片中的靶标，并把识别到的数字和靶标gps坐标放入全局变量num_and_location中'
+    rospy.loginfo("get into ts_callback")
     # 判断同步器的回调函数是否执行，如果不执行直接返回
     if stop_ts_callback == 1:
+        rospy.loginfo("ts_callback is stopped")
         return
     else:
+        rospy.loginfo("ts_callback begin")
         # 1. 获取飞机自身gps坐标及姿态角
         global locate
         locate.ref_longitude = msg2.longitude
@@ -581,20 +585,20 @@ def ts_callback(msg1,msg2,msg3):
         
        
         # 输出飞机自身gps坐标
-        rospy.loginfo("plane longitude = %d latitude = %d altitude = %d",locate.ref_longitude,locate.ref_latitude,locate.ref_altitude)
+        rospy.loginfo("plane longitude = %f latitude = %f altitude = %f",locate.ref_longitude,locate.ref_latitude,locate.ref_altitude)
 
         # 四元数转姿态角
         quaternion = (
-            msg3.orientation.x,
-            msg3.orientation.y,
-            msg3.orientation.z,
-            msg3.orientation.w
+            msg3.pose.orientation.x,
+            msg3.pose.orientation.y,
+            msg3.pose.orientation.z,
+            msg3.pose.orientation.w
                     )
         # 姿态角赋值
         locate.roll,locate.pitch,locate.yaw = euler_from_quaternion(quaternion)
 
         # 输出姿态角
-        rospy.loginfo("plane roll = %d pitch = %d yaw = %d",locate.roll, locate.pitch, locate.yaw)
+        rospy.loginfo("plane roll = %f pitch = %f yaw = %f",locate.roll, locate.pitch, locate.yaw)
         # 2. 图像处理
         for i in range(len(msg1.image_list)):
             # 将ros图片格式转为opencv图片格式
@@ -628,6 +632,7 @@ def ts_callback(msg1,msg2,msg3):
                 x,y,z = locate.get_xyz()
                 # 坐标系变换，将相机坐标系变换为北东地坐标系
                 rotated_x,rotated_y,rotated_z = locate.rotate_xyz(x,y,z)
+                rospy.loginfo("rotated_x = %f rotated_y = %f rotated_z = %f",rotated_x,rotated_y,rotated_z)
                 # 如果视觉定位得到的飞机高度与飞控得到的飞机高度在误差范围内，则认为视觉定位准确，予以采用。否则，则舍弃此次定位
                 if rotated_z >= (1 - locate_error) * locate.ref_altitude and rotated_z <= (1 + locate_error) * locate.ref_altitude:
                     # 定位精确，予以采用
@@ -641,8 +646,10 @@ def ts_callback(msg1,msg2,msg3):
                     filter.num_dict_add(number, False, 0, 0)
     pass
 def state_callback(msg):
+    rospy.loginfo("get state")
     # 如果接收到侦查终止信号，将全局变量stop_ts_callback赋值为1，并发布中位数gps坐标
     if msg.signal == 1:
+
         global stop_ts_callback
         global is_processed
         global median_gps
@@ -682,21 +689,23 @@ def state_callback(msg):
 if __name__ == "__main__":
     # 初始化ros节点
     rospy.init_node("num_and_location")
-
-    
+    rospy.loginfo("节点初始化完毕") 
     # rospy.Subscriber("/yolov5/Boundingboxs_and_image",Boundingboxs_and_image,call_back,queue_size=20) # 测试用，可删除
 
     # 创建消息订阅者
     box_sub = Subscriber("/yolov5/Boundingboxs_and_image",Boundingboxs_and_image) # 获取yolov5图像和坐标信息
     gps_sub = Subscriber('/mavros/global_position/global',NavSatFix) # 获取飞控gps坐标
-    pose_sub = Subscriber('/mavros/imu/data', AttitudeTarget) # 获取飞控姿态
+    pose_sub = Subscriber('/mavros/local_position/pose', PoseStamped) # 获取飞控姿态
+    rospy.loginfo("订阅者创建完毕")
     state_sub = rospy.Subscriber('/is_investigation_over',Signal,state_callback,queue_size=10) # 获取侦查状态（正在侦查还是已侦查完毕）
     # 创建时间同步器
-    ts = ApproximateTimeSynchronizer([box_sub,gps_sub,pose_sub],queue_size=10,slop=time_error)
+    ts = ApproximateTimeSynchronizer([box_sub,gps_sub,pose_sub],queue_size=10,slop=100)
+    rospy.loginfo("同步器创建完毕")
     
     # 注册回调函数
     ts.registerCallback(ts_callback)
-
+    rospy.loginfo("回调函数注册完毕")
+    
     # 启动回调
     rospy.spin()
     

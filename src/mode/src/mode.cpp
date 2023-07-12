@@ -758,8 +758,8 @@ int main(int argc, char *argv[])
 	home.altitude = 170.326400;
 
 	// 测试靶点的经纬度 45.56456740	126.61732350
-	// target.latitude = 45.56456740;
-	// target.longtitude = 126.61732350;
+	target.latitude = 45.56456740;
+	target.longtitude = 126.61732350;
 
 	// target.latitude=result.mission.request.waypoints[5].x_lat;      这样赋值 会报Segmentation fault (core dumped)
 	// target.longtitude=result.mission.request.waypoints[5].y_long;
