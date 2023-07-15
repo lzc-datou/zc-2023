@@ -4,7 +4,7 @@
 home_altitude = 18
 '水平地面的海拔高度，每到一个新地方时一定记得更新'
 locate_error = 0.1
-time_error = 100
+time_error = 0.1
 '时间同步器允许的时间误差范围'
 # rotate_target()函数转正靶标时的相关参数
 kernal_size = (2, 2)

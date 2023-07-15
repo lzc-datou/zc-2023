@@ -45,7 +45,7 @@ class LetNet5(nn.Module):
 
     # 前向传播
     def forward(self, x):
-
+        
         x = self.conv_pool1(x)
         x = self.conv_pool2(x)
         x = x.view(-1, 16*5*5)       # resize to 2-dims(batch_size, 16*5*5) 展平成1维

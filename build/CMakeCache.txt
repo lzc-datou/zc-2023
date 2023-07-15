@@ -307,7 +307,7 @@ DOXYGEN_EXECUTABLE:FILEPATH=DOXYGEN_EXECUTABLE-NOTFOUND
 EMPY_EXECUTABLE:FILEPATH=EMPY_EXECUTABLE-NOTFOUND
 
 //Empy script
-EMPY_SCRIPT:STRING=/usr/lib/python3/dist-packages/em.py
+EMPY_SCRIPT:STRING=/home/lzc/.local/lib/python3.8/site-packages/em.py
 
 //Path to a library.
 GMOCK_LIBRARY:FILEPATH=GMOCK_LIBRARY-NOTFOUND
@@ -362,7 +362,7 @@ PYTHON_EXECUTABLE:FILEPATH=/usr/bin/python3
 PYTHON_VERSION:STRING=3
 
 //Location of Python module em
-PY_EM:STRING=/usr/lib/python3/dist-packages/em.py
+PY_EM:STRING=/home/lzc/.local/lib/python3.8/site-packages/em.py
 
 //Value Computed by CMake
 Project_BINARY_DIR:STATIC=/home/lzc/lzc-code/build
@@ -774,7 +774,7 @@ CMAKE_UNAME:INTERNAL=/usr/bin/uname
 //ADVANCED property for variable: CMAKE_VERBOSE_MAKEFILE
 CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
 //Details about finding PY_em
-FIND_PACKAGE_MESSAGE_DETAILS_PY_em:INTERNAL=[/usr/lib/python3/dist-packages/em.py][v()]
+FIND_PACKAGE_MESSAGE_DETAILS_PY_em:INTERNAL=[/home/lzc/.local/lib/python3.8/site-packages/em.py][v()]
 //Details about finding PythonInterp
 FIND_PACKAGE_MESSAGE_DETAILS_PythonInterp:INTERNAL=[/usr/bin/python3][v3.8.10()]
 //Details about finding Threads
