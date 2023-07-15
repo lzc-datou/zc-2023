@@ -717,6 +717,20 @@ void wait_auto_mode(ros::Rate &rate, ros::Publisher &vision_command)
 	return;
 }
 
+//侦察结束，接收靶点函数
+void target_get(ros::Rate &rate)
+{
+	for (int i = 0, i < 50; i++)
+	{
+
+		vision_command.publish(stop);
+ 		ros::spinOnce();
+	 	rate.sleep();
+	}
+	
+}
+
+
 int main(int argc, char *argv[])
 {
 	bool FlagMode = true;
@@ -746,7 +760,7 @@ int main(int argc, char *argv[])
 	ros::Rate rate(10);
 	mavros_msgs::WaypointClear missionClear;
 
-	// 侦察
+	// 侦察视觉启动与结束
 	start.signal = 0;
 	stop.signal = 1;
 	// 45.5614448	126.6185532	170.326400
@@ -784,15 +798,10 @@ int main(int argc, char *argv[])
 
 	// 等待航线任务执行完成
 	wait_detect_over(rate);
+	target_get(rate);
 
-	// Set_AutoMode(setModeClient,rate);
-	// for (int i = 0, i < 50; i++)
-	// {
+	//Set_AutoMode(setModeClient,rate);
 
-	// 	vision_command.publish(stop);
-	// 	ros::spinOnce();
-	// 	rate.sleep();
-	// }
 
 	std::cout << "zzh target lat, lon: " << target.latitude << ", " << target.longtitude << std::endl;
 
