@@ -44,6 +44,8 @@ is_processed = 0
 '标志变量：判断侦查获取到的数据是否已经处理过'
 median_gps = list()
 '存储中位数靶标gps坐标，方便侦查结束后循环发布中位数靶标gps坐标'
+three_nums = []
+'存储识别到的三个靶标数字'
 
 
 class Times_and_GPS:
@@ -313,7 +315,7 @@ class Locate:
     ref_latitude = 0.
     '飞机的纬度'
     ref_altitude = 0.
-    '飞机的海拔'
+    '飞机的海拔(对地高度)'
     roll = 0.
     '飞机滚转角'
     pitch = 0.
@@ -601,7 +603,7 @@ bridge = CvBridge()
 
 def ts_callback(msg1, msg2, msg3):
     '回调函数功能：处理单张图片及定位该图片中的靶标，并把识别到的数字和靶标gps坐标放入全局变量num_and_location中'
-    rospy.loginfo("get into ts_callback")
+    # rospy.loginfo("get into ts_callback")
     # 判断同步器的回调函数是否执行，如果不执行直接返回
     if stop_ts_callback == 1:
         rospy.loginfo("ts_callback is stopped")
@@ -670,17 +672,16 @@ def ts_callback(msg1, msg2, msg3):
                 rotated_x, rotated_y, rotated_z = locate.rotate_xyz(x, y, z)
                 rospy.loginfo("rotated_x = %f rotated_y = %f rotated_z = %f", rotated_x, rotated_y, rotated_z)
                 # 如果视觉定位得到的飞机高度与飞控得到的飞机高度在误差范围内，则认为视觉定位准确，予以采用。否则，则舍弃此次定位
-                # if rotated_z >= (1 - locate_error) * locate.ref_altitude and rotated_z <= (1 + locate_error) * locate.ref_altitude:
-                    # 定位精确，予以采用
-                longitude, latitude = locate.xy_to_gps(rotated_x, rotated_y)
-                rospy.loginfo("target longitude = %f  latitude = %f ", longitude, latitude)
-                
-                filter.num_dict_add(number, True, longitude, latitude)
+                if rotated_z >= (1 - locate_error) * locate.ref_altitude and rotated_z <= (1 + locate_error) * locate.ref_altitude:
+                    #定位精确，予以采用
+                    longitude, latitude = locate.xy_to_gps(rotated_x, rotated_y)
+                    rospy.loginfo("target longitude = %f  latitude = %f ", longitude, latitude)
+                    filter.num_dict_add(number, True, longitude, latitude)
                     
-                # else:
-                #     # 定位不精确，弃用
-                #     rospy.logwarn("inaccurate locate")
-                #     filter.num_dict_add(number, False, 0, 0)
+                else:
+                    # 定位不精确，弃用
+                    rospy.logwarn("inaccurate locate")
+                    filter.num_dict_add(number, False, 0, 0)
     pass
 
 
@@ -691,7 +692,7 @@ def state_callback(msg):
         global stop_ts_callback
         global is_processed
         global median_gps
-
+        global three_nums
         stop_ts_callback = 1
 
         if is_processed == 0:
@@ -705,13 +706,14 @@ def state_callback(msg):
                 num_list.append(key)
             num_list.sort(reverse=True)
 
+            three_nums = num_list
             median_num = num_list[1]
-            rospy.loginfo("results = %d %d %d",num_list[0], num_list[1], num_list[2])
-            rospy.loginfo("median number = %d", median_num)
-
             median_gps = [num_gps[median_num][0], num_gps[median_num][1]]
+        # 打印结果
+        rospy.loginfo("results = %d %d %d",three_nums[0], three_nums[1], three_nums[2])
+        rospy.loginfo("median number = %d", three_nums[1])
+        rospy.loginfo("median number longitude = %f latitude = %f",median_gps[0],median_gps[1])
         # 发布中位数靶标的gps坐标
-
         # 赋值
         median_gps_1 = Median_gps()
         median_gps_1.longitude = median_gps[0]
@@ -733,7 +735,7 @@ if __name__ == "__main__":
     gps_sub = Subscriber('/mavros/global_position/global',NavSatFix)  # 获取飞控gps坐标
     pose_sub = Subscriber('/mavros/local_position/pose', PoseStamped)  # 获取飞控姿态
     rospy.loginfo("订阅者创建完毕")
-    state_sub = rospy.Subscriber('/is_investigation_over', Signal, state_callback, queue_size=10)  # 获取侦查状态（正在侦查还是已侦查完毕）
+    state_sub = rospy.Subscriber('/is_investigation_over', Signal, state_callback, queue_size=20)  # 获取侦查状态（正在侦查还是已侦查完毕）
     # 创建时间同步器
     ts = ApproximateTimeSynchronizer([box_sub, gps_sub, pose_sub], queue_size=1, slop=time_error)
     rospy.loginfo("同步器创建完毕")

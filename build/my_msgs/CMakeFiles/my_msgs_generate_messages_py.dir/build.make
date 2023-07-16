@@ -79,9 +79,9 @@ my_msgs/CMakeFiles/my_msgs_generate_messages_py: /home/lzc/lzc-code/devel/lib/py
 
 /home/lzc/lzc-code/devel/lib/python3/dist-packages/my_msgs/msg/_Boundingboxs_and_image.py: /opt/ros/noetic/lib/genpy/genmsg_py.py
 /home/lzc/lzc-code/devel/lib/python3/dist-packages/my_msgs/msg/_Boundingboxs_and_image.py: /home/lzc/lzc-code/src/my_msgs/msg/Boundingboxs_and_image.msg
-/home/lzc/lzc-code/devel/lib/python3/dist-packages/my_msgs/msg/_Boundingboxs_and_image.py: /home/lzc/lzc-code/src/my_msgs/msg/Bounding_box.msg
-/home/lzc/lzc-code/devel/lib/python3/dist-packages/my_msgs/msg/_Boundingboxs_and_image.py: /opt/ros/noetic/share/sensor_msgs/msg/Image.msg
 /home/lzc/lzc-code/devel/lib/python3/dist-packages/my_msgs/msg/_Boundingboxs_and_image.py: /opt/ros/noetic/share/std_msgs/msg/Header.msg
+/home/lzc/lzc-code/devel/lib/python3/dist-packages/my_msgs/msg/_Boundingboxs_and_image.py: /opt/ros/noetic/share/sensor_msgs/msg/Image.msg
+/home/lzc/lzc-code/devel/lib/python3/dist-packages/my_msgs/msg/_Boundingboxs_and_image.py: /home/lzc/lzc-code/src/my_msgs/msg/Bounding_box.msg
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/lzc/lzc-code/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Generating Python from MSG my_msgs/Boundingboxs_and_image"
 	cd /home/lzc/lzc-code/build/my_msgs && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/genpy/cmake/../../../lib/genpy/genmsg_py.py /home/lzc/lzc-code/src/my_msgs/msg/Boundingboxs_and_image.msg -Imy_msgs:/home/lzc/lzc-code/src/my_msgs/msg -Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg -Isensor_msgs:/opt/ros/noetic/share/sensor_msgs/cmake/../msg -Igeometry_msgs:/opt/ros/noetic/share/geometry_msgs/cmake/../msg -p my_msgs -o /home/lzc/lzc-code/devel/lib/python3/dist-packages/my_msgs/msg
 

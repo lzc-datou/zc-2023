@@ -717,19 +717,15 @@ void wait_auto_mode(ros::Rate &rate, ros::Publisher &vision_command)
 	return;
 }
 
-//侦察结束，接收靶点函数
-void target_get(ros::Rate &rate)
+// 侦察结束，接收靶点函数
+void target_get(ros::Rate &rate, ros::Publisher &vision_command)
 {
-	for (int i = 0, i < 50; i++)
+	for (int i = 0; i < 50; i++)
 	{
 
 		vision_command.publish(stop);
- 		ros::spinOnce();
-	 	rate.sleep();
-	}
-	
+		}
 }
-
 
 int main(int argc, char *argv[])
 {
@@ -798,10 +794,9 @@ int main(int argc, char *argv[])
 
 	// 等待航线任务执行完成
 	wait_detect_over(rate);
-	target_get(rate);
+	target_get(rate, vision_command);
 
-	//Set_AutoMode(setModeClient,rate);
-
+	// Set_AutoMode(setModeClient,rate);
 
 	std::cout << "zzh target lat, lon: " << target.latitude << ", " << target.longtitude << std::endl;
 

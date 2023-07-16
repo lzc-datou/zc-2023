@@ -3,7 +3,7 @@
 # 添加import 路径
 import sys
 sys.path.append("./src/process_imgs/scripts")
-
+sys.path.append("./src")
 # 导入参数
 from path_params import *
 from params import *
@@ -127,6 +127,7 @@ class RecoNum:
             return False, Ori_target, np.empty(0)
         # 获取数字底板外轮廓
         areas_copy = areas.copy()
+        
         while (True):
             numBoard_area = max(areas_copy)
             if numBoard_area > 0.3*max_area:
@@ -139,7 +140,7 @@ class RecoNum:
                 break
         # print("max_id = ",max_id) # 测试用
         # print("numBoard_id = ",numBoard_id)
-
+        
         cv2.drawContours(im_test, contours, max_id, 255, 2)
         cv2.drawContours(im_test, contours, numBoard_id, 255, 2)
 
@@ -164,16 +165,19 @@ class RecoNum:
                     # print(i) # 测试用
 
             cv2.circle(im_test, (x, y), 3, [255, 0, 0], 5)  # 测试用
+       
         # 测试用
         # print(im_test.shape)
         # print(min_box)
+        
         cv2.drawContours(im_test, [min_box], 0, 255, 2)
         cv2.drawContours(im_test, [numBoard_box], 0, 255, 2)
-        show_img("after draw", im_test)  # 测试用
-
+        # show_img("after draw", im_test)  # 测试用
+       
         # 如果重合角点不是两个，直接弃用
         if len(box_index) != 2:
             # print("same point less than 2")
+            
             return False, Ori_target, np.empty(0)
         # 外接矩形宽  数据类型:double  转成int32使用
         width = np.int32(numBoard_rect[1][0])
@@ -183,6 +187,7 @@ class RecoNum:
         side_len = np.int32(np.ceil((width+height)/2))
         # 角点索引升序排序
         box_index.sort()
+       
         global src
         # 四种情况分类讨论_1
         if box_index == [0, 3]:
@@ -200,11 +205,12 @@ class RecoNum:
         # 目标结果都是一样的
         dst = np.float32(
             [[0, 0], [side_len, 0], [side_len, side_len], [0, side_len]])
+        
         # 透视变换转正靶标
         transformMat = cv2.getPerspectiveTransform(src, dst)  # source 和 destination  原图片和目标图片
         transform_img = cv2.warpPerspective(Ori_target, transformMat, (side_len, side_len))
         # show_img("transform_img",transform_img)
-
+       
         # print("max_area/img_area = ",max_area/img_area)
         # print("numBoard_area/max_area = ",numBoard_area/max_area)
         if transform_img.shape[0] < 0.5*transform_img.shape[1]:
@@ -216,20 +222,22 @@ class RecoNum:
     def split_num(self, transform_img: cv2.Mat):
         '''函数功能:将正方形数字底板分成左右两份，为网络识别做准备。返回左侧数字图片和右侧数字图片'''
 
+       
         # 转成灰度图
         transform_img = cv2.cvtColor(transform_img, cv2.COLOR_RGB2GRAY)
+     
         # 图片数组的列数
         columns = transform_img.shape[0]
         rows = transform_img.shape[1]
+     
         # 将图片从中间分成两份,并做适量裁剪，去除边缘干扰  截取比例根据实际情况调整
-        left_num_img = transform_img[int(
-            0.1*rows):int(0.9*rows), int(0.1*columns):int(0.5*columns)]
-        right_num_img = transform_img[int(
-            0.1*rows):int(0.9*rows), int(0.5*columns):int(0.9*columns)]
+        left_num_img = transform_img[int(0.1*rows):int(0.9*rows), int(0.1*columns):int(0.5*columns)]
+        right_num_img = transform_img[int(0.1*rows):int(0.9*rows), int(0.5*columns):int(0.9*columns)]
+      
         # 调整图片为28*28的黑底白字图
         left_num_img = self.my_resize(left_num_img)
         right_num_img = self.my_resize(right_num_img)
-
+     
         return left_num_img, right_num_img
         pass
 
@@ -238,10 +246,10 @@ class RecoNum:
         # 自适应均衡化图像 实现图像增强
         clahe = cv2.createCLAHE(clipLimit=2, tileGridSize=(2, 2))
         img = clahe.apply(img)
-        show_img("zengqiang_1", img)
+        # show_img("zengqiang_1", img) # 测试用
         # # 二值化，使得白底黑字变成黑底白字。使用OTSU二值化
         __, img = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
-        show_img("erzhihua", img)  # 测试用
+        # show_img("erzhihua", img)  # 测试用
         # 这部分放缩重点是不能使得数字变形。单个数字图片高：宽=2：1，要把这个图片调整为一个1：1的正方形图片
         # 获取图片高度与28的比值，等比例将原图放缩为高度为28的图片（此时宽度小于28）
         ratio = img.shape[0] / 28
@@ -249,11 +257,11 @@ class RecoNum:
         if ratio >= 1:
             # 缩小，使用下采样最合适的方法
             img = cv2.resize(img, (new_c, 28), cv2.INTER_AREA)
-            show_img("to_28_h", img)  # 测试用
+            # show_img("to_28_h", img)  # 测试用
         else:
             # 放大，使用上采样最合适的方法
             img = cv2.resize(img, (new_c, 28), cv2.INTER_LINEAR)
-            show_img("to_28_h", img)  # 测试用
+            # show_img("to_28_h", img)  # 测试用
 
         # 根据新宽度与28的差值，将宽度扩展到28   int()函数向下取整
         long = (28 - new_c)/2
@@ -272,19 +280,25 @@ class RecoNum:
         kernal = np.ones((2, 2), np.uint8)
         img = cv2.erode(img, kernal, iterations=1)
         img = cv2.dilate(img, kernal, iterations=1)
-        show_img("xingtai", img)  # 测试用
+        # show_img("xingtai", img)  # 测试用
         return img
 
     def reco_num(self, num_img: cv2.Mat) -> int:
         '识别数字(recognize number) 。输入的图像为28*28的黑底白字图。返回识别出的数字(int) '
 
         # 把图片变成可以在网络中传递的变量
+        
         transf = torchvision.transforms.ToTensor()  # 实例化类
         num_img = transf(num_img)  # 变成张量
         num_img = Variable(num_img)  # 使之可求梯度
 
         # 获得网络输出，注意：网络输出不直接是数字
-        outputs = self.model(num_img)
+        if torch.cuda.is_available():
+            # 使用cuda
+            outputs = self.model(num_img.cuda())
+        else:
+            # 使用cpu
+            outputs = self.model(num_img)
         # 将网络输出变成具体数字
         predicted = torch.max(outputs.data, 1)[1]
         num = int(predicted)
@@ -315,9 +329,9 @@ class Locate:
                              [0.01, -0.01, 0], [-0.01, -0.01, 0]
                              ])  # 目前参数为IR 1080P 18.0mm 1/2.7''相机的参数
     # 相机内参
-    cameraMatrix = np.float32([[1312.071067,       0., 446.061005],
-                               [0.,   1313.617388, 309.887004],
-                               [0.,       0.,     1.]
+    cameraMatrix = np.float32([[ 1312.071067,       0.        , 446.061005],
+                               [    0.      ,   1313.617388   , 309.887004],
+                               [    0.      ,       0.        ,     1.    ]
                                ])
     # 相机畸变系数
     distCoeffs = np.float32([-0.505909,    0.469929,   -0.021110,  -0.018548,  0])
@@ -364,7 +378,7 @@ class Locate:
         # 订阅飞控gps坐标 gps_sub = rospy.Subscriber('/mavros/global_position/global', NavSatFix, gps_callback)
         # 订阅飞控姿态信息（俯仰，偏航，滚转） attitude_sub = rospy.Subscriber('/mavros/local_position/pose', PoseStamped, attitude_callback)
 
-        
+        #  从mavros获取的角度单位是弧度
         roll = self.roll
         pitch = self.pitch
         # 绕偏航轴旋转时，由于飞控用的是东北天，而我们的目标坐标系是北东地，所以需要多转0.5*pi
@@ -421,8 +435,9 @@ class Locate:
         self.longitude:飞机自身的经度\n
         返回值：靶标经纬度->(longitude,latitude)
         '''
-        x_rad = float(x) / self.CONSTANTS_RADIUS_OF_EARTH
-        y_rad = float(y) / self.CONSTANTS_RADIUS_OF_EARTH
+        global CONSTANTS_RADIUS_OF_EARTH
+        x_rad = float(x) / CONSTANTS_RADIUS_OF_EARTH
+        y_rad = float(y) / CONSTANTS_RADIUS_OF_EARTH
         c = math.sqrt(x_rad * x_rad + y_rad * y_rad)
 
         ref_lat_rad = math.radians(self.ref_latitude)
@@ -509,8 +524,7 @@ class Filter:
         num3_longitude = self.data_process(num_and_location[num3].longitude)
         num3_latitude = self.data_process(num_and_location[num3].latitude)
 
-        num_gps = {num1: [num1_longitude, num1_latitude], num2: [
-            num2_longitude, num2_latitude], num3: [num3_longitude, num3_latitude]}
+        num_gps = {num1: [num1_longitude, num1_latitude], num2: [num2_longitude, num2_latitude], num3: [num3_longitude, num3_latitude]}
 
         return num_gps
 
@@ -573,7 +587,7 @@ def call_back(boxs_and_image):
 
 def show_img(windows_name, img_name):
     cv2.imshow(windows_name, img_name)
-    cv2.waitKey(5)
+    cv2.waitKey(1)
 
 
 # 实例化对象
@@ -602,8 +616,7 @@ def ts_callback(msg1, msg2, msg3):
         locate.ref_altitude = msg2.altitude - home_altitude
 
         # 输出飞机自身gps坐标
-        rospy.loginfo("plane longitude = %f latitude = %f altitude = %f",
-                      locate.ref_longitude, locate.ref_latitude, locate.ref_altitude)
+        rospy.loginfo("plane longitude = %f latitude = %f altitude = %f",locate.ref_longitude, locate.ref_latitude, locate.ref_altitude)
 
         # 四元数转姿态角
         quaternion = (
@@ -613,23 +626,24 @@ def ts_callback(msg1, msg2, msg3):
             msg3.pose.orientation.w
         )
         # 姿态角赋值
-        locate.roll, locate.pitch, locate.yaw = euler_from_quaternion(
-            quaternion)
+        locate.roll, locate.pitch, locate.yaw = euler_from_quaternion(quaternion)
 
         # 输出姿态角
-        rospy.loginfo("plane roll = %f pitch = %f yaw = %f",
-                      math.degrees(locate.roll), math.degrees(locate.pitch), math.degrees(locate.yaw))
+        rospy.loginfo("plane roll = %f pitch = %f yaw = %f",math.degrees(locate.roll), math.degrees(locate.pitch), math.degrees(locate.yaw))
         # 2. 图像处理
+        rospy.loginfo("len of image is %d ",len(msg1.image_list))
+        if len(msg1.image_list) == 0:
+            return
         for i in range(len(msg1.image_list)):
             # 将ros图片格式转为opencv图片格式
             cv_image = bridge.imgmsg_to_cv2(msg1.image_list[i], 'bgr8')
             # 转正靶标
             is_rotated, transform_img, num_board = reco.rotate_target(cv_image)
-
             # 获取yolov5矩形框的左上角在原图中的坐标（现在处理的图片是yolov5从原图中截取出来的，靶标在原图中的坐标=yolov5矩形框左上角坐标+现在处理的图片中靶标的实际坐标（实际坐标所在坐标系的原点即为矩形框左上角））
             box = msg1.bounding_boxs[i]
             Ori_point = [box.x1, box.y1]
             # 获取靶标中心正方形白色数字板的四个顶点坐标（在原图中的坐标）
+            
             imgPoints_is_got = locate.get_imgPoints(Ori_point, num_board)
             # 如果靶标转正失败，发出警告消息，直接进入下次循环
             if is_rotated == False:
@@ -638,8 +652,10 @@ def ts_callback(msg1, msg2, msg3):
             # 如果转正成功，则识别数字
             else:
                 # 将转正图像分割为左右两个图像
+               
                 left_num_img, right_num_img = reco.split_num(transform_img)
                 # 分别识别左右两个数字
+               
                 left_num = reco.reco_num(left_num_img)
                 right_num = reco.reco_num(right_num_img)
                 # 得到最终结果
@@ -652,15 +668,13 @@ def ts_callback(msg1, msg2, msg3):
                 x, y, z = locate.get_xyz()
                 # 坐标系变换，将相机坐标系变换为北东地坐标系
                 rotated_x, rotated_y, rotated_z = locate.rotate_xyz(x, y, z)
-                rospy.loginfo(
-                    "rotated_x = %f rotated_y = %f rotated_z = %f", rotated_x, rotated_y, rotated_z)
+                rospy.loginfo("rotated_x = %f rotated_y = %f rotated_z = %f", rotated_x, rotated_y, rotated_z)
                 # 如果视觉定位得到的飞机高度与飞控得到的飞机高度在误差范围内，则认为视觉定位准确，予以采用。否则，则舍弃此次定位
                 # if rotated_z >= (1 - locate_error) * locate.ref_altitude and rotated_z <= (1 + locate_error) * locate.ref_altitude:
                     # 定位精确，予以采用
-                longitude, latitude = locate.xy_to_gps(
-                    rotated_x, rotated_y)
-                rospy.loginfo(
-                    "target longitude = %f  latitude = %f ", longitude, latitude)
+                longitude, latitude = locate.xy_to_gps(rotated_x, rotated_y)
+                rospy.loginfo("target longitude = %f  latitude = %f ", longitude, latitude)
+                
                 filter.num_dict_add(number, True, longitude, latitude)
                     
                 # else:
@@ -671,10 +685,9 @@ def ts_callback(msg1, msg2, msg3):
 
 
 def state_callback(msg):
-    rospy.loginfo("get state")
     # 如果接收到侦查终止信号，将全局变量stop_ts_callback赋值为1，并发布中位数gps坐标
     if msg.signal == 1:
-
+        rospy.loginfo("signal = %d",msg.signal)
         global stop_ts_callback
         global is_processed
         global median_gps
@@ -693,8 +706,7 @@ def state_callback(msg):
             num_list.sort(reverse=True)
 
             median_num = num_list[1]
-            rospy.loginfo("results = %d %d %d",
-                          num_list[0], num_list[1], num_list[2])
+            rospy.loginfo("results = %d %d %d",num_list[0], num_list[1], num_list[2])
             rospy.loginfo("median number = %d", median_num)
 
             median_gps = [num_gps[median_num][0], num_gps[median_num][1]]
@@ -723,9 +735,8 @@ if __name__ == "__main__":
     rospy.loginfo("订阅者创建完毕")
     state_sub = rospy.Subscriber('/is_investigation_over', Signal, state_callback, queue_size=10)  # 获取侦查状态（正在侦查还是已侦查完毕）
     # 创建时间同步器
-    ts = ApproximateTimeSynchronizer([box_sub, gps_sub, pose_sub], queue_size=10, slop=100)
+    ts = ApproximateTimeSynchronizer([box_sub, gps_sub, pose_sub], queue_size=1, slop=time_error)
     rospy.loginfo("同步器创建完毕")
-
     # 注册回调函数
     ts.registerCallback(ts_callback)
     rospy.loginfo("回调函数注册完毕")
