@@ -19,7 +19,8 @@
     1. 安装ROS，方法见[ros-noetic-install](http://wiki.ros.org/noetic/Installation/Ubuntu)
     2. 安装mavros ,方法见[mavros-install](https://docs.px4.io/main/zh/ros/mavros_installation.html)
     3. 安装torch和torchvision,方法见[pytorch for jetson](https://forums.developer.nvidia.com/t/pytorch-for-jetson/72048)
-    4. 安装yolov5依赖，进入yolov5包，使用命令`pip3 install -r requirement.txt`即可  
+    4. 安装ros_cv_bridge。直接`sudo apt install ros-noetic-cv-bridge`大概率不好使（笔记本电脑可以直接这样），到[ros-cv-bridge官网](http://wiki.ros.org/cv_bridge)中找到`ros-cv-bridge`在github的源码，将其`git clone`到`ros工作空间/src/`目录下，然后在ros工作空间目录中`catkin_make`自行编译`cv-bridge`即可使用。补充：[ros-noetic-cv-bridge源码](https://github.com/ros-perception/vision_opencv)。注意：源码要下载noetic版本的，`git clone`完之后进入`vision_opencv`文件夹内命令行输入`git checkout noetic`将克隆内容替换成分支noetic的即可。或者下载时直接下载源码仓库内的noetic分支的压缩包也可以。
+    5. 安装yolov5依赖，进入yolov5包，使用命令`pip3 install -r requirement.txt`即可  
 
 以上操作需要翻墙，如果clash翻墙不好使了，就去用协会的梯子。强调一遍：尽量不要给系统换源，国内源可能会出奇怪的错误无法解决。
 
