@@ -12,15 +12,15 @@ gnome-terminal --tab "roscore" -- bash -c "roscore"
 }& 
 sleep 2
 {
-gnome-terminal --tab "yolov5" -- bash -c "cd /home/lzc/lzc-code;source ./devel/setup.bash;rosrun yolov5 detect.py"
+gnome-terminal --tab "my_pkg" -- bash -c "cd /home/lzc/lzc-code;source ./devel/setup.bash;rosrun yolov5 detect.py"
 }& 
 sleep 2
 {
-gnome-terminal --tab "yolov5" -- bash -c "cd /home/lzc/lzc-code;source ./devel/setup.bash;rosrun process_imgs getNum_and_locate.py;"
+gnome-terminal --tab "my_pkg" -- bash -c "cd /home/lzc/lzc-code;source ./devel/setup.bash;rosrun process_imgs getNum_and_locate.py;"
 }& 
 sleep 2
 {
-gnome-terminal --tab "yolov5" -- bash -c "cd /home/lzc/lzc-code;source ./devel/setup.bash;rosrun mode mode;"
+gnome-terminal --tab "my_pkg" -- bash -c "cd /home/lzc/lzc-code;source ./devel/setup.bash;rosrun mode mode;"
 }&
 sleep 2
 {
