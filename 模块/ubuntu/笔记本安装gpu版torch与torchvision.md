@@ -1,5 +1,7 @@
 # 安装gpu版torch与torchvision
-> 2023.6.26
+> 2023.6.26  
+
+安装目的主要是为了能在有独立显卡（N卡）的电脑上运行代码和训练神经网络
 
 **pip安装的torch与torchvision一般默认是cpu版本的，如果想要使用gpu加速，需要单独上官网下载对应版本的torch与torchvision**
 
