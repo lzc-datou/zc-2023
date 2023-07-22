@@ -3,7 +3,8 @@
 
 ## 1. 下载pytorch和cuda驱动
 见文章[3060显卡-yolov5-GPU环境搭建的一些建议](https://blog.csdn.net/a1729901831/article/details/123782788)中给出的链接。注意：不需要下载anaconda来创建什么虚拟环境。直接用电脑自己版本的python就可以了，如果报错缺什么库，直接pip装上相应库就可以了。
-安装`CUDA Toolkit`时`install type`选择`deb(network)`
+安装`CUDA Toolkit`时`install type`选择`deb(network)`。安装类型选择如下图所示：
+![cuda安装](../../photo/cuda安装.png)
 ## 2. 安装cuda
 全部跟着cuda安装程序中的提示进行操作即可，每一步先别急着点，看完英文指引后再进行选择。如果实在不确定，必应搜索相关图文教程进行指导安装。  
 中间很关键的一点：安装程序会问你要一个secure boot的密码。其实并不是要已有的密码，只是叫你现在在它的安装程序中设置一个这样的密码，后续要用到(我下载时在这里卡了很久，就是不知道这个密码是什么意思)
