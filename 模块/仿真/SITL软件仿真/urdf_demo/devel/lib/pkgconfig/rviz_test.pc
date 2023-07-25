@@ -1,0 +1,8 @@
+prefix=/home/lzc/文档/URDF_demo/devel
+
+Name: rviz_test
+Description: Description of rviz_test
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 
