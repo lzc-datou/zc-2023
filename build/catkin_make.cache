@@ -1,2 +1,2 @@
-mode:my_msgs:process_imgs:test:vision_opencv/cv_bridge:vision_opencv/image_geometry:vision_opencv/opencv_tests:vision_opencv/vision_opencv:yolov5
+mode:my_msgs:plane_description:plane_gazebo:process_imgs:test:vision_opencv/cv_bridge:vision_opencv/image_geometry:vision_opencv/opencv_tests:vision_opencv/vision_opencv:yolov5
 -DCATKIN_DEVEL_PREFIX=/home/lzc/lzc-code/devel -DCMAKE_INSTALL_PREFIX=/home/lzc/lzc-code/install -G Unix Makefiles

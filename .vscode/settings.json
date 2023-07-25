@@ -5,5 +5,6 @@
         "bitset": "cpp",
         "cstdlib": "cpp",
         "shared_mutex": "cpp"
-    }
+    },
+    "ros.distro": "noetic"
 }

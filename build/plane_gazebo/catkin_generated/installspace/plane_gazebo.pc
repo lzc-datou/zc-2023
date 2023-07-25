@@ -1,0 +1,8 @@
+prefix=/home/lzc/lzc-code/install
+
+Name: plane_gazebo
+Description: Description of plane_gazebo
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

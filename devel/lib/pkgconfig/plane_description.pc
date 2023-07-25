@@ -1,0 +1,8 @@
+prefix=/home/lzc/lzc-code/devel
+
+Name: plane_description
+Description: Description of plane_description
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

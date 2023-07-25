@@ -73,15 +73,15 @@ mode/CMakeFiles/mode.dir/src/mode.cpp.o: mode/CMakeFiles/mode.dir/flags.make
 mode/CMakeFiles/mode.dir/src/mode.cpp.o: /home/lzc/lzc-code/src/mode/src/mode.cpp
 mode/CMakeFiles/mode.dir/src/mode.cpp.o: mode/CMakeFiles/mode.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/lzc/lzc-code/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object mode/CMakeFiles/mode.dir/src/mode.cpp.o"
-	cd /home/lzc/lzc-code/build/mode && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT mode/CMakeFiles/mode.dir/src/mode.cpp.o -MF CMakeFiles/mode.dir/src/mode.cpp.o.d -o CMakeFiles/mode.dir/src/mode.cpp.o -c /home/lzc/lzc-code/src/mode/src/mode.cpp
+	cd /home/lzc/lzc-code/build/mode && /usr/lib/ccache/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT mode/CMakeFiles/mode.dir/src/mode.cpp.o -MF CMakeFiles/mode.dir/src/mode.cpp.o.d -o CMakeFiles/mode.dir/src/mode.cpp.o -c /home/lzc/lzc-code/src/mode/src/mode.cpp
 
 mode/CMakeFiles/mode.dir/src/mode.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/mode.dir/src/mode.cpp.i"
-	cd /home/lzc/lzc-code/build/mode && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/lzc/lzc-code/src/mode/src/mode.cpp > CMakeFiles/mode.dir/src/mode.cpp.i
+	cd /home/lzc/lzc-code/build/mode && /usr/lib/ccache/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/lzc/lzc-code/src/mode/src/mode.cpp > CMakeFiles/mode.dir/src/mode.cpp.i
 
 mode/CMakeFiles/mode.dir/src/mode.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/mode.dir/src/mode.cpp.s"
-	cd /home/lzc/lzc-code/build/mode && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/lzc/lzc-code/src/mode/src/mode.cpp -o CMakeFiles/mode.dir/src/mode.cpp.s
+	cd /home/lzc/lzc-code/build/mode && /usr/lib/ccache/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/lzc/lzc-code/src/mode/src/mode.cpp -o CMakeFiles/mode.dir/src/mode.cpp.s
 
 # Object files for target mode
 mode_OBJECTS = \

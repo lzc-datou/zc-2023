@@ -67,6 +67,8 @@ all: gtest/all
 all: vision_opencv/opencv_tests/all
 all: vision_opencv/vision_opencv/all
 all: my_msgs/all
+all: plane_description/all
+all: plane_gazebo/all
 all: test/all
 all: vision_opencv/cv_bridge/all
 all: vision_opencv/image_geometry/all
@@ -80,6 +82,8 @@ preinstall: gtest/preinstall
 preinstall: vision_opencv/opencv_tests/preinstall
 preinstall: vision_opencv/vision_opencv/preinstall
 preinstall: my_msgs/preinstall
+preinstall: plane_description/preinstall
+preinstall: plane_gazebo/preinstall
 preinstall: test/preinstall
 preinstall: vision_opencv/cv_bridge/preinstall
 preinstall: vision_opencv/image_geometry/preinstall
@@ -98,6 +102,8 @@ clean: gtest/clean
 clean: vision_opencv/opencv_tests/clean
 clean: vision_opencv/vision_opencv/clean
 clean: my_msgs/clean
+clean: plane_description/clean
+clean: plane_gazebo/clean
 clean: test/clean
 clean: vision_opencv/cv_bridge/clean
 clean: vision_opencv/image_geometry/clean
@@ -237,6 +243,36 @@ my_msgs/clean: my_msgs/CMakeFiles/my_msgs_gennodejs.dir/clean
 my_msgs/clean: my_msgs/CMakeFiles/my_msgs_generate_messages_py.dir/clean
 my_msgs/clean: my_msgs/CMakeFiles/my_msgs_genpy.dir/clean
 .PHONY : my_msgs/clean
+
+#=============================================================================
+# Directory level rules for directory plane_description
+
+# Recursive "all" directory target.
+plane_description/all:
+.PHONY : plane_description/all
+
+# Recursive "preinstall" directory target.
+plane_description/preinstall:
+.PHONY : plane_description/preinstall
+
+# Recursive "clean" directory target.
+plane_description/clean:
+.PHONY : plane_description/clean
+
+#=============================================================================
+# Directory level rules for directory plane_gazebo
+
+# Recursive "all" directory target.
+plane_gazebo/all:
+.PHONY : plane_gazebo/all
+
+# Recursive "preinstall" directory target.
+plane_gazebo/preinstall:
+.PHONY : plane_gazebo/preinstall
+
+# Recursive "clean" directory target.
+plane_gazebo/clean:
+.PHONY : plane_gazebo/clean
 
 #=============================================================================
 # Directory level rules for directory process_imgs

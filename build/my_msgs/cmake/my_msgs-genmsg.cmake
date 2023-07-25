@@ -24,7 +24,7 @@ add_custom_target(_my_msgs_generate_messages_check_deps_${_filename}
 
 get_filename_component(_filename "/home/lzc/lzc-code/src/my_msgs/msg/Boundingboxs_and_image.msg" NAME_WE)
 add_custom_target(_my_msgs_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "my_msgs" "/home/lzc/lzc-code/src/my_msgs/msg/Boundingboxs_and_image.msg" "std_msgs/Header:my_msgs/Bounding_box:sensor_msgs/Image"
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "my_msgs" "/home/lzc/lzc-code/src/my_msgs/msg/Boundingboxs_and_image.msg" "my_msgs/Bounding_box:std_msgs/Header:sensor_msgs/Image"
 )
 
 get_filename_component(_filename "/home/lzc/lzc-code/src/my_msgs/msg/Signal.msg" NAME_WE)
@@ -52,7 +52,7 @@ _generate_msg_cpp(my_msgs
 _generate_msg_cpp(my_msgs
   "/home/lzc/lzc-code/src/my_msgs/msg/Boundingboxs_and_image.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/home/lzc/lzc-code/src/my_msgs/msg/Bounding_box.msg;/opt/ros/noetic/share/sensor_msgs/cmake/../msg/Image.msg"
+  "/home/lzc/lzc-code/src/my_msgs/msg/Bounding_box.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/sensor_msgs/cmake/../msg/Image.msg"
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/my_msgs
 )
 _generate_msg_cpp(my_msgs
@@ -109,7 +109,7 @@ _generate_msg_eus(my_msgs
 _generate_msg_eus(my_msgs
   "/home/lzc/lzc-code/src/my_msgs/msg/Boundingboxs_and_image.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/home/lzc/lzc-code/src/my_msgs/msg/Bounding_box.msg;/opt/ros/noetic/share/sensor_msgs/cmake/../msg/Image.msg"
+  "/home/lzc/lzc-code/src/my_msgs/msg/Bounding_box.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/sensor_msgs/cmake/../msg/Image.msg"
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/my_msgs
 )
 _generate_msg_eus(my_msgs
@@ -166,7 +166,7 @@ _generate_msg_lisp(my_msgs
 _generate_msg_lisp(my_msgs
   "/home/lzc/lzc-code/src/my_msgs/msg/Boundingboxs_and_image.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/home/lzc/lzc-code/src/my_msgs/msg/Bounding_box.msg;/opt/ros/noetic/share/sensor_msgs/cmake/../msg/Image.msg"
+  "/home/lzc/lzc-code/src/my_msgs/msg/Bounding_box.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/sensor_msgs/cmake/../msg/Image.msg"
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/my_msgs
 )
 _generate_msg_lisp(my_msgs
@@ -223,7 +223,7 @@ _generate_msg_nodejs(my_msgs
 _generate_msg_nodejs(my_msgs
   "/home/lzc/lzc-code/src/my_msgs/msg/Boundingboxs_and_image.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/home/lzc/lzc-code/src/my_msgs/msg/Bounding_box.msg;/opt/ros/noetic/share/sensor_msgs/cmake/../msg/Image.msg"
+  "/home/lzc/lzc-code/src/my_msgs/msg/Bounding_box.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/sensor_msgs/cmake/../msg/Image.msg"
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/my_msgs
 )
 _generate_msg_nodejs(my_msgs
@@ -280,7 +280,7 @@ _generate_msg_py(my_msgs
 _generate_msg_py(my_msgs
   "/home/lzc/lzc-code/src/my_msgs/msg/Boundingboxs_and_image.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/home/lzc/lzc-code/src/my_msgs/msg/Bounding_box.msg;/opt/ros/noetic/share/sensor_msgs/cmake/../msg/Image.msg"
+  "/home/lzc/lzc-code/src/my_msgs/msg/Bounding_box.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/sensor_msgs/cmake/../msg/Image.msg"
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/my_msgs
 )
 _generate_msg_py(my_msgs
