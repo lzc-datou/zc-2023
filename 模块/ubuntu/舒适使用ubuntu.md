@@ -9,7 +9,7 @@
 - 上侧边框的隐藏方法可以自行百度，需要安装ubuntu插件，插件还有许多其他的优越功能。  
 
 建议将上侧和左侧都设置成鼠标移动过去就自动出现的模式，较为方便  
-这里提供一个隐藏上侧边框的[网址](https://blog.csdn.net/qq_40767523/article/details/126762638#:~:text=%E4%BE%A7%E8%BE%B9%E6%A0%8F%E9%9A%90%E8%97%8F%20%E5%9C%A8%20%E8%AE%BE%E7%BD%AE,%E4%B8%AD%E6%89%BE%E5%88%B0%20%E5%A4%96%E8%A7%82%20%EF%BC%8C%E9%80%89%E4%B8%AD%20%E8%87%AA%E5%8A%A8%E9%9A%90%E8%97%8FDock%2C%E5%8D%B3%E8%AE%BE%E7%BD%AE%E6%88%90%E5%8A%9F%EF%BC%8C%E5%BD%93%E6%89%93%E5%BC%80%E7%9A%84%E8%BD%AF%E4%BB%B6%E7%AA%97%E5%8F%A3%E9%9D%A0%E8%BF%91%E4%BE%A7%E8%BE%B9%E6%A0%8F%E6%88%96%E5%85%A8%E5%B1%8F%E6%97%B6%EF%BC%8C%E4%BE%A7%E8%BE%B9%E6%A0%8F%E4%BC%9A%E8%87%AA%E5%8A%A8%E9%9A%90%E8%97%8F%E3%80%82)
+这里提供一个隐藏上侧边框的[网址](https://blog.csdn.net/qq_40767523/article/details/126762638)
 ## 调整窗口位置
 `win + 上下左右` 可以对窗口位置进行调整
 ## 打开多个工作区
