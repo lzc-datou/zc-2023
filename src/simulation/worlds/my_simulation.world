@@ -1,0 +1,1743 @@
+<?xml version="1.0" ?>
+<sdf version='1.7'>
+  <world name='default'>
+    <gui fullscreen='0'>
+      <camera name='user_camera'>
+        <pose>7.08959 3.72492 11.6114 0 1.16618 -2.78855</pose>
+        <view_controller>orbit</view_controller>
+        <projection_type>perspective</projection_type>
+      </camera>
+      <plugin name='keyboard' filename='libKeyboardGUIPlugin.so'/>
+    </gui>
+    <physics type='ode'>
+      <ode>
+        <solver>
+          <type>quick</type>
+          <iters>100</iters>
+          <sor>1</sor>
+          <use_dynamic_moi_rescaling>0</use_dynamic_moi_rescaling>
+        </solver>
+        <constraints>
+          <cfm>0</cfm>
+          <erp>0.2</erp>
+          <contact_max_correcting_vel>0.1</contact_max_correcting_vel>
+          <contact_surface_layer>0</contact_surface_layer>
+        </constraints>
+      </ode>
+      <real_time_update_rate>400</real_time_update_rate>
+      <max_step_size>0.0025</max_step_size>
+      <real_time_factor>1</real_time_factor>
+    </physics>
+    <light name='sun' type='directional'>
+      <cast_shadows>1</cast_shadows>
+      <pose>0 0 10 0 -0 0</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <attenuation>
+        <range>1000</range>
+        <constant>0.9</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <direction>-0.5 0.1 -0.9</direction>
+      <spot>
+        <inner_angle>0</inner_angle>
+        <outer_angle>0</outer_angle>
+        <falloff>0</falloff>
+      </spot>
+    </light>
+    <model name='ground_plane'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>5000 5000</size>
+            </plane>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1</mu>
+                <mu2>1</mu2>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <visual name='runway'>
+          <pose>0 0 0.005 0 0 -1.5707</pose>
+          <cast_shadows>0</cast_shadows>
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>1829 45</size>
+            </plane>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Runway</name>
+            </script>
+          </material>
+        </visual>
+        <visual name='grass'>
+          <pose>0 0 -0.1 0 -0 0</pose>
+          <cast_shadows>0</cast_shadows>
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>5000 5000</size>
+            </plane>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Grass</name>
+            </script>
+          </material>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+    </model>
+    <model name='zephyr_delta_wing_demo'>
+      <pose>0 0 0.2 0 -0 0</pose>
+      <frame name='zephyr_delta_wing_demo::__model__' attached_to='zephyr_delta_wing_demo::zephyr_delta_wing::wing'>
+        <pose relative_to='__model__'>0 0 0 0 -0 0</pose>
+      </frame>
+      <frame name='zephyr_delta_wing_demo::zephyr_delta_wing::__model__' attached_to='zephyr_delta_wing_demo::zephyr_delta_wing::wing'>
+        <pose relative_to='zephyr_delta_wing_demo::__model__'>0 0 0.2 0 -0 0</pose>
+      </frame>
+      <link name='zephyr_delta_wing_demo::zephyr_delta_wing::wing'>
+        <inertial>
+          <pose>0 -0.12 0 0 -0 0</pose>
+          <mass>1.5</mass>
+          <inertia>
+            <ixx>0.0831371</ixx>
+            <ixy>0</ixy>
+            <iyy>0.387382</iyy>
+            <ixz>0</ixz>
+            <iyz>0</iyz>
+            <izz>0.469845</izz>
+          </inertia>
+        </inertial>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>model://zephyr_delta_wing/meshes/wing.dae</uri>
+              <submesh>
+                <name>Wing</name>
+                <center>1</center>
+              </submesh>
+            </mesh>
+          </geometry>
+        </visual>
+        <collision name='body_collision'>
+          <geometry>
+            <mesh>
+              <uri>model://zephyr_delta_wing/meshes/wing.dae</uri>
+              <submesh>
+                <name>Wing</name>
+                <center>1</center>
+              </submesh>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <collision name='right_rudder_collision'>
+          <pose>-0.76435 0.33918 0.002 -0.03 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.005 0.12993 0.12688</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <collision name='left_rudder_collision'>
+          <pose>0.76435 0.33918 0.002 -0.03 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.005 0.12993 0.12688</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <pose relative_to='zephyr_delta_wing_demo::zephyr_delta_wing::__model__'>0 0 0 0 -0 0</pose>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <link name='zephyr_delta_wing_demo::zephyr_delta_wing::zephyr/imu_link'>
+        <inertial>
+          <pose>0 0 0 0 -0 0</pose>
+          <mass>0.15</mass>
+          <inertia>
+            <ixx>1e-05</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>2e-05</iyy>
+            <iyz>0</iyz>
+            <izz>2e-05</izz>
+          </inertia>
+        </inertial>
+        <sensor name='imu_sensor' type='imu'>
+          <pose>0 0 0 -3.14159 -0 -1.57079</pose>
+          <always_on>1</always_on>
+          <update_rate>1000</update_rate>
+          <imu/>
+        </sensor>
+        <pose relative_to='zephyr_delta_wing_demo::zephyr_delta_wing::__model__'>0 0 0 0 -0 0</pose>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='zephyr_delta_wing_demo::zephyr_delta_wing::zephyr/imu_joint' type='revolute'>
+        <child>zephyr_delta_wing_demo::zephyr_delta_wing::zephyr/imu_link</child>
+        <parent>zephyr_delta_wing_demo::zephyr_delta_wing::wing</parent>
+        <axis>
+          <xyz expressed_in='zephyr_delta_wing_demo::zephyr_delta_wing::__model__'>0 0 1</xyz>
+          <limit>
+            <lower>0</lower>
+            <upper>0</upper>
+            <effort>0</effort>
+            <velocity>0</velocity>
+          </limit>
+          <dynamics>
+            <damping>1</damping>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+        </axis>
+        <physics>
+          <ode>
+            <implicit_spring_damper>1</implicit_spring_damper>
+            <limit>
+              <cfm>0</cfm>
+              <erp>0.2</erp>
+            </limit>
+          </ode>
+        </physics>
+      </joint>
+      <link name='zephyr_delta_wing_demo::zephyr_delta_wing::propeller'>
+        <pose relative_to='zephyr_delta_wing_demo::zephyr_delta_wing::__model__'>0 0.07 0.008 0 1.57079 0</pose>
+        <inertial>
+          <mass>0.05</mass>
+          <inertia>
+            <ixx>0.000367571</ixx>
+            <ixy>0</ixy>
+            <iyy>0.00036985</iyy>
+            <ixz>0</ixz>
+            <iyz>0</iyz>
+            <izz>3.187e-06</izz>
+          </inertia>
+          <pose>0 0 0 0 -0 0</pose>
+        </inertial>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>model://zephyr_delta_wing/meshes/wing.dae</uri>
+              <submesh>
+                <name>Propeller</name>
+                <center>1</center>
+              </submesh>
+            </mesh>
+          </geometry>
+        </visual>
+        <collision name='blade1'>
+          <pose>0 0 0.074205 0 -0 0.3</pose>
+          <geometry>
+            <box>
+              <size>0.02561 0.00541 0.14841</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <collision name='blade2'>
+          <pose>0 0 -0.074205 0 0 -0.3</pose>
+          <geometry>
+            <box>
+              <size>0.02561 0.00541 0.14841</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <link name='zephyr_delta_wing_demo::zephyr_delta_wing::flap_left'>
+        <pose relative_to='zephyr_delta_wing_demo::zephyr_delta_wing::__model__'>0.453 0.239 0.007 0 -0 0</pose>
+        <inertial>
+          <pose>0 0 0 0 -0 0.324457</pose>
+          <mass>0.1</mass>
+          <inertia>
+            <ixx>0.000102319</ixx>
+            <ixy>0</ixy>
+            <iyy>0.00334417</iyy>
+            <ixz>0</ixz>
+            <iyz>0</iyz>
+            <izz>0.00344607</izz>
+          </inertia>
+        </inertial>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>model://zephyr_delta_wing/meshes/wing.dae</uri>
+              <submesh>
+                <name>Flap_Left</name>
+                <center>1</center>
+              </submesh>
+            </mesh>
+          </geometry>
+        </visual>
+        <collision name='collision'>
+          <pose>-0.01 0.01 0 0 -0 0.324457</pose>
+          <geometry>
+            <box>
+              <size>0.633463 0.110694 0.005</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <link name='zephyr_delta_wing_demo::zephyr_delta_wing::flap_right'>
+        <pose relative_to='zephyr_delta_wing_demo::zephyr_delta_wing::__model__'>-0.453 0.239 0.007 0 -0 0</pose>
+        <inertial>
+          <pose>0 0 0 0 0 -0.324457</pose>
+          <mass>0.1</mass>
+          <inertia>
+            <ixx>0.000102319</ixx>
+            <ixy>0</ixy>
+            <iyy>0.00334417</iyy>
+            <ixz>0</ixz>
+            <iyz>0</iyz>
+            <izz>0.00344607</izz>
+          </inertia>
+        </inertial>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>model://zephyr_delta_wing/meshes/wing.dae</uri>
+              <submesh>
+                <name>Flap_Right</name>
+                <center>1</center>
+              </submesh>
+            </mesh>
+          </geometry>
+        </visual>
+        <collision name='collision'>
+          <pose>0.01 0.01 0 0 0 -0.324457</pose>
+          <geometry>
+            <box>
+              <size>0.633463 0.110694 0.005</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='zephyr_delta_wing_demo::zephyr_delta_wing::propeller_joint' type='revolute'>
+        <parent>zephyr_delta_wing_demo::zephyr_delta_wing::wing</parent>
+        <child>zephyr_delta_wing_demo::zephyr_delta_wing::propeller</child>
+        <axis>
+          <xyz>0 -1 0</xyz>
+          <dynamics>
+            <damping>0.002</damping>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+          <limit>
+            <lower>-1e+16</lower>
+            <upper>1e+16</upper>
+          </limit>
+        </axis>
+        <physics>
+          <ode>
+            <implicit_spring_damper>1</implicit_spring_damper>
+            <limit>
+              <cfm>0</cfm>
+              <erp>0.2</erp>
+            </limit>
+          </ode>
+        </physics>
+      </joint>
+      <joint name='zephyr_delta_wing_demo::zephyr_delta_wing::flap_left_joint' type='revolute'>
+        <parent>zephyr_delta_wing_demo::zephyr_delta_wing::wing</parent>
+        <child>zephyr_delta_wing_demo::zephyr_delta_wing::flap_left</child>
+        <pose>0 -0.04 0 0 -0 0</pose>
+        <axis>
+          <xyz>1 0.330321 0</xyz>
+          <limit>
+            <lower>-0.524</lower>
+            <upper>0.524</upper>
+          </limit>
+          <dynamics>
+            <damping>0.1</damping>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+        </axis>
+        <physics>
+          <ode>
+            <implicit_spring_damper>1</implicit_spring_damper>
+            <limit>
+              <cfm>0</cfm>
+              <erp>0.2</erp>
+            </limit>
+          </ode>
+        </physics>
+      </joint>
+      <joint name='zephyr_delta_wing_demo::zephyr_delta_wing::flap_right_joint' type='revolute'>
+        <parent>zephyr_delta_wing_demo::zephyr_delta_wing::wing</parent>
+        <child>zephyr_delta_wing_demo::zephyr_delta_wing::flap_right</child>
+        <pose>0 -0.04 0 0 -0 0</pose>
+        <axis>
+          <xyz>1 -0.330321 0</xyz>
+          <limit>
+            <lower>-0.524</lower>
+            <upper>0.524</upper>
+          </limit>
+          <dynamics>
+            <damping>0.1</damping>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+          </dynamics>
+        </axis>
+        <physics>
+          <ode>
+            <implicit_spring_damper>1</implicit_spring_damper>
+            <limit>
+              <cfm>0</cfm>
+              <erp>0.2</erp>
+            </limit>
+          </ode>
+        </physics>
+      </joint>
+      <plugin name='invisible_canard' filename='libLiftDragPlugin.so'>
+        <a0>0.13</a0>
+        <cla>3.7</cla>
+        <cda>0.06417112299</cda>
+        <cma>-1.8</cma>
+        <alpha_stall>0.3391428111</alpha_stall>
+        <cla_stall>-3.85</cla_stall>
+        <cda_stall>-0.9233984055</cda_stall>
+        <cma_stall>0</cma_stall>
+        <cp>0 -0.1 0</cp>
+        <area>0.50</area>
+        <air_density>1.2041</air_density>
+        <forward>0 -1 0</forward>
+        <upward>0 0 1</upward>
+        <link_name>zephyr_delta_wing_demo::zephyr_delta_wing::wing</link_name>
+      </plugin>
+      <plugin name='left_wing' filename='libLiftDragPlugin.so'>
+        <a0>0.15</a0>
+        <cla>6.8</cla>
+        <cda>0.06417112299</cda>
+        <cma>-1.8</cma>
+        <alpha_stall>0.6391428111</alpha_stall>
+        <cla_stall>-3.85</cla_stall>
+        <cda_stall>-0.9233984055</cda_stall>
+        <cma_stall>0</cma_stall>
+        <cp>0.7 0.20 0</cp>
+        <area>0.10</area>
+        <air_density>1.2041</air_density>
+        <forward>0 -1 0</forward>
+        <upward>0 0 1</upward>
+        <link_name>zephyr_delta_wing_demo::zephyr_delta_wing::wing</link_name>
+        <control_joint_name>zephyr_delta_wing_demo::zephyr_delta_wing::flap_left_joint</control_joint_name>
+        <control_joint_rad_to_cl>-5.0</control_joint_rad_to_cl>
+      </plugin>
+      <plugin name='right_wing' filename='libLiftDragPlugin.so'>
+        <a0>0.15</a0>
+        <cla>6.8</cla>
+        <cda>0.06417112299</cda>
+        <cma>-1.8</cma>
+        <alpha_stall>0.6391428111</alpha_stall>
+        <cla_stall>-3.85</cla_stall>
+        <cda_stall>-0.9233984055</cda_stall>
+        <cma_stall>0</cma_stall>
+        <cp>-0.7 0.20 0</cp>
+        <area>0.10</area>
+        <air_density>1.2041</air_density>
+        <forward>0 -1 0</forward>
+        <upward>0 0 1</upward>
+        <link_name>zephyr_delta_wing_demo::zephyr_delta_wing::wing</link_name>
+        <control_joint_name>zephyr_delta_wing_demo::zephyr_delta_wing::flap_right_joint</control_joint_name>
+        <control_joint_rad_to_cl>-5.0</control_joint_rad_to_cl>
+      </plugin>
+      <plugin name='left_rudder' filename='libLiftDragPlugin.so'>
+        <a0>0.0</a0>
+        <cla>4.752798721</cla>
+        <cda>0.6417112299</cda>
+        <cma>-1.8</cma>
+        <alpha_stall>0.3391428111</alpha_stall>
+        <cla_stall>-3.85</cla_stall>
+        <cda_stall>-0.9233984055</cda_stall>
+        <cma_stall>0</cma_stall>
+        <cp>-0.76 0.30 0.025</cp>
+        <area>0.12</area>
+        <air_density>1.2041</air_density>
+        <forward>0 -1 0</forward>
+        <upward>1 0 0</upward>
+        <link_name>zephyr_delta_wing_demo::zephyr_delta_wing::wing</link_name>
+      </plugin>
+      <plugin name='right_rudder' filename='libLiftDragPlugin.so'>
+        <a0>0.0</a0>
+        <cla>4.752798721</cla>
+        <cda>0.6417112299</cda>
+        <cma>-1.8</cma>
+        <alpha_stall>0.3391428111</alpha_stall>
+        <cla_stall>-3.85</cla_stall>
+        <cda_stall>-0.9233984055</cda_stall>
+        <cma_stall>0</cma_stall>
+        <cp>0.76 0.30 0.025</cp>
+        <area>0.12</area>
+        <air_density>1.2041</air_density>
+        <forward>0 -1 0</forward>
+        <upward>1 0 0</upward>
+        <link_name>zephyr_delta_wing_demo::zephyr_delta_wing::wing</link_name>
+      </plugin>
+      <plugin name='propeller_blade_1' filename='libLiftDragPlugin.so'>
+        <a0>0.30</a0>
+        <alpha_stall>1.4</alpha_stall>
+        <cla>4.2500</cla>
+        <cda>0.10</cda>
+        <cma>0.00</cma>
+        <cla_stall>-0.025</cla_stall>
+        <cda_stall>0.0</cda_stall>
+        <cma_stall>0.0</cma_stall>
+        <area>0.02</area>
+        <air_density>1.2041</air_density>
+        <cp>0 0 0.074205</cp>
+        <forward>-1 0 0</forward>
+        <upward>0 -1 0</upward>
+        <link_name>zephyr_delta_wing_demo::zephyr_delta_wing::propeller</link_name>
+      </plugin>
+      <plugin name='propeller_blade_2' filename='libLiftDragPlugin.so'>
+        <a0>0.30</a0>
+        <alpha_stall>1.4</alpha_stall>
+        <cla>4.2500</cla>
+        <cda>0.10</cda>
+        <cma>0.00</cma>
+        <cla_stall>-0.025</cla_stall>
+        <cda_stall>0.0</cda_stall>
+        <cma_stall>0.0</cma_stall>
+        <area>0.02</area>
+        <air_density>1.2041</air_density>
+        <cp>0 0 -0.074205</cp>
+        <forward>1 0 0</forward>
+        <upward>0 -1 0</upward>
+        <link_name>zephyr_delta_wing_demo::zephyr_delta_wing::propeller</link_name>
+      </plugin>
+      <frame name='zephyr_delta_wing_demo::ZED_stereocamera::__model__' attached_to='zephyr_delta_wing_demo::ZED_stereocamera::link'>
+        <pose relative_to='zephyr_delta_wing_demo::__model__'>0 -0.34 0.28 0 -0 -1.5708</pose>
+      </frame>
+      <link name='zephyr_delta_wing_demo::ZED_stereocamera::link'>
+        <pose relative_to='zephyr_delta_wing_demo::ZED_stereocamera::__model__'>0 0 0 0 -0 0</pose>
+        <inertial>
+          <mass>0.159</mass>
+          <inertia>
+            <ixx>1.2e-05</ixx>
+            <iyy>0.000406</iyy>
+            <izz>0.000418</izz>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyz>0</iyz>
+          </inertia>
+          <pose>0 0 0 0 -0 0</pose>
+        </inertial>
+        <collision name='collision'>
+          <geometry>
+            <box>
+              <size>0.1 0.1 0.1</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>model://ZED_stereocamera/meshes/ZED.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <name>Gazebo/Grey</name>
+              <uri>__default__</uri>
+            </script>
+          </material>
+        </visual>
+        <visual name='visual_lens_left'>
+          <pose>0 -0.06 0 0 1.57 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.007</radius>
+              <length>0.03</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/WideLensMap</name>
+            </script>
+          </material>
+        </visual>
+        <visual name='visual_lens_right'>
+          <pose>0 0.06 0 0 1.57 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.007</radius>
+              <length>0.03</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/WideLensMap</name>
+            </script>
+          </material>
+        </visual>
+        <sensor name='camera' type='multicamera'>
+          <always_on>1</always_on>
+          <update_rate>30</update_rate>
+          <visualize>1</visualize>
+          <camera name='left'>
+            <pose>0 0 0 0 -0 0</pose>
+            <horizontal_fov>1.91986</horizontal_fov>
+            <image>
+              <width>720</width>
+              <height>480</height>
+            </image>
+            <clip>
+              <near>0.1</near>
+              <far>100</far>
+            </clip>
+          </camera>
+          <camera name='right'>
+            <pose>0 -0.12 0 0 -0 0</pose>
+            <horizontal_fov>1.91986</horizontal_fov>
+            <image>
+              <width>720</width>
+              <height>480</height>
+            </image>
+            <clip>
+              <near>0.1</near>
+              <far>100</far>
+            </clip>
+          </camera>
+          <plugin name='stereo_camera_controller' filename='libgazebo_ros_multicamera.so'>
+            <alwaysOn>1</alwaysOn>
+            <updateRate>0.0</updateRate>
+            <cameraName>multisense_sl/camera</cameraName>
+            <imageTopicName>/multicamera/image_raw</imageTopicName>
+            <cameraInfoTopicName>/multicamera/camera_info</cameraInfoTopicName>
+            <frameName>left_camera_optical_frame</frameName>
+            <hackBaseline>0.07</hackBaseline>
+            <distortionK1>0.0</distortionK1>
+            <distortionK2>0.0</distortionK2>
+            <distortionK3>0.0</distortionK3>
+            <distortionT1>0.0</distortionT1>
+            <distortionT2>0.0</distortionT2>
+          </plugin>
+        </sensor>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <frame name='zephyr_delta_wing_demo::camera::__model__' attached_to='zephyr_delta_wing_demo::camera::link'>
+        <pose relative_to='zephyr_delta_wing_demo::__model__'>0 -0.34 0.2 0 1.57 -1.5708</pose>
+      </frame>
+      <link name='zephyr_delta_wing_demo::camera::link'>
+        <inertial>
+          <mass>0.0001</mass>
+          <inertia>
+            <ixx>0.000166667</ixx>
+            <iyy>0.000166667</iyy>
+            <izz>0.000166667</izz>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyz>0</iyz>
+          </inertia>
+          <pose>0 0 0 0 -0 0</pose>
+        </inertial>
+        <collision name='collision'>
+          <geometry>
+            <box>
+              <size>0.01 0.01 0.01</size>
+            </box>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <box>
+              <size>0.01 0.01 0.01</size>
+            </box>
+          </geometry>
+        </visual>
+        <sensor name='camera' type='camera'>
+          <camera>
+            <horizontal_fov>1.047</horizontal_fov>
+            <image>
+              <width>640</width>
+              <height>480</height>
+            </image>
+            <clip>
+              <near>0.1</near>
+              <far>100</far>
+            </clip>
+          </camera>
+          <plugin name='gazebo_camera' filename='libgazebo_ros_camera.so'>
+            <alwaysOn>1</alwaysOn>
+            <updateRate>0.0</updateRate>
+            <cameraName>/camera</cameraName>
+            <imageTopicName>/downward_camera/image_raw</imageTopicName>
+            <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+            <frameName>camera</frameName>
+            <hackBaseline>0.07</hackBaseline>
+            <distortionK1>0.0</distortionK1>
+            <distortionK2>0.0</distortionK2>
+            <distortionK3>0.0</distortionK3>
+            <distortionT1>0.0</distortionT1>
+            <distortionT2>0.0</distortionT2>
+          </plugin>
+          <update_rate>30</update_rate>
+          <visualize>1</visualize>
+        </sensor>
+        <pose relative_to='zephyr_delta_wing_demo::camera::__model__'>0 0 0 0 -0 0</pose>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <link name='zephyr_delta_wing_demo::cam_link'>
+        <pose relative_to='zephyr_delta_wing_demo::__model__'>0 0 0 0 -0 0</pose>
+        <inertial>
+          <mass>0.01</mass>
+          <inertia>
+            <ixx>0.0001</ixx>
+            <iyy>0.0001</iyy>
+            <izz>0.0001</izz>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyz>0</iyz>
+          </inertia>
+          <pose>0 0 0 0 -0 0</pose>
+        </inertial>
+        <sensor name='chase_cam_wide' type='camera'>
+          <pose>0 2 1 -0 0.2 -1.5717</pose>
+          <camera>
+            <horizontal_fov>1.5</horizontal_fov>
+            <image>
+              <width>1920</width>
+              <height>1080</height>
+            </image>
+            <clip>
+              <near>0.1</near>
+              <far>1000</far>
+            </clip>
+          </camera>
+          <plugin name='gazebo_camera' filename='libgazebo_ros_camera.so'>
+            <alwaysOn>1</alwaysOn>
+            <updateRate>0.0</updateRate>
+            <cameraName>/camera</cameraName>
+            <imageTopicName>/chase_cam/image_raw</imageTopicName>
+            <cameraInfoTopicName>/chase_cam/camera_info</cameraInfoTopicName>
+            <frameName>camera</frameName>
+            <hackBaseline>0.07</hackBaseline>
+            <distortionK1>0.0</distortionK1>
+            <distortionK2>0.0</distortionK2>
+            <distortionK3>0.0</distortionK3>
+            <distortionT1>0.0</distortionT1>
+            <distortionT2>0.0</distortionT2>
+          </plugin>
+          <always_on>0</always_on>
+          <update_rate>60</update_rate>
+          <visualize>0</visualize>
+        </sensor>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='zephyr_delta_wing_demo::camera_mount' type='fixed'>
+        <child>zephyr_delta_wing_demo::ZED_stereocamera::link</child>
+        <parent>zephyr_delta_wing_demo::zephyr_delta_wing::wing</parent>
+        <axis>
+          <xyz>0 0 1</xyz>
+          <limit>
+            <upper>0</upper>
+            <lower>0</lower>
+          </limit>
+        </axis>
+      </joint>
+      <joint name='zephyr_delta_wing_demo::camera_mount_1' type='fixed'>
+        <child>zephyr_delta_wing_demo::camera::link</child>
+        <parent>zephyr_delta_wing_demo::zephyr_delta_wing::wing</parent>
+        <axis>
+          <xyz>0 0 1</xyz>
+          <limit>
+            <upper>0</upper>
+            <lower>0</lower>
+          </limit>
+        </axis>
+      </joint>
+      <joint name='zephyr_delta_wing_demo::virtual_camera_mount' type='fixed'>
+        <child>zephyr_delta_wing_demo::cam_link</child>
+        <parent>zephyr_delta_wing_demo::zephyr_delta_wing::wing</parent>
+        <axis>
+          <xyz>0 0 1</xyz>
+          <limit>
+            <upper>0</upper>
+            <lower>0</lower>
+          </limit>
+        </axis>
+      </joint>
+      <link name='zephyr_delta_wing_demo::skid_pad'>
+        <pose relative_to='zephyr_delta_wing_demo::__model__'>0 -0.07 -0.02 0 -0 0</pose>
+        <inertial>
+          <mass>0.1</mass>
+          <inertia>
+            <ixx>0.00431371</ixx>
+            <ixy>0</ixy>
+            <iyy>0.00387382</iyy>
+            <ixz>0</ixz>
+            <iyz>0</iyz>
+            <izz>0.00809845</izz>
+          </inertia>
+          <pose>0 0 0 0 -0 0</pose>
+        </inertial>
+        <collision name='zephyr_delta_wing_demo::skid_pad'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>1 0.5 0.05</size>
+            </box>
+          </geometry>
+          <surface>
+            <contact>
+              <ode>
+                <kp>100000</kp>
+                <kd>1</kd>
+                <min_depth>0.01</min_depth>
+                <max_vel>1</max_vel>
+              </ode>
+            </contact>
+            <friction>
+              <ode>
+                <mu>0.3</mu>
+                <fdir1>0 1 0</fdir1>
+              </ode>
+              <torsional>
+                <ode/>
+              </torsional>
+            </friction>
+            <bounce/>
+          </surface>
+          <max_contacts>10</max_contacts>
+        </collision>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <joint name='zephyr_delta_wing_demo::skid_pad_joint' type='fixed'>
+        <parent>zephyr_delta_wing_demo::zephyr_delta_wing::wing</parent>
+        <child>zephyr_delta_wing_demo::skid_pad</child>
+        <axis>
+          <limit>
+            <lower>0</lower>
+            <upper>0</upper>
+          </limit>
+          <xyz expressed_in='zephyr_delta_wing_demo::__model__'>0 1 0</xyz>
+        </axis>
+      </joint>
+      <plugin name='ardupilot_plugin' filename='libArduPilotPlugin.so'>
+        <fdm_addr>127.0.0.1</fdm_addr>
+        <fdm_port_in>9002</fdm_port_in>
+        <fdm_port_out>9003</fdm_port_out>
+        <modelXYZToAirplaneXForwardZDown>0 0 0 3.141593 0 -1.57079</modelXYZToAirplaneXForwardZDown>
+        <gazeboXYZToNED>0 0 0 3.141593 0 -1.57079</gazeboXYZToNED>
+        <imuName>zephyr_delta_wing_demo::zephyr_delta_wing::zephyr/imu_link::imu_sensor</imuName>
+        <connectionTimeoutMaxCount>5</connectionTimeoutMaxCount>
+        <control channel='2'>
+          <multiplier>838</multiplier>
+          <offset>0.2</offset>
+          <type>VELOCITY</type>
+          <p_gain>0.5</p_gain>
+          <i_gain>0</i_gain>
+          <d_gain>0</d_gain>
+          <i_max>0</i_max>
+          <i_min>0</i_min>
+          <cmd_max>2.0</cmd_max>
+          <cmd_min>0.0</cmd_min>
+          <jointName>zephyr_delta_wing_demo::zephyr_delta_wing::propeller_joint</jointName>
+        </control>
+        <control channel='0'>
+          <multiplier>-1</multiplier>
+          <offset>-0.5</offset>
+          <type>POSITION</type>
+          <p_gain>10.0</p_gain>
+          <i_gain>0</i_gain>
+          <d_gain>0</d_gain>
+          <i_max>0</i_max>
+          <i_min>0</i_min>
+          <cmd_max>2.0</cmd_max>
+          <cmd_min>-2.0</cmd_min>
+          <jointName>zephyr_delta_wing_demo::zephyr_delta_wing::flap_left_joint</jointName>
+        </control>
+        <control channel='1'>
+          <multiplier>-1</multiplier>
+          <offset>-0.5</offset>
+          <type>POSITION</type>
+          <p_gain>10.0</p_gain>
+          <i_gain>0</i_gain>
+          <d_gain>0</d_gain>
+          <i_max>0</i_max>
+          <i_min>0</i_min>
+          <cmd_max>2.0</cmd_max>
+          <cmd_min>-2.0</cmd_min>
+          <jointName>zephyr_delta_wing_demo::zephyr_delta_wing::flap_right_joint</jointName>
+        </control>
+      </plugin>
+      <sensor name='gps_sensor' type='gps'>
+        <pose>0 0 0 0 0 0</pose>
+        <update_rate>10.0</update_rate>
+        <always_on>1</always_on>
+        <gps>
+          <position_sensing>
+            <horizontal>
+              <noise type='gaussian_quantized'>
+                <mean>0</mean>
+                <stddev>1</stddev>
+                <bias_mean>3</bias_mean>
+                <bias_stddev>1</bias_stddev>
+                <precision>0.5</precision>
+              </noise>
+            </horizontal>
+            <vertical>
+              <noise type='gaussian_quantized'>
+                <mean>0</mean>
+                <stddev>1</stddev>
+                <bias_mean>3</bias_mean>
+                <bias_stddev>1</bias_stddev>
+                <precision>1.0</precision>
+              </noise>
+            </vertical>
+          </position_sensing>
+          <velocity_sensing>
+            <horizontal>
+              <noise type='gaussian_quantized'>
+                <mean>0</mean>
+                <stddev>0.1</stddev>
+                <bias_mean>0.1</bias_mean>
+                <bias_stddev>0.1</bias_stddev>
+                <precision>0.1</precision>
+              </noise>
+            </horizontal>
+            <vertical>
+              <noise type='gaussian_quantized'>
+                <mean>0</mean>
+                <stddev>0.2</stddev>
+                <bias_mean>0.2</bias_mean>
+                <bias_stddev>0.2</bias_stddev>
+                <precision>0.2</precision>
+              </noise>
+            </vertical>
+          </velocity_sensing>
+        </gps>
+      </sensor>
+    </model>
+    <gravity>0 0 -9.8</gravity>
+    <magnetic_field>6e-06 2.3e-05 -4.2e-05</magnetic_field>
+    <atmosphere type='adiabatic'/>
+    <scene>
+      <ambient>0.4 0.4 0.4 1</ambient>
+      <background>0.7 0.7 0.7 1</background>
+      <shadows>1</shadows>
+    </scene>
+    <wind/>
+    <spherical_coordinates>
+      <surface_model>EARTH_WGS84</surface_model>
+      <latitude_deg>0</latitude_deg>
+      <longitude_deg>0</longitude_deg>
+      <elevation>0</elevation>
+      <heading_deg>0</heading_deg>
+    </spherical_coordinates>
+    <model name='my_number1'>
+      <link name='link'>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+        <pose>0 0 0 0 -0 0</pose>
+        <gravity>1</gravity>
+        <inertial>
+          <mass>1</mass>
+          <pose>0 0 0 0 -0 0</pose>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>model://number1/meshes/number.dae</uri>
+              <scale>0.5 0.25 0.001</scale>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <uri>model://number1/materials/scripts</uri>
+              <uri>model://number1/materials/textures</uri>
+              <name>Number/One</name>
+            </script>
+            <shader type='pixel'>
+              <normal_map>__default__</normal_map>
+            </shader>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+            <specular>0 0 0 1</specular>
+            <emissive>0 0 0 1</emissive>
+          </material>
+          <pose>0 0 0 0 -0 0</pose>
+          <transparency>0</transparency>
+          <cast_shadows>1</cast_shadows>
+        </visual>
+        <collision name='collision_0'>
+          <laser_retro>0</laser_retro>
+          <max_contacts>10</max_contacts>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>0.5 0.25 0.001</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1</mu>
+                <mu2>1</mu2>
+                <fdir1>0 0 0</fdir1>
+                <slip1>0</slip1>
+                <slip2>0</slip2>
+              </ode>
+              <torsional>
+                <coefficient>1</coefficient>
+                <patch_radius>0</patch_radius>
+                <surface_radius>0</surface_radius>
+                <use_patch_radius>1</use_patch_radius>
+                <ode>
+                  <slip>0</slip>
+                </ode>
+              </torsional>
+            </friction>
+            <bounce>
+              <restitution_coefficient>0</restitution_coefficient>
+              <threshold>1e+06</threshold>
+            </bounce>
+            <contact>
+              <collide_without_contact>0</collide_without_contact>
+              <collide_without_contact_bitmask>1</collide_without_contact_bitmask>
+              <collide_bitmask>1</collide_bitmask>
+              <ode>
+                <soft_cfm>0</soft_cfm>
+                <soft_erp>0.2</soft_erp>
+                <kp>1e+13</kp>
+                <kd>1</kd>
+                <max_vel>0.01</max_vel>
+                <min_depth>0</min_depth>
+              </ode>
+              <bullet>
+                <split_impulse>1</split_impulse>
+                <split_impulse_penetration_threshold>-0.01</split_impulse_penetration_threshold>
+                <soft_cfm>0</soft_cfm>
+                <soft_erp>0.2</soft_erp>
+                <kp>1e+13</kp>
+                <kd>1</kd>
+              </bullet>
+            </contact>
+          </surface>
+        </collision>
+      </link>
+      <static>1</static>
+      <allow_auto_disable>1</allow_auto_disable>
+      <pose>4.2756 -14.5732 0 0 -0 0</pose>
+    </model>
+    <state world_name='default'>
+      <sim_time>339 117500000</sim_time>
+      <real_time>13 488661413</real_time>
+      <wall_time>1690353794 673405188</wall_time>
+      <iterations>5376</iterations>
+      <model name='ground_plane'>
+        <pose>0 0 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>0 0 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='my_number1'>
+        <pose>4.2756 -14.5732 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>4.2756 -14.5732 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='my_number11'>
+        <pose>4.8041 -0.516163 0.4 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>4.68128 -0.207575 0.400005 -4.7e-05 0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+        <model name='my_number1'>
+          <pose>4.68128 -0.007575 0.4 0 -0 0</pose>
+          <scale>1 1 1</scale>
+          <link name='link'>
+            <pose>4.68128 -0.007575 0.4 0 -0 0</pose>
+            <velocity>0 0 0 0 -0 0</velocity>
+            <acceleration>0 0 0 0 -0 0</acceleration>
+            <wrench>0 0 0 0 -0 0</wrench>
+          </link>
+        </model>
+      </model>
+      <model name='my_number11_0'>
+        <pose>4.68193 -0.81313 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>4.55911 -0.504542 5e-06 -4.7e-05 0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+        <model name='my_number1'>
+          <pose>4.55911 -0.304542 0 0 -0 0</pose>
+          <scale>1 1 1</scale>
+          <link name='link'>
+            <pose>4.55911 -0.304542 0 0 -0 0</pose>
+            <velocity>0 0 0 0 -0 0</velocity>
+            <acceleration>0 0 0 0 -0 0</acceleration>
+            <wrench>0 0 0 0 -0 0</wrench>
+          </link>
+        </model>
+      </model>
+      <model name='my_number11_1'>
+        <pose>4.99936 -0.868674 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>4.87654 -0.560086 5e-06 -4.7e-05 0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+        <model name='my_number1'>
+          <pose>4.87654 -0.360086 0 0 -0 0</pose>
+          <scale>1 1 1</scale>
+          <link name='link'>
+            <pose>4.87654 -0.360086 0 0 -0 0</pose>
+            <velocity>0 0 0 0 -0 0</velocity>
+            <acceleration>0 0 0 0 -0 0</acceleration>
+            <wrench>0 0 0 0 -0 0</wrench>
+          </link>
+        </model>
+      </model>
+      <model name='my_number1_1'>
+        <pose>4.09859 -1.35859 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose>4.09859 -1.35859 0 0 -0 0</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='zephyr_delta_wing_demo'>
+        <pose>-1.6e-05 -0.000423 0.034946 2.4e-05 1e-06 1.2e-05</pose>
+        <scale>1 1 1</scale>
+        <link name='zephyr_delta_wing_demo::ZED_stereocamera::link'>
+          <pose>-1.1e-05 -0.340429 0.314929 -1e-06 2.4e-05 -1.57079</pose>
+          <velocity>0.00026 -3e-06 0.000112 4.2e-05 0.000826 -2e-05</velocity>
+          <acceleration>0.21203 -0.01215 0.011976 0.001256 -1.35347 -0.028759</acceleration>
+          <wrench>0.033713 -0.001932 0.001904 0 -0 0</wrench>
+        </link>
+        <link name='zephyr_delta_wing_demo::cam_link'>
+          <pose>-1.6e-05 -0.000422 0.034946 2.4e-05 1e-06 1.2e-05</pose>
+          <velocity>8.3e-05 9e-06 0.000138 4.1e-05 0.000826 -2e-05</velocity>
+          <acceleration>0.061239 0.001763 0.029688 0.049067 0.702831 -0.029312</acceleration>
+          <wrench>0.000612 1.8e-05 0.000297 0 -0 0</wrench>
+        </link>
+        <link name='zephyr_delta_wing_demo::camera::link'>
+          <pose>-1.1e-05 -0.340427 0.234938 -0.001297 1.57002 -1.57208</pose>
+          <velocity>0.00019 0 0.000124 4.1e-05 0.000826 -2e-05</velocity>
+          <acceleration>0.150747 -0.00826 0.012859 0.049067 0.702838 -0.029311</acceleration>
+          <wrench>1.5e-05 -1e-06 1e-06 0 -0 0</wrench>
+        </link>
+        <link name='zephyr_delta_wing_demo::skid_pad'>
+          <pose>-1.5e-05 -0.070423 0.014947 1.4e-05 -3e-06 1.2e-05</pose>
+          <velocity>-6.3e-05 -4e-06 0.000141 3.7e-05 -0.002553 0</velocity>
+          <acceleration>-0.050967 -0.001004 0.026303 -3.0943 -1.08973 -3.14131</acceleration>
+          <wrench>-0.005097 -0.0001 0.00263 0 -0 0</wrench>
+        </link>
+        <link name='zephyr_delta_wing_demo::zephyr_delta_wing::flap_left'>
+          <pose>0.45458 0.233739 0.222947 -0.501841 -0.157587 0.040482</pose>
+          <velocity>0.000193 -7e-06 -0.000235 0.000194 0.00088 -2.2e-05</velocity>
+          <acceleration>0.161139 -0.022903 -0.288846 0.023566 0.692461 -0.040764</acceleration>
+          <wrench>0.016114 -0.00229 -0.028885 0 -0 0</wrench>
+        </link>
+        <link name='zephyr_delta_wing_demo::zephyr_delta_wing::flap_right'>
+          <pose>-0.454618 0.233725 0.222942 -0.502037 0.157644 -0.040488</pose>
+          <velocity>0.000314 0.000378 0.001204 0.019351 -0.005549 -2.1e-05</velocity>
+          <acceleration>0.147981 -0.029704 0.304933 -1.86746 1.33245 -0.045395</acceleration>
+          <wrench>0.014798 -0.00297 0.030493 0 -0 0</wrench>
+        </link>
+        <link name='zephyr_delta_wing_demo::zephyr_delta_wing::propeller'>
+          <pose>-1.6e-05 0.069573 0.242948 0.07283 1.57047 0.072842</pose>
+          <velocity>0.000207 -0 0.000141 4.1e-05 5e-06 -2.2e-05</velocity>
+          <acceleration>0.169994 -0.008646 0.033009 -0.620213 0.00452 0.001556</acceleration>
+          <wrench>0.0085 -0.000432 0.00165 0 -0 0</wrench>
+        </link>
+        <link name='zephyr_delta_wing_demo::zephyr_delta_wing::wing'>
+          <pose>-1.6e-05 -0.000427 0.234946 2.4e-05 1e-06 1.2e-05</pose>
+          <velocity>0.0002 0 0.000138 4.1e-05 0.000828 -2.2e-05</velocity>
+          <acceleration>0.15952 -0.008251 0.023675 0.049145 0.704701 -0.031399</acceleration>
+          <wrench>0.23928 -0.012376 0.035513 0 -0 0</wrench>
+        </link>
+        <link name='zephyr_delta_wing_demo::zephyr_delta_wing::zephyr/imu_link'>
+          <pose>-1.6e-05 -0.000427 0.234946 2.4e-05 1e-06 1.2e-05</pose>
+          <velocity>0.0002 0 0.000138 4.1e-05 0.000828 -2.2e-05</velocity>
+          <acceleration>0.16329 -0.008251 0.02957 0.049123 0.704701 -0.031402</acceleration>
+          <wrench>0.024494 -0.001238 0.004435 0 -0 0</wrench>
+        </link>
+      </model>
+      <light name='sun'>
+        <pose>0 0 10 0 -0 0</pose>
+      </light>
+    </state>
+    <model name='my_number1_1'>
+      <link name='link'>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+        <pose>0 0 0 0 -0 0</pose>
+        <gravity>1</gravity>
+        <inertial>
+          <mass>1</mass>
+          <pose>0 0 0 0 -0 0</pose>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>model://number1/meshes/number.dae</uri>
+              <scale>0.5 0.25 0.001</scale>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <uri>model://number1/materials/scripts</uri>
+              <uri>model://number1/materials/textures</uri>
+              <name>Number/One</name>
+            </script>
+            <shader type='pixel'>
+              <normal_map>__default__</normal_map>
+            </shader>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+            <specular>0 0 0 1</specular>
+            <emissive>0 0 0 1</emissive>
+          </material>
+          <pose>0 0 0 0 -0 0</pose>
+          <transparency>0</transparency>
+          <cast_shadows>1</cast_shadows>
+        </visual>
+      </link>
+      <static>1</static>
+      <allow_auto_disable>1</allow_auto_disable>
+      <pose>4.09859 -1.35859 0 0 -0 0</pose>
+    </model>
+    <model name='my_number11'>
+      <link name='link'>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+        <pose>-0.122822 0.308588 5e-06 -4.7e-05 0 0</pose>
+        <gravity>1</gravity>
+        <inertial>
+          <mass>1</mass>
+          <pose>0 0 0 0 -0 0</pose>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>model://number1/meshes/number.dae</uri>
+              <scale>0.5 0.25 0.001</scale>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <uri>model://number1/materials/scripts</uri>
+              <uri>model://number1/materials/textures</uri>
+              <name>Number/One</name>
+            </script>
+            <shader type='pixel'>
+              <normal_map>__default__</normal_map>
+            </shader>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+            <specular>0 0 0 1</specular>
+            <emissive>0 0 0 1</emissive>
+          </material>
+          <pose>0 0 0 0 -0 0</pose>
+          <transparency>0</transparency>
+          <cast_shadows>1</cast_shadows>
+        </visual>
+      </link>
+      <model name='my_number1'>
+        <link name='link'>
+          <self_collide>0</self_collide>
+          <enable_wind>0</enable_wind>
+          <kinematic>0</kinematic>
+          <pose>0 0 0 0 -0 0</pose>
+          <gravity>1</gravity>
+          <inertial>
+            <mass>1</mass>
+            <pose>0 0 0 0 -0 0</pose>
+            <inertia>
+              <ixx>1</ixx>
+              <ixy>0</ixy>
+              <ixz>0</ixz>
+              <iyy>1</iyy>
+              <iyz>0</iyz>
+              <izz>1</izz>
+            </inertia>
+          </inertial>
+          <visual name='visual'>
+            <geometry>
+              <mesh>
+                <uri>model://number1/meshes/number.dae</uri>
+                <scale>0.5 0.25 0.001</scale>
+              </mesh>
+            </geometry>
+            <material>
+              <script>
+                <uri>model://number1/materials/scripts</uri>
+                <uri>model://number1/materials/textures</uri>
+                <name>Number/One</name>
+              </script>
+              <shader type='pixel'>
+                <normal_map>__default__</normal_map>
+              </shader>
+              <ambient>1 1 1 1</ambient>
+              <diffuse>1 1 1 1</diffuse>
+              <specular>0 0 0 1</specular>
+              <emissive>0 0 0 1</emissive>
+            </material>
+            <pose>0 0 0 0 -0 0</pose>
+            <transparency>0</transparency>
+            <cast_shadows>1</cast_shadows>
+          </visual>
+        </link>
+        <static>1</static>
+        <allow_auto_disable>1</allow_auto_disable>
+        <pose>-0.122822 0.508588 0 0 -0 0</pose>
+      </model>
+      <joint name='link_JOINT_0' type='fixed'>
+        <parent>link</parent>
+        <child>my_number1::link</child>
+        <pose>0 0 0 0 -0 0</pose>
+        <physics>
+          <ode>
+            <limit>
+              <cfm>0</cfm>
+              <erp>0.2</erp>
+            </limit>
+            <suspension>
+              <cfm>0</cfm>
+              <erp>0.2</erp>
+            </suspension>
+          </ode>
+        </physics>
+      </joint>
+      <static>1</static>
+      <allow_auto_disable>1</allow_auto_disable>
+      <pose>4.8041 -0.516163 0.4 0 -0 0</pose>
+    </model>
+    <model name='my_number11_0'>
+      <link name='link'>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+        <pose>-0.122822 0.308588 5e-06 -4.7e-05 0 0</pose>
+        <gravity>1</gravity>
+        <inertial>
+          <mass>1</mass>
+          <pose>0 0 0 0 -0 0</pose>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>model://number1/meshes/number.dae</uri>
+              <scale>0.5 0.25 0.001</scale>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <uri>model://number1/materials/scripts</uri>
+              <uri>model://number1/materials/textures</uri>
+              <name>Number/One</name>
+            </script>
+            <shader type='pixel'>
+              <normal_map>__default__</normal_map>
+            </shader>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+            <specular>0 0 0 1</specular>
+            <emissive>0 0 0 1</emissive>
+          </material>
+          <pose>0 0 0 0 -0 0</pose>
+          <transparency>0</transparency>
+          <cast_shadows>1</cast_shadows>
+        </visual>
+      </link>
+      <model name='my_number1'>
+        <link name='link'>
+          <self_collide>0</self_collide>
+          <enable_wind>0</enable_wind>
+          <kinematic>0</kinematic>
+          <pose>0 0 0 0 -0 0</pose>
+          <gravity>1</gravity>
+          <inertial>
+            <mass>1</mass>
+            <pose>0 0 0 0 -0 0</pose>
+            <inertia>
+              <ixx>1</ixx>
+              <ixy>0</ixy>
+              <ixz>0</ixz>
+              <iyy>1</iyy>
+              <iyz>0</iyz>
+              <izz>1</izz>
+            </inertia>
+          </inertial>
+          <visual name='visual'>
+            <geometry>
+              <mesh>
+                <uri>model://number1/meshes/number.dae</uri>
+                <scale>0.5 0.25 0.001</scale>
+              </mesh>
+            </geometry>
+            <material>
+              <script>
+                <uri>model://number1/materials/scripts</uri>
+                <uri>model://number1/materials/textures</uri>
+                <name>Number/One</name>
+              </script>
+              <shader type='pixel'>
+                <normal_map>__default__</normal_map>
+              </shader>
+              <ambient>1 1 1 1</ambient>
+              <diffuse>1 1 1 1</diffuse>
+              <specular>0 0 0 1</specular>
+              <emissive>0 0 0 1</emissive>
+            </material>
+            <pose>0 0 0 0 -0 0</pose>
+            <transparency>0</transparency>
+            <cast_shadows>1</cast_shadows>
+          </visual>
+        </link>
+        <static>1</static>
+        <allow_auto_disable>1</allow_auto_disable>
+        <pose>-0.122822 0.508588 0 0 -0 0</pose>
+      </model>
+      <joint name='link_JOINT_0' type='fixed'>
+        <parent>link</parent>
+        <child>my_number1::link</child>
+        <pose>0 0 0 0 -0 0</pose>
+        <physics>
+          <ode>
+            <limit>
+              <cfm>0</cfm>
+              <erp>0.2</erp>
+            </limit>
+            <suspension>
+              <cfm>0</cfm>
+              <erp>0.2</erp>
+            </suspension>
+          </ode>
+        </physics>
+      </joint>
+      <static>1</static>
+      <allow_auto_disable>1</allow_auto_disable>
+      <pose>4.68193 -0.81313 0 0 -0 0</pose>
+    </model>
+    <model name='my_number11_1'>
+      <link name='link'>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+        <pose>-0.122822 0.308588 5e-06 -4.7e-05 0 0</pose>
+        <gravity>1</gravity>
+        <inertial>
+          <mass>1</mass>
+          <pose>0 0 0 0 -0 0</pose>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <visual name='visual'>
+          <geometry>
+            <mesh>
+              <uri>model://number1/meshes/number.dae</uri>
+              <scale>0.5 0.25 0.001</scale>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <uri>model://number1/materials/scripts</uri>
+              <uri>model://number1/materials/textures</uri>
+              <name>Number/One</name>
+            </script>
+            <shader type='pixel'>
+              <normal_map>__default__</normal_map>
+            </shader>
+            <ambient>1 1 1 1</ambient>
+            <diffuse>1 1 1 1</diffuse>
+            <specular>0 0 0 1</specular>
+            <emissive>0 0 0 1</emissive>
+          </material>
+          <pose>0 0 0 0 -0 0</pose>
+          <transparency>0</transparency>
+          <cast_shadows>1</cast_shadows>
+        </visual>
+      </link>
+      <model name='my_number1'>
+        <link name='link'>
+          <self_collide>0</self_collide>
+          <enable_wind>0</enable_wind>
+          <kinematic>0</kinematic>
+          <pose>0 0 0 0 -0 0</pose>
+          <gravity>1</gravity>
+          <inertial>
+            <mass>1</mass>
+            <pose>0 0 0 0 -0 0</pose>
+            <inertia>
+              <ixx>1</ixx>
+              <ixy>0</ixy>
+              <ixz>0</ixz>
+              <iyy>1</iyy>
+              <iyz>0</iyz>
+              <izz>1</izz>
+            </inertia>
+          </inertial>
+          <visual name='visual'>
+            <geometry>
+              <mesh>
+                <uri>model://number1/meshes/number.dae</uri>
+                <scale>0.5 0.25 0.001</scale>
+              </mesh>
+            </geometry>
+            <material>
+              <script>
+                <uri>model://number1/materials/scripts</uri>
+                <uri>model://number1/materials/textures</uri>
+                <name>Number/One</name>
+              </script>
+              <shader type='pixel'>
+                <normal_map>__default__</normal_map>
+              </shader>
+              <ambient>1 1 1 1</ambient>
+              <diffuse>1 1 1 1</diffuse>
+              <specular>0 0 0 1</specular>
+              <emissive>0 0 0 1</emissive>
+            </material>
+            <pose>0 0 0 0 -0 0</pose>
+            <transparency>0</transparency>
+            <cast_shadows>1</cast_shadows>
+          </visual>
+        </link>
+        <static>1</static>
+        <allow_auto_disable>1</allow_auto_disable>
+        <pose>-0.122822 0.508588 0 0 -0 0</pose>
+      </model>
+      <joint name='link_JOINT_0' type='fixed'>
+        <parent>link</parent>
+        <child>my_number1::link</child>
+        <pose>0 0 0 0 -0 0</pose>
+        <physics>
+          <ode>
+            <limit>
+              <cfm>0</cfm>
+              <erp>0.2</erp>
+            </limit>
+            <suspension>
+              <cfm>0</cfm>
+              <erp>0.2</erp>
+            </suspension>
+          </ode>
+        </physics>
+      </joint>
+      <static>1</static>
+      <allow_auto_disable>1</allow_auto_disable>
+      <pose>4.99936 -0.868674 0 0 -0 0</pose>
+    </model>
+  </world>
+</sdf>

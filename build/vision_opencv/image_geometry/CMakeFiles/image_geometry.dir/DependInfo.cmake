@@ -12,8 +12,8 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/lzc/lzc-code/src/vision_opencv/image_geometry/src/stereo_camera_model.cpp" "vision_opencv/image_geometry/CMakeFiles/image_geometry.dir/src/stereo_camera_model.cpp.o" "gcc" "vision_opencv/image_geometry/CMakeFiles/image_geometry.dir/src/stereo_camera_model.cpp.o.d"
   )
 
-# Targets to which this target links.
-set(CMAKE_TARGET_LINKED_INFO_FILES
+# Targets to which this target links which contain Fortran sources.
+set(CMAKE_Fortran_TARGET_LINKED_INFO_FILES
   )
 
 # Fortran module output directory.

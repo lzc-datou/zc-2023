@@ -12,8 +12,8 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/lzc/lzc-code/src/vision_opencv/cv_bridge/src/rgb_colors.cpp" "vision_opencv/cv_bridge/src/CMakeFiles/cv_bridge.dir/rgb_colors.cpp.o" "gcc" "vision_opencv/cv_bridge/src/CMakeFiles/cv_bridge.dir/rgb_colors.cpp.o.d"
   )
 
-# Targets to which this target links.
-set(CMAKE_TARGET_LINKED_INFO_FILES
+# Targets to which this target links which contain Fortran sources.
+set(CMAKE_Fortran_TARGET_LINKED_INFO_FILES
   )
 
 # Fortran module output directory.

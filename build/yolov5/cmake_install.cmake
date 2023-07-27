@@ -61,3 +61,7 @@ if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/yolov5" TYPE PROGRAM FILES "/home/lzc/lzc-code/build/yolov5/catkin_generated/installspace/detect.py")
 endif()
 
+if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/yolov5" TYPE PROGRAM FILES "/home/lzc/lzc-code/build/yolov5/catkin_generated/installspace/detect_simulation.py")
+endif()
+

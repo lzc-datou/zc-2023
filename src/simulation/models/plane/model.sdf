@@ -1,0 +1,1241 @@
+<?xml version='1.0'?>
+<sdf version='1.7'>
+  <model name='plane'>
+    <link name='zephyr_delta_wing::wing'>
+      <inertial>
+        <pose>0 -0.12 0 0 -0 0</pose>
+        <mass>1.5</mass>
+        <inertia>
+          <ixx>0.0831371</ixx>
+          <ixy>0</ixy>
+          <iyy>0.387382</iyy>
+          <ixz>0</ixz>
+          <iyz>0</iyz>
+          <izz>0.469845</izz>
+        </inertia>
+      </inertial>
+      <pose>-0 -0 0.2 0 -0 0</pose>
+      <self_collide>0</self_collide>
+      <enable_wind>0</enable_wind>
+      <kinematic>0</kinematic>
+      <visual name='visual'>
+        <geometry>
+          <mesh>
+            <uri>model://zephyr_delta_wing/meshes/wing.dae</uri>
+            <submesh>
+              <name>Wing</name>
+              <center>1</center>
+            </submesh>
+          </mesh>
+        </geometry>
+        <material>
+          <shader type='pixel'/>
+          <emissive>0 0 0 1</emissive>
+        </material>
+        <pose>0 0 0 0 -0 0</pose>
+        <transparency>0</transparency>
+        <cast_shadows>1</cast_shadows>
+      </visual>
+      <collision name='left_rudder_collision'>
+        <laser_retro>0</laser_retro>
+        <max_contacts>10</max_contacts>
+        <pose>0.76435 0.33918 0.002 -0.03 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.005 0.12993 0.12688</size>
+          </box>
+        </geometry>
+        <surface>
+          <friction>
+            <ode>
+              <mu>1</mu>
+              <mu2>1</mu2>
+              <fdir1>0 0 0</fdir1>
+              <slip1>0</slip1>
+              <slip2>0</slip2>
+            </ode>
+            <torsional>
+              <coefficient>1</coefficient>
+              <patch_radius>0</patch_radius>
+              <surface_radius>0</surface_radius>
+              <use_patch_radius>1</use_patch_radius>
+              <ode>
+                <slip>0</slip>
+              </ode>
+            </torsional>
+          </friction>
+          <bounce>
+            <restitution_coefficient>0</restitution_coefficient>
+            <threshold>1e+06</threshold>
+          </bounce>
+          <contact>
+            <collide_without_contact>0</collide_without_contact>
+            <collide_without_contact_bitmask>1</collide_without_contact_bitmask>
+            <collide_bitmask>1</collide_bitmask>
+            <ode>
+              <soft_cfm>0</soft_cfm>
+              <soft_erp>0.2</soft_erp>
+              <kp>1e+13</kp>
+              <kd>1</kd>
+              <max_vel>0.01</max_vel>
+              <min_depth>0</min_depth>
+            </ode>
+            <bullet>
+              <split_impulse>1</split_impulse>
+              <split_impulse_penetration_threshold>-0.01</split_impulse_penetration_threshold>
+              <soft_cfm>0</soft_cfm>
+              <soft_erp>0.2</soft_erp>
+              <kp>1e+13</kp>
+              <kd>1</kd>
+            </bullet>
+          </contact>
+        </surface>
+      </collision>
+      <collision name='body_collision'>
+        <laser_retro>0</laser_retro>
+        <max_contacts>10</max_contacts>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>/home/lzc/ardupilot_gazebo/models/zephyr_delta_wing/meshes/wing.dae</uri>
+            <submesh>
+              <name>Wing</name>
+              <center>1</center>
+            </submesh>
+            <scale>1 1 1</scale>
+          </mesh>
+        </geometry>
+        <surface>
+          <friction>
+            <ode>
+              <mu>1</mu>
+              <mu2>1</mu2>
+              <fdir1>0 0 0</fdir1>
+              <slip1>0</slip1>
+              <slip2>0</slip2>
+            </ode>
+            <torsional>
+              <coefficient>1</coefficient>
+              <patch_radius>0</patch_radius>
+              <surface_radius>0</surface_radius>
+              <use_patch_radius>1</use_patch_radius>
+              <ode>
+                <slip>0</slip>
+              </ode>
+            </torsional>
+          </friction>
+          <bounce>
+            <restitution_coefficient>0</restitution_coefficient>
+            <threshold>1e+06</threshold>
+          </bounce>
+          <contact>
+            <collide_without_contact>0</collide_without_contact>
+            <collide_without_contact_bitmask>1</collide_without_contact_bitmask>
+            <collide_bitmask>1</collide_bitmask>
+            <ode>
+              <soft_cfm>0</soft_cfm>
+              <soft_erp>0.2</soft_erp>
+              <kp>1e+13</kp>
+              <kd>1</kd>
+              <max_vel>0.01</max_vel>
+              <min_depth>0</min_depth>
+            </ode>
+            <bullet>
+              <split_impulse>1</split_impulse>
+              <split_impulse_penetration_threshold>-0.01</split_impulse_penetration_threshold>
+              <soft_cfm>0</soft_cfm>
+              <soft_erp>0.2</soft_erp>
+              <kp>1e+13</kp>
+              <kd>1</kd>
+            </bullet>
+          </contact>
+        </surface>
+      </collision>
+      <collision name='right_rudder_collision'>
+        <laser_retro>0</laser_retro>
+        <max_contacts>10</max_contacts>
+        <pose>-0.76435 0.33918 0.002 -0.03 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.005 0.12993 0.12688</size>
+          </box>
+        </geometry>
+        <surface>
+          <friction>
+            <ode>
+              <mu>1</mu>
+              <mu2>1</mu2>
+              <fdir1>0 0 0</fdir1>
+              <slip1>0</slip1>
+              <slip2>0</slip2>
+            </ode>
+            <torsional>
+              <coefficient>1</coefficient>
+              <patch_radius>0</patch_radius>
+              <surface_radius>0</surface_radius>
+              <use_patch_radius>1</use_patch_radius>
+              <ode>
+                <slip>0</slip>
+              </ode>
+            </torsional>
+          </friction>
+          <bounce>
+            <restitution_coefficient>0</restitution_coefficient>
+            <threshold>1e+06</threshold>
+          </bounce>
+          <contact>
+            <collide_without_contact>0</collide_without_contact>
+            <collide_without_contact_bitmask>1</collide_without_contact_bitmask>
+            <collide_bitmask>1</collide_bitmask>
+            <ode>
+              <soft_cfm>0</soft_cfm>
+              <soft_erp>0.2</soft_erp>
+              <kp>1e+13</kp>
+              <kd>1</kd>
+              <max_vel>0.01</max_vel>
+              <min_depth>0</min_depth>
+            </ode>
+            <bullet>
+              <split_impulse>1</split_impulse>
+              <split_impulse_penetration_threshold>-0.01</split_impulse_penetration_threshold>
+              <soft_cfm>0</soft_cfm>
+              <soft_erp>0.2</soft_erp>
+              <kp>1e+13</kp>
+              <kd>1</kd>
+            </bullet>
+          </contact>
+        </surface>
+      </collision>
+    </link>
+    <link name='ZED_stereocamera::link'>
+      <pose>0 -0.34 0.28 0 -0 -1.5708</pose>
+      <inertial>
+        <mass>0.159</mass>
+        <inertia>
+          <ixx>1.2e-05</ixx>
+          <iyy>0.000406</iyy>
+          <izz>0.000418</izz>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyz>0</iyz>
+        </inertia>
+        <pose>0 0 0 0 -0 0</pose>
+      </inertial>
+      <sensor name='camera' type='multicamera'>
+        <always_on>1</always_on>
+        <update_rate>30</update_rate>
+        <visualize>1</visualize>
+        <camera name='left'>
+          <pose>0 0 0 0 -0 0</pose>
+          <horizontal_fov>1.91986</horizontal_fov>
+          <image>
+            <width>720</width>
+            <height>480</height>
+          </image>
+          <clip>
+            <near>0.1</near>
+            <far>100</far>
+          </clip>
+        </camera>
+        <camera name='right'>
+          <pose>0 -0.12 0 0 -0 0</pose>
+          <horizontal_fov>1.91986</horizontal_fov>
+          <image>
+            <width>720</width>
+            <height>480</height>
+          </image>
+          <clip>
+            <near>0.1</near>
+            <far>100</far>
+          </clip>
+        </camera>
+      </sensor>
+      <self_collide>0</self_collide>
+      <enable_wind>0</enable_wind>
+      <kinematic>0</kinematic>
+      <visual name='visual'>
+        <geometry>
+          <mesh>
+            <uri>model://ZED_stereocamera/meshes/ZED.stl</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <script>
+            <name>Gazebo/Grey</name>
+            <uri>__default__</uri>
+          </script>
+          <shader type='pixel'/>
+          <emissive>0 0 0 1</emissive>
+        </material>
+        <pose>0 0 0 0 -0 0</pose>
+        <transparency>0</transparency>
+        <cast_shadows>1</cast_shadows>
+      </visual>
+      <visual name='visual_lens_left'>
+        <pose>0 -0.06 0 0 1.57 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.007</radius>
+            <length>0.03</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/WideLensMap</name>
+          </script>
+          <shader type='pixel'/>
+          <emissive>0 0 0 1</emissive>
+        </material>
+        <transparency>0</transparency>
+        <cast_shadows>1</cast_shadows>
+      </visual>
+      <visual name='visual_lens_right'>
+        <pose>0 0.06 0 0 1.57 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.007</radius>
+            <length>0.03</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/WideLensMap</name>
+          </script>
+          <shader type='pixel'/>
+          <emissive>0 0 0 1</emissive>
+        </material>
+        <transparency>0</transparency>
+        <cast_shadows>1</cast_shadows>
+      </visual>
+      <collision name='collision'>
+        <laser_retro>0</laser_retro>
+        <max_contacts>10</max_contacts>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>0.1 0.1 0.1</size>
+          </box>
+        </geometry>
+        <surface>
+          <friction>
+            <ode>
+              <mu>1</mu>
+              <mu2>1</mu2>
+              <fdir1>0 0 0</fdir1>
+              <slip1>0</slip1>
+              <slip2>0</slip2>
+            </ode>
+            <torsional>
+              <coefficient>1</coefficient>
+              <patch_radius>0</patch_radius>
+              <surface_radius>0</surface_radius>
+              <use_patch_radius>1</use_patch_radius>
+              <ode>
+                <slip>0</slip>
+              </ode>
+            </torsional>
+          </friction>
+          <bounce>
+            <restitution_coefficient>0</restitution_coefficient>
+            <threshold>1e+06</threshold>
+          </bounce>
+          <contact>
+            <collide_without_contact>0</collide_without_contact>
+            <collide_without_contact_bitmask>1</collide_without_contact_bitmask>
+            <collide_bitmask>1</collide_bitmask>
+            <ode>
+              <soft_cfm>0</soft_cfm>
+              <soft_erp>0.2</soft_erp>
+              <kp>1e+13</kp>
+              <kd>1</kd>
+              <max_vel>0.01</max_vel>
+              <min_depth>0</min_depth>
+            </ode>
+            <bullet>
+              <split_impulse>1</split_impulse>
+              <split_impulse_penetration_threshold>-0.01</split_impulse_penetration_threshold>
+              <soft_cfm>0</soft_cfm>
+              <soft_erp>0.2</soft_erp>
+              <kp>1e+13</kp>
+              <kd>1</kd>
+            </bullet>
+          </contact>
+        </surface>
+      </collision>
+    </link>
+    <link name='cam_link'>
+      <pose>0 0 0 0 -0 0</pose>
+      <inertial>
+        <mass>0.01</mass>
+        <inertia>
+          <ixx>0.0001</ixx>
+          <iyy>0.0001</iyy>
+          <izz>0.0001</izz>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyz>0</iyz>
+        </inertia>
+        <pose>0 0 0 0 -0 0</pose>
+      </inertial>
+      <sensor name='chase_cam_wide' type='camera'>
+        <pose>0 2 1 -0 0.2 -1.5717</pose>
+        <camera>
+          <horizontal_fov>1.5</horizontal_fov>
+          <image>
+            <width>1920</width>
+            <height>1080</height>
+          </image>
+          <clip>
+            <near>0.1</near>
+            <far>1000</far>
+          </clip>
+        </camera>
+        <always_on>0</always_on>
+        <update_rate>60</update_rate>
+        <visualize>0</visualize>
+      </sensor>
+      <self_collide>0</self_collide>
+      <enable_wind>0</enable_wind>
+      <kinematic>0</kinematic>
+    </link>
+    <link name='skid_pad'>
+      <pose>-0 -0.07 -0.02 0 -0 0</pose>
+      <inertial>
+        <mass>0.1</mass>
+        <inertia>
+          <ixx>0.00431371</ixx>
+          <ixy>0</ixy>
+          <iyy>0.00387382</iyy>
+          <ixz>0</ixz>
+          <iyz>0</iyz>
+          <izz>0.00809845</izz>
+        </inertia>
+        <pose>0 0 0 0 -0 0</pose>
+      </inertial>
+      <self_collide>0</self_collide>
+      <enable_wind>0</enable_wind>
+      <kinematic>0</kinematic>
+      <collision name='skid_pad'>
+        <laser_retro>0</laser_retro>
+        <max_contacts>10</max_contacts>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>1 0.5 0.05</size>
+          </box>
+        </geometry>
+        <surface>
+          <friction>
+            <ode>
+              <mu>0.3</mu>
+              <mu2>1</mu2>
+              <fdir1>0 1 0</fdir1>
+              <slip1>0</slip1>
+              <slip2>0</slip2>
+            </ode>
+            <torsional>
+              <coefficient>1</coefficient>
+              <patch_radius>0</patch_radius>
+              <surface_radius>0</surface_radius>
+              <use_patch_radius>1</use_patch_radius>
+              <ode>
+                <slip>0</slip>
+              </ode>
+            </torsional>
+          </friction>
+          <bounce>
+            <restitution_coefficient>0</restitution_coefficient>
+            <threshold>1e+06</threshold>
+          </bounce>
+          <contact>
+            <collide_without_contact>0</collide_without_contact>
+            <collide_without_contact_bitmask>1</collide_without_contact_bitmask>
+            <collide_bitmask>1</collide_bitmask>
+            <ode>
+              <soft_cfm>0</soft_cfm>
+              <soft_erp>0.2</soft_erp>
+              <kp>100000</kp>
+              <kd>1</kd>
+              <max_vel>1</max_vel>
+              <min_depth>0.01</min_depth>
+            </ode>
+            <bullet>
+              <split_impulse>1</split_impulse>
+              <split_impulse_penetration_threshold>-0.01</split_impulse_penetration_threshold>
+              <soft_cfm>0</soft_cfm>
+              <soft_erp>0.2</soft_erp>
+              <kp>100000</kp>
+              <kd>1</kd>
+            </bullet>
+          </contact>
+        </surface>
+      </collision>
+    </link>
+    <link name='zephyr_delta_wing::flap_left'>
+      <pose>0.453 0.239 0.207 0 -0 0</pose>
+      <inertial>
+        <pose>0 0 0 0 -0 0.324457</pose>
+        <mass>0.1</mass>
+        <inertia>
+          <ixx>0.000102319</ixx>
+          <ixy>0</ixy>
+          <iyy>0.00334417</iyy>
+          <ixz>0</ixz>
+          <iyz>0</iyz>
+          <izz>0.00344607</izz>
+        </inertia>
+      </inertial>
+      <self_collide>0</self_collide>
+      <enable_wind>0</enable_wind>
+      <kinematic>0</kinematic>
+      <visual name='visual'>
+        <geometry>
+          <mesh>
+            <uri>model://zephyr_delta_wing/meshes/wing.dae</uri>
+            <submesh>
+              <name>Flap_Left</name>
+              <center>1</center>
+            </submesh>
+          </mesh>
+        </geometry>
+        <material>
+          <shader type='pixel'/>
+        </material>
+        <pose>0 0 0 0 -0 0</pose>
+        <transparency>0</transparency>
+        <cast_shadows>1</cast_shadows>
+      </visual>
+      <collision name='collision'>
+        <laser_retro>0</laser_retro>
+        <max_contacts>10</max_contacts>
+        <pose>-0.01 0.01 0 0 -0 0.324457</pose>
+        <geometry>
+          <box>
+            <size>0.633463 0.110694 0.005</size>
+          </box>
+        </geometry>
+        <surface>
+          <friction>
+            <ode>
+              <mu>1</mu>
+              <mu2>1</mu2>
+              <fdir1>0 0 0</fdir1>
+              <slip1>0</slip1>
+              <slip2>0</slip2>
+            </ode>
+            <torsional>
+              <coefficient>1</coefficient>
+              <patch_radius>0</patch_radius>
+              <surface_radius>0</surface_radius>
+              <use_patch_radius>1</use_patch_radius>
+              <ode>
+                <slip>0</slip>
+              </ode>
+            </torsional>
+          </friction>
+          <bounce>
+            <restitution_coefficient>0</restitution_coefficient>
+            <threshold>1e+06</threshold>
+          </bounce>
+          <contact>
+            <collide_without_contact>0</collide_without_contact>
+            <collide_without_contact_bitmask>1</collide_without_contact_bitmask>
+            <collide_bitmask>1</collide_bitmask>
+            <ode>
+              <soft_cfm>0</soft_cfm>
+              <soft_erp>0.2</soft_erp>
+              <kp>1e+13</kp>
+              <kd>1</kd>
+              <max_vel>0.01</max_vel>
+              <min_depth>0</min_depth>
+            </ode>
+            <bullet>
+              <split_impulse>1</split_impulse>
+              <split_impulse_penetration_threshold>-0.01</split_impulse_penetration_threshold>
+              <soft_cfm>0</soft_cfm>
+              <soft_erp>0.2</soft_erp>
+              <kp>1e+13</kp>
+              <kd>1</kd>
+            </bullet>
+          </contact>
+        </surface>
+      </collision>
+    </link>
+    <link name='zephyr_delta_wing::flap_right'>
+      <pose>-0.453 0.239 0.207 0 -0 0</pose>
+      <inertial>
+        <pose>0 0 0 0 0 -0.324457</pose>
+        <mass>0.1</mass>
+        <inertia>
+          <ixx>0.000102319</ixx>
+          <ixy>0</ixy>
+          <iyy>0.00334417</iyy>
+          <ixz>0</ixz>
+          <iyz>0</iyz>
+          <izz>0.00344607</izz>
+        </inertia>
+      </inertial>
+      <self_collide>0</self_collide>
+      <enable_wind>0</enable_wind>
+      <kinematic>0</kinematic>
+      <visual name='visual'>
+        <geometry>
+          <mesh>
+            <uri>model://zephyr_delta_wing/meshes/wing.dae</uri>
+            <submesh>
+              <name>Flap_Right</name>
+              <center>1</center>
+            </submesh>
+          </mesh>
+        </geometry>
+        <material>
+          <shader type='pixel'/>
+        </material>
+        <pose>0 0 0 0 -0 0</pose>
+        <transparency>0</transparency>
+        <cast_shadows>1</cast_shadows>
+      </visual>
+      <collision name='collision'>
+        <laser_retro>0</laser_retro>
+        <max_contacts>10</max_contacts>
+        <pose>0.01 0.01 0 0 0 -0.324457</pose>
+        <geometry>
+          <box>
+            <size>0.633463 0.110694 0.005</size>
+          </box>
+        </geometry>
+        <surface>
+          <friction>
+            <ode>
+              <mu>1</mu>
+              <mu2>1</mu2>
+              <fdir1>0 0 0</fdir1>
+              <slip1>0</slip1>
+              <slip2>0</slip2>
+            </ode>
+            <torsional>
+              <coefficient>1</coefficient>
+              <patch_radius>0</patch_radius>
+              <surface_radius>0</surface_radius>
+              <use_patch_radius>1</use_patch_radius>
+              <ode>
+                <slip>0</slip>
+              </ode>
+            </torsional>
+          </friction>
+          <bounce>
+            <restitution_coefficient>0</restitution_coefficient>
+            <threshold>1e+06</threshold>
+          </bounce>
+          <contact>
+            <collide_without_contact>0</collide_without_contact>
+            <collide_without_contact_bitmask>1</collide_without_contact_bitmask>
+            <collide_bitmask>1</collide_bitmask>
+            <ode>
+              <soft_cfm>0</soft_cfm>
+              <soft_erp>0.2</soft_erp>
+              <kp>1e+13</kp>
+              <kd>1</kd>
+              <max_vel>0.01</max_vel>
+              <min_depth>0</min_depth>
+            </ode>
+            <bullet>
+              <split_impulse>1</split_impulse>
+              <split_impulse_penetration_threshold>-0.01</split_impulse_penetration_threshold>
+              <soft_cfm>0</soft_cfm>
+              <soft_erp>0.2</soft_erp>
+              <kp>1e+13</kp>
+              <kd>1</kd>
+            </bullet>
+          </contact>
+        </surface>
+      </collision>
+    </link>
+    <link name='zephyr_delta_wing::propeller'>
+      <pose>-0 0.07 0.208 2e-06 1.57079 2e-06</pose>
+      <inertial>
+        <mass>0.05</mass>
+        <inertia>
+          <ixx>0.000367571</ixx>
+          <ixy>0</ixy>
+          <iyy>0.00036985</iyy>
+          <ixz>0</ixz>
+          <iyz>0</iyz>
+          <izz>3.187e-06</izz>
+        </inertia>
+        <pose>0 0 0 0 -0 0</pose>
+      </inertial>
+      <self_collide>0</self_collide>
+      <enable_wind>0</enable_wind>
+      <kinematic>0</kinematic>
+      <visual name='visual'>
+        <geometry>
+          <mesh>
+            <uri>model://zephyr_delta_wing/meshes/wing.dae</uri>
+            <submesh>
+              <name>Propeller</name>
+              <center>1</center>
+            </submesh>
+          </mesh>
+        </geometry>
+        <material>
+          <shader type='pixel'/>
+          <emissive>0 0 0 1</emissive>
+        </material>
+        <pose>0 0 0 0 -0 0</pose>
+        <transparency>0</transparency>
+        <cast_shadows>1</cast_shadows>
+      </visual>
+      <collision name='blade1'>
+        <laser_retro>0</laser_retro>
+        <max_contacts>10</max_contacts>
+        <pose>0 0 0.074205 0 -0 0.3</pose>
+        <geometry>
+          <box>
+            <size>0.02561 0.00541 0.14841</size>
+          </box>
+        </geometry>
+        <surface>
+          <friction>
+            <ode>
+              <mu>1</mu>
+              <mu2>1</mu2>
+              <fdir1>0 0 0</fdir1>
+              <slip1>0</slip1>
+              <slip2>0</slip2>
+            </ode>
+            <torsional>
+              <coefficient>1</coefficient>
+              <patch_radius>0</patch_radius>
+              <surface_radius>0</surface_radius>
+              <use_patch_radius>1</use_patch_radius>
+              <ode>
+                <slip>0</slip>
+              </ode>
+            </torsional>
+          </friction>
+          <bounce>
+            <restitution_coefficient>0</restitution_coefficient>
+            <threshold>1e+06</threshold>
+          </bounce>
+          <contact>
+            <collide_without_contact>0</collide_without_contact>
+            <collide_without_contact_bitmask>1</collide_without_contact_bitmask>
+            <collide_bitmask>1</collide_bitmask>
+            <ode>
+              <soft_cfm>0</soft_cfm>
+              <soft_erp>0.2</soft_erp>
+              <kp>1e+13</kp>
+              <kd>1</kd>
+              <max_vel>0.01</max_vel>
+              <min_depth>0</min_depth>
+            </ode>
+            <bullet>
+              <split_impulse>1</split_impulse>
+              <split_impulse_penetration_threshold>-0.01</split_impulse_penetration_threshold>
+              <soft_cfm>0</soft_cfm>
+              <soft_erp>0.2</soft_erp>
+              <kp>1e+13</kp>
+              <kd>1</kd>
+            </bullet>
+          </contact>
+        </surface>
+      </collision>
+      <collision name='blade2'>
+        <laser_retro>0</laser_retro>
+        <max_contacts>10</max_contacts>
+        <pose>0 0 -0.074205 0 0 -0.3</pose>
+        <geometry>
+          <box>
+            <size>0.02561 0.00541 0.14841</size>
+          </box>
+        </geometry>
+        <surface>
+          <friction>
+            <ode>
+              <mu>1</mu>
+              <mu2>1</mu2>
+              <fdir1>0 0 0</fdir1>
+              <slip1>0</slip1>
+              <slip2>0</slip2>
+            </ode>
+            <torsional>
+              <coefficient>1</coefficient>
+              <patch_radius>0</patch_radius>
+              <surface_radius>0</surface_radius>
+              <use_patch_radius>1</use_patch_radius>
+              <ode>
+                <slip>0</slip>
+              </ode>
+            </torsional>
+          </friction>
+          <bounce>
+            <restitution_coefficient>0</restitution_coefficient>
+            <threshold>1e+06</threshold>
+          </bounce>
+          <contact>
+            <collide_without_contact>0</collide_without_contact>
+            <collide_without_contact_bitmask>1</collide_without_contact_bitmask>
+            <collide_bitmask>1</collide_bitmask>
+            <ode>
+              <soft_cfm>0</soft_cfm>
+              <soft_erp>0.2</soft_erp>
+              <kp>1e+13</kp>
+              <kd>1</kd>
+              <max_vel>0.01</max_vel>
+              <min_depth>0</min_depth>
+            </ode>
+            <bullet>
+              <split_impulse>1</split_impulse>
+              <split_impulse_penetration_threshold>-0.01</split_impulse_penetration_threshold>
+              <soft_cfm>0</soft_cfm>
+              <soft_erp>0.2</soft_erp>
+              <kp>1e+13</kp>
+              <kd>1</kd>
+            </bullet>
+          </contact>
+        </surface>
+      </collision>
+    </link>
+    <link name='zephyr_delta_wing::zephyr/imu_link'>
+      <inertial>
+        <pose>0 0 0 0 -0 0</pose>
+        <mass>0.15</mass>
+        <inertia>
+          <ixx>1e-05</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>2e-05</iyy>
+          <iyz>0</iyz>
+          <izz>2e-05</izz>
+        </inertia>
+      </inertial>
+      <sensor name='imu_sensor' type='imu'>
+        <pose>0 0 0 -3.14159 -0 -1.57079</pose>
+        <always_on>1</always_on>
+        <update_rate>1000</update_rate>
+        <imu/>
+      </sensor>
+      <pose>-0 -0 0.2 0 -0 0</pose>
+      <self_collide>0</self_collide>
+      <enable_wind>0</enable_wind>
+      <kinematic>0</kinematic>
+    </link>
+    <model name='camera'>
+      <static>1</static>
+      <pose>0.010345 -0.374868 0.183331 -0.590901 -0.186568 0.056933</pose>
+      <link name='link'>
+        <inertial>
+          <mass>0.0001</mass>
+          <inertia>
+            <ixx>0.000166667</ixx>
+            <iyy>0.000166667</iyy>
+            <izz>0.000166667</izz>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyz>0</iyz>
+          </inertia>
+        </inertial>
+        <visual name='visual'>
+          <geometry>
+            <box>
+              <size>0.01 0.01 0.01</size>
+            </box>
+          </geometry>
+        </visual>
+        <sensor name='camera' type='camera'>
+          <camera>
+            <horizontal_fov>1.047</horizontal_fov>
+            <image>
+              <width>640</width>
+              <height>480</height>
+            </image>
+            <clip>
+              <near>0.1</near>
+              <far>100</far>
+            </clip>
+          </camera>
+          <plugin name='gazebo_camera' filename='libgazebo_ros_camera.so'>
+            <alwaysOn>1</alwaysOn>
+            <updateRate>0.0</updateRate>
+            <cameraName>/camera</cameraName>
+            <imageTopicName>/camera/image_raw</imageTopicName>
+            <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+            <frameName>camera</frameName>
+            <hackBaseline>0.07</hackBaseline>
+            <distortionK1>0.0</distortionK1>
+            <distortionK2>0.0</distortionK2>
+            <distortionK3>0.0</distortionK3>
+            <distortionT1>0.0</distortionT1>
+            <distortionT2>0.0</distortionT2>
+          </plugin>
+          <update_rate>30</update_rate>
+          <visualize>1</visualize>
+        </sensor>
+      </link>
+    </model>
+    <joint name='camera_mount' type='fixed'>
+      <parent>zephyr_delta_wing::wing</parent>
+      <child>ZED_stereocamera::link</child>
+      <pose>0 0 0 0 -0 0</pose>
+      <physics>
+        <ode>
+          <limit>
+            <cfm>0</cfm>
+            <erp>0.2</erp>
+          </limit>
+          <suspension>
+            <cfm>0</cfm>
+            <erp>0.2</erp>
+          </suspension>
+        </ode>
+      </physics>
+    </joint>
+    <joint name='skid_pad_joint' type='fixed'>
+      <parent>zephyr_delta_wing::wing</parent>
+      <child>skid_pad</child>
+      <pose>0 0 0 0 -0 0</pose>
+      <physics>
+        <ode>
+          <limit>
+            <cfm>0</cfm>
+            <erp>0.2</erp>
+          </limit>
+          <suspension>
+            <cfm>0</cfm>
+            <erp>0.2</erp>
+          </suspension>
+        </ode>
+      </physics>
+    </joint>
+    <joint name='virtual_camera_mount' type='fixed'>
+      <parent>zephyr_delta_wing::wing</parent>
+      <child>cam_link</child>
+      <pose>0 0 0 0 -0 0</pose>
+      <physics>
+        <ode>
+          <limit>
+            <cfm>0</cfm>
+            <erp>0.2</erp>
+          </limit>
+          <suspension>
+            <cfm>0</cfm>
+            <erp>0.2</erp>
+          </suspension>
+        </ode>
+      </physics>
+    </joint>
+    <joint name='zephyr_delta_wing::flap_left_joint' type='revolute'>
+      <parent>zephyr_delta_wing::wing</parent>
+      <child>zephyr_delta_wing::flap_left</child>
+      <pose>0 -0.04 0 0 -0 0</pose>
+      <axis>
+        <xyz>1 0.330321 0</xyz>
+        <limit>
+          <lower>-0.524</lower>
+          <upper>0.524</upper>
+          <effort>-1</effort>
+          <velocity>-1</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+          <damping>0.1</damping>
+          <friction>0</friction>
+        </dynamics>
+      </axis>
+      <physics>
+        <ode>
+          <limit>
+            <cfm>0</cfm>
+            <erp>0.2</erp>
+          </limit>
+          <suspension>
+            <cfm>0</cfm>
+            <erp>0.2</erp>
+          </suspension>
+        </ode>
+      </physics>
+    </joint>
+    <joint name='zephyr_delta_wing::flap_right_joint' type='revolute'>
+      <parent>zephyr_delta_wing::wing</parent>
+      <child>zephyr_delta_wing::flap_right</child>
+      <pose>0 -0.04 0 0 -0 0</pose>
+      <axis>
+        <xyz>1 -0.330321 0</xyz>
+        <limit>
+          <lower>-0.524</lower>
+          <upper>0.524</upper>
+          <effort>-1</effort>
+          <velocity>-1</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+          <damping>0.1</damping>
+          <friction>0</friction>
+        </dynamics>
+      </axis>
+      <physics>
+        <ode>
+          <limit>
+            <cfm>0</cfm>
+            <erp>0.2</erp>
+          </limit>
+          <suspension>
+            <cfm>0</cfm>
+            <erp>0.2</erp>
+          </suspension>
+        </ode>
+      </physics>
+    </joint>
+    <joint name='zephyr_delta_wing::propeller_joint' type='revolute'>
+      <parent>zephyr_delta_wing::wing</parent>
+      <child>zephyr_delta_wing::propeller</child>
+      <pose>0 0 0 0 -0 0</pose>
+      <axis>
+        <xyz>0 -1 0</xyz>
+        <limit>
+          <lower>-1e+16</lower>
+          <upper>1e+16</upper>
+          <effort>-1</effort>
+          <velocity>-1</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+          <damping>0.002</damping>
+          <friction>0</friction>
+        </dynamics>
+      </axis>
+      <physics>
+        <ode>
+          <limit>
+            <cfm>0</cfm>
+            <erp>0.2</erp>
+          </limit>
+          <suspension>
+            <cfm>0</cfm>
+            <erp>0.2</erp>
+          </suspension>
+        </ode>
+      </physics>
+    </joint>
+    <joint name='wing_JOINT_0' type='fixed'>
+      <parent>zephyr_delta_wing::wing</parent>
+      <child>camera::link</child>
+      <pose>0 0 0 0 -0 0</pose>
+      <physics>
+        <ode>
+          <limit>
+            <cfm>0</cfm>
+            <erp>0.2</erp>
+          </limit>
+          <suspension>
+            <cfm>0</cfm>
+            <erp>0.2</erp>
+          </suspension>
+        </ode>
+      </physics>
+    </joint>
+    <joint name='zephyr_delta_wing::zephyr/imu_joint' type='revolute'>
+      <parent>zephyr_delta_wing::wing</parent>
+      <child>zephyr_delta_wing::zephyr/imu_link</child>
+      <pose>0 0 0 0 -0 0</pose>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>0</lower>
+          <upper>0</upper>
+          <effort>0</effort>
+          <velocity>0</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+          <damping>1</damping>
+          <friction>0</friction>
+        </dynamics>
+      </axis>
+      <physics>
+        <ode>
+          <limit>
+            <cfm>0</cfm>
+            <erp>0.2</erp>
+          </limit>
+          <suspension>
+            <cfm>0</cfm>
+            <erp>0.2</erp>
+          </suspension>
+        </ode>
+      </physics>
+    </joint>
+    <static>0</static>
+    <allow_auto_disable>1</allow_auto_disable>
+    <plugin name='ardupilot_plugin' filename='libArduPilotPlugin.so'>
+      <fdm_addr>127.0.0.1</fdm_addr>
+      <fdm_port_in>9002</fdm_port_in>
+      <fdm_port_out>9003</fdm_port_out>
+      <modelXYZToAirplaneXForwardZDown>0 0 0 3.141593 0 -1.57079</modelXYZToAirplaneXForwardZDown>
+      <gazeboXYZToNED>0 0 0 3.141593 0 -1.57079</gazeboXYZToNED>
+      <connectionTimeoutMaxCount>5</connectionTimeoutMaxCount>
+      <control channel='2'>
+        <multiplier>838</multiplier>
+        <offset>0.2</offset>
+        <type>VELOCITY</type>
+        <p_gain>0.5</p_gain>
+        <i_gain>0</i_gain>
+        <d_gain>0</d_gain>
+        <i_max>0</i_max>
+        <i_min>0</i_min>
+        <cmd_max>2.0</cmd_max>
+        <cmd_min>0.0</cmd_min>
+        <jointName>zephyr_delta_wing::propeller_joint</jointName>
+      </control>
+      <control channel='0'>
+        <multiplier>-1</multiplier>
+        <offset>-0.5</offset>
+        <type>POSITION</type>
+        <p_gain>10.0</p_gain>
+        <i_gain>0</i_gain>
+        <d_gain>0</d_gain>
+        <i_max>0</i_max>
+        <i_min>0</i_min>
+        <cmd_max>2.0</cmd_max>
+        <cmd_min>-2.0</cmd_min>
+        <jointName>zephyr_delta_wing::flap_left_joint</jointName>
+      </control>
+      <control channel='1'>
+        <multiplier>-1</multiplier>
+        <offset>-0.5</offset>
+        <type>POSITION</type>
+        <p_gain>10.0</p_gain>
+        <i_gain>0</i_gain>
+        <d_gain>0</d_gain>
+        <i_max>0</i_max>
+        <i_min>0</i_min>
+        <cmd_max>2.0</cmd_max>
+        <cmd_min>-2.0</cmd_min>
+        <jointName>zephyr_delta_wing::flap_right_joint</jointName>
+      </control>
+    </plugin>
+    <plugin name='invisible_canard' filename='libLiftDragPlugin.so'>
+      <a0>0.13</a0>
+      <cla>3.7</cla>
+      <cda>0.06417112299</cda>
+      <cma>-1.8</cma>
+      <alpha_stall>0.3391428111</alpha_stall>
+      <cla_stall>-3.85</cla_stall>
+      <cda_stall>-0.9233984055</cda_stall>
+      <cma_stall>0</cma_stall>
+      <cp>0 -0.1 0</cp>
+      <area>0.50</area>
+      <air_density>1.2041</air_density>
+      <forward>0 -1 0</forward>
+      <upward>0 0 1</upward>
+      <link_name>zephyr_delta_wing::wing</link_name>
+    </plugin>
+    <plugin name='left_rudder' filename='libLiftDragPlugin.so'>
+      <a0>0.0</a0>
+      <cla>4.752798721</cla>
+      <cda>0.6417112299</cda>
+      <cma>-1.8</cma>
+      <alpha_stall>0.3391428111</alpha_stall>
+      <cla_stall>-3.85</cla_stall>
+      <cda_stall>-0.9233984055</cda_stall>
+      <cma_stall>0</cma_stall>
+      <cp>-0.76 0.30 0.025</cp>
+      <area>0.12</area>
+      <air_density>1.2041</air_density>
+      <forward>0 -1 0</forward>
+      <upward>1 0 0</upward>
+      <link_name>zephyr_delta_wing::wing</link_name>
+    </plugin>
+    <plugin name='left_wing' filename='libLiftDragPlugin.so'>
+      <a0>0.15</a0>
+      <cla>6.8</cla>
+      <cda>0.06417112299</cda>
+      <cma>-1.8</cma>
+      <alpha_stall>0.6391428111</alpha_stall>
+      <cla_stall>-3.85</cla_stall>
+      <cda_stall>-0.9233984055</cda_stall>
+      <cma_stall>0</cma_stall>
+      <cp>0.7 0.20 0</cp>
+      <area>0.10</area>
+      <air_density>1.2041</air_density>
+      <forward>0 -1 0</forward>
+      <upward>0 0 1</upward>
+      <link_name>zephyr_delta_wing::wing</link_name>
+      <control_joint_name>zephyr_delta_wing::flap_left_joint</control_joint_name>
+      <control_joint_rad_to_cl>-5.0</control_joint_rad_to_cl>
+    </plugin>
+    <plugin name='propeller_blade_1' filename='libLiftDragPlugin.so'>
+      <a0>0.30</a0>
+      <alpha_stall>1.4</alpha_stall>
+      <cla>4.2500</cla>
+      <cda>0.10</cda>
+      <cma>0.00</cma>
+      <cla_stall>-0.025</cla_stall>
+      <cda_stall>0.0</cda_stall>
+      <cma_stall>0.0</cma_stall>
+      <area>0.02</area>
+      <air_density>1.2041</air_density>
+      <cp>0 0 0.074205</cp>
+      <forward>-1 0 0</forward>
+      <upward>0 -1 0</upward>
+      <link_name>zephyr_delta_wing::propeller</link_name>
+    </plugin>
+    <plugin name='propeller_blade_2' filename='libLiftDragPlugin.so'>
+      <a0>0.30</a0>
+      <alpha_stall>1.4</alpha_stall>
+      <cla>4.2500</cla>
+      <cda>0.10</cda>
+      <cma>0.00</cma>
+      <cla_stall>-0.025</cla_stall>
+      <cda_stall>0.0</cda_stall>
+      <cma_stall>0.0</cma_stall>
+      <area>0.02</area>
+      <air_density>1.2041</air_density>
+      <cp>0 0 -0.074205</cp>
+      <forward>1 0 0</forward>
+      <upward>0 -1 0</upward>
+      <link_name>zephyr_delta_wing::propeller</link_name>
+    </plugin>
+    <plugin name='right_rudder' filename='libLiftDragPlugin.so'>
+      <a0>0.0</a0>
+      <cla>4.752798721</cla>
+      <cda>0.6417112299</cda>
+      <cma>-1.8</cma>
+      <alpha_stall>0.3391428111</alpha_stall>
+      <cla_stall>-3.85</cla_stall>
+      <cda_stall>-0.9233984055</cda_stall>
+      <cma_stall>0</cma_stall>
+      <cp>0.76 0.30 0.025</cp>
+      <area>0.12</area>
+      <air_density>1.2041</air_density>
+      <forward>0 -1 0</forward>
+      <upward>1 0 0</upward>
+      <link_name>zephyr_delta_wing::wing</link_name>
+    </plugin>
+    <plugin name='right_wing' filename='libLiftDragPlugin.so'>
+      <a0>0.15</a0>
+      <cla>6.8</cla>
+      <cda>0.06417112299</cda>
+      <cma>-1.8</cma>
+      <alpha_stall>0.6391428111</alpha_stall>
+      <cla_stall>-3.85</cla_stall>
+      <cda_stall>-0.9233984055</cda_stall>
+      <cma_stall>0</cma_stall>
+      <cp>-0.7 0.20 0</cp>
+      <area>0.10</area>
+      <air_density>1.2041</air_density>
+      <forward>0 -1 0</forward>
+      <upward>0 0 1</upward>
+      <link_name>zephyr_delta_wing::wing</link_name>
+      <control_joint_name>zephyr_delta_wing::flap_right_joint</control_joint_name>
+      <control_joint_rad_to_cl>-5.0</control_joint_rad_to_cl>
+    </plugin>
+  </model>
+</sdf>

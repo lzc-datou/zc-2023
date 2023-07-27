@@ -2,9 +2,11 @@
 	<!-- vim: set ft=xml noet : -->
 	<!-- example launch script for ArduPilot based FCU's -->
 
-	 <arg name="fcu_url" default="udp://127.0.0.1:14551@localhost14555" />
-	<!-- <arg name="fcu_url" default="/dev/ttyACM0:921600" /> -->
-	<arg name="gcs_url" default="udp://@" />
+	 <!-- <arg name="fcu_url" default="udp://127.0.0.1:14551@localhost14555" /> -->
+	 <arg name="fcu_url" default="udp://127.0.0.1:14551@:14555" />
+	<!-- <arg name="fcu_url" default="/dev/ttyACM2:57600" /> -->
+	<!-- <arg name="fcu_url" default="tcp:localhost:5762" /> -->
+	<arg name="gcs_url" default="" />
 	<arg name="tgt_system" default="1" />
 	<arg name="tgt_component" default="1" />
 	<arg name="log_output" default="screen" />

@@ -1,9 +1,9 @@
 # -*-coding:utf-8-*-
 # 本文件用于保存getNum_and_locate.py程序中的参数，便于在不同的环境下进行调参
 # 自定义变量均为小写，库自带变量一般均为全大写
-home_altitude = 18
+home_altitude = 603.4696849357588
 '水平地面的海拔高度，每到一个新地方时一定记得更新'
-locate_error = 0.1
+locate_error = 0.4
 time_error = 0.1
 '时间同步器允许的时间误差范围'
 # rotate_target()函数转正靶标时的相关参数
@@ -11,7 +11,7 @@ kernal_size = (2, 2)
 '''腐蚀，膨胀用到的卷积核的大小'''
 erode_iter = 1
 '''腐蚀操作的轮数'''
-dilate_iter = 1
+dilate_iter = 2
 '''膨胀操作的轮数'''
 
 # 边缘检测参数

@@ -84,15 +84,16 @@ class RecoNum:
         
         # 中间处理时不对原图操作，对原图的操作只有最后的转正   Ori_target表示 Origin target
         # 拷贝一份副本进行操作
+        
         target = Ori_target.copy()
         # 图像预处理
 
         # 将彩色图(bgr)转成灰度图(gray)
         target = cv2.cvtColor(target, cv2.COLOR_BGR2GRAY)
         # 创建核
-        kernal = np.ones((2, 2), np.uint8)
+        kernal = np.ones(kernal_size, np.uint8)
         # 膨胀
-        target = cv2.dilate(target, kernal, iterations=2)
+        target = cv2.dilate(target, kernal, iterations=dilate_iter)
         # show_img("dilate",target) # 测试用
         # 腐蚀
         target = cv2.erode(target, kernal, iterations=erode_iter)
@@ -116,36 +117,45 @@ class RecoNum:
             # print("area = ",area) # 测试用
 
             areas.append(area)
-
+        # 此处的检测很有必要，从报错中修改而来
         if len(areas) != 0:
             max_id = areas.index(max(areas))
             max_area = max(areas)
         else:
+            rospy.logwarn("contour areas number = 0")
             return False, Ori_target, np.empty(0)
 
-        # 判断最大外轮廓是否合理
+        # 判断最大外轮廓是否合理,最大外轮廓即靶标外轮廓（三角形+正方形）
         if max_area/img_area < 0.2:
             # print("max_area not find")
+            rospy.logwarn("max contour area not fit")
             return False, Ori_target, np.empty(0)
         # 获取数字底板外轮廓
+        
         areas_copy = areas.copy()
         
         while (True):
-            numBoard_area = max(areas_copy)
-            if numBoard_area > 0.3*max_area:
-                areas_copy.remove(numBoard_area)
-            elif numBoard_area < 0.1*max_area:
-                # print("number_board not find")
+            # 此处的检测很有必要，从报错中修改而来
+            if len(areas_copy) == 0:
+                rospy.logwarn("number board area not fit")
                 return False, Ori_target, np.empty(0)
             else:
-                numBoard_id = areas.index(numBoard_area)
-                break
+                numBoard_area = max(areas_copy)
+                if numBoard_area > 0.3*max_area:
+                    areas_copy.remove(numBoard_area)
+                elif numBoard_area < 0.1*max_area:
+                    # print("number_board not find")
+                    rospy.logwarn("number board area not fit")
+                    return False, Ori_target, np.empty(0)
+                else:
+                    numBoard_id = areas.index(numBoard_area)
+                    break
         # print("max_id = ",max_id) # 测试用
         # print("numBoard_id = ",numBoard_id)
         
         cv2.drawContours(im_test, contours, max_id, 255, 2)
         cv2.drawContours(im_test, contours, numBoard_id, 255, 2)
-
+      
         box_index = []
         # 绘制最小外接矩形
         min_rect = cv2.minAreaRect(contours[max_id])
@@ -179,7 +189,7 @@ class RecoNum:
         # 如果重合角点不是两个，直接弃用
         if len(box_index) != 2:
             # print("same point less than 2")
-            
+            rospy.logwarn("same corner point number != 2")
             return False, Ori_target, np.empty(0)
         # 外接矩形宽  数据类型:double  转成int32使用
         width = np.int32(numBoard_rect[1][0])
@@ -216,6 +226,7 @@ class RecoNum:
         # print("max_area/img_area = ",max_area/img_area)
         # print("numBoard_area/max_area = ",numBoard_area/max_area)
         if transform_img.shape[0] < 0.5*transform_img.shape[1]:
+            rospy.logwarn("transform direction wrong")
             return False, Ori_target, np.empty(0)
         else:
             # 返回的src用于pnp算法定位
@@ -327,9 +338,12 @@ class Locate:
     # 根据靶标大小直接得出世界坐标系（以靶标正方形中心为原点）下靶标最小外接矩形的坐标
     # obj_points = np.float32([[-0.5,1.366,0],[0.5,1.366,0],[0.5,-0.5,0],[-0.5,-0.5,0]]) # 最小外接矩形世界坐标
 
-    obj_points = np.float32([[-0.01, 0.01, 0], [0.01, 0.01, 0],
-                             [0.01, -0.01, 0], [-0.01, -0.01, 0]
-                             ])  # 目前参数为IR 1080P 18.0mm 1/2.7''相机的参数
+    # obj_points = np.float32([[-0.01, 0.01, 0], [0.01, 0.01, 0],
+    #                          [0.01, -0.01, 0], [-0.01, -0.01, 0]
+    #                          ])  # 目前参数为IR 1080P 18.0mm 1/2.7''相机的参数
+    obj_points = np.float32([[-1, 1, 0], [1, 1, 0],
+                             [1, -1, 0], [-1, -1, 0]
+                             ])
     # 相机内参
     cameraMatrix = np.float32([[ 1312.071067,       0.        , 446.061005],
                                [    0.      ,   1313.617388   , 309.887004],
@@ -609,6 +623,7 @@ def ts_callback(msg1, msg2, msg3):
         rospy.loginfo("ts_callback is stopped")
         return
     else:
+
         rospy.loginfo("ts_callback begin")
         # 1. 获取飞机自身gps坐标及姿态角
         global locate
@@ -638,7 +653,7 @@ def ts_callback(msg1, msg2, msg3):
             return
         for i in range(len(msg1.image_list)):
             # 将ros图片格式转为opencv图片格式
-            cv_image = bridge.imgmsg_to_cv2(msg1.image_list[i], 'bgr8')
+            cv_image = bridge.imgmsg_to_cv2(msg1.image_list[i],'bgr8')
             # 转正靶标
             is_rotated, transform_img, num_board = reco.rotate_target(cv_image)
             # 获取yolov5矩形框的左上角在原图中的坐标（现在处理的图片是yolov5从原图中截取出来的，靶标在原图中的坐标=yolov5矩形框左上角坐标+现在处理的图片中靶标的实际坐标（实际坐标所在坐标系的原点即为矩形框左上角））
@@ -672,16 +687,15 @@ def ts_callback(msg1, msg2, msg3):
                 rotated_x, rotated_y, rotated_z = locate.rotate_xyz(x, y, z)
                 rospy.loginfo("rotated_x = %f rotated_y = %f rotated_z = %f", rotated_x, rotated_y, rotated_z)
                 # 如果视觉定位得到的飞机高度与飞控得到的飞机高度在误差范围内，则认为视觉定位准确，予以采用。否则，则舍弃此次定位
-                if rotated_z >= (1 - locate_error) * locate.ref_altitude and rotated_z <= (1 + locate_error) * locate.ref_altitude:
+                # if rotated_z >= (1 - locate_error) * locate.ref_altitude and rotated_z <= (1 + locate_error) * locate.ref_altitude:
                     #定位精确，予以采用
-                    longitude, latitude = locate.xy_to_gps(rotated_x, rotated_y)
-                    rospy.loginfo("target longitude = %f  latitude = %f ", longitude, latitude)
-                    filter.num_dict_add(number, True, longitude, latitude)
-                    
-                else:
-                    # 定位不精确，弃用
-                    rospy.logwarn("inaccurate locate")
-                    filter.num_dict_add(number, False, 0, 0)
+                longitude, latitude = locate.xy_to_gps(rotated_x, rotated_y)
+                rospy.loginfo("target longitude = %f  latitude = %f ", longitude, latitude)
+                filter.num_dict_add(number, True, longitude, latitude) 
+                # else:
+                #     # 定位不精确，弃用
+                #     rospy.logwarn("inaccurate locate")
+                #     filter.num_dict_add(number, False, 0, 0)
     pass
 
 
