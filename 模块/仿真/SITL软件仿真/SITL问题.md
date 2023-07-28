@@ -26,3 +26,9 @@
 
 ### 10. gazebo连接ROS
 `cd /home/lzc/ardupilot_gazebo;gazebo --verbose -s libgazebo_ros_api_plugin.so ./worlds/target.world`
+
+
+
+
+
+
