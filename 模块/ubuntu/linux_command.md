@@ -2,9 +2,9 @@
 
 > 2023.1.5
 
-### 1.列出所有安装的软件包（两种方式)
+### 1.列出所有安装的软件包（两种方式）
 
-1. `sudo apt list`
+1. `sudo apt list --installed`
 2. `dpkg --get-selections`  
 
 ### 2.更新、删除或安装我们不需要的软件
@@ -18,7 +18,7 @@
 
 1. 方法一：
 
-- `sudo apt list | grep 软件名 `
+- `sudo apt list --installed | grep 软件名 `
 - `sudo apt purge 软件包名`
 - `sudo apt autopurge`
 
