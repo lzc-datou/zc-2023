@@ -177,7 +177,7 @@ def run(
             imc = im0.copy() if save_crop else im0  # for save_crop
             annotator = Annotator(im0, line_width=line_thickness, example=str(names))
 
-            # 展示仿真图像
+            # 展示仿真摄像头图像
             cv2.imshow("yolov5",im0)
             cv2.waitKey(1)
 
@@ -210,7 +210,8 @@ def run(
                     y1 = int(xyxy[1])
                     x2 = int(xyxy[2])
                     y2 = int(xyxy[3])
-                  
+
+                    # 展示yolov5检测结果
                     cv2.imshow("yolov5",im0)
                     cv2.waitKey(1)
                     box = Bounding_box()
@@ -369,9 +370,11 @@ def quit(signum, frame):
     print("Keyboard interruption by yourself")
     sys.exit(0)
 
+# 接收到的话题图像存放的位置
 filename = "./src/simulation/simulation_image/sim_img.jpg"
 
 def img_callback(data):
+    '接收ros话题图像并保存'
     print(data.encoding)
     # 注意：仿真摄像头传来的图像是rgb8格式的，需要手动转换成bgr8
     img = bridge.imgmsg_to_cv2(data,'rgb8')

@@ -1,9 +1,9 @@
-<?xml version="1.0" ?>
+<?xml version='1.0'?>
 <sdf version='1.7'>
   <world name='default'>
     <gui fullscreen='0'>
       <camera name='user_camera'>
-        <pose>7.08959 3.72492 11.6114 0 1.16618 -2.78855</pose>
+        <pose>8.54273 31.9221 29.4126 -0 0.296 -1.5827</pose>
         <view_controller>orbit</view_controller>
         <projection_type>perspective</projection_type>
       </camera>
@@ -1084,58 +1084,41 @@
       <elevation>0</elevation>
       <heading_deg>0</heading_deg>
     </spherical_coordinates>
-    <model name='my_number1'>
-      <link name='link'>
-        <self_collide>0</self_collide>
-        <enable_wind>0</enable_wind>
-        <kinematic>0</kinematic>
-        <pose>0 0 0 0 -0 0</pose>
-        <gravity>1</gravity>
+    <model name='biao_12'>
+      <link name='link_0'>
         <inertial>
           <mass>1</mass>
-          <pose>0 0 0 0 -0 0</pose>
           <inertia>
-            <ixx>1</ixx>
+            <ixx>0.166667</ixx>
             <ixy>0</ixy>
             <ixz>0</ixz>
-            <iyy>1</iyy>
+            <iyy>0.166667</iyy>
             <iyz>0</iyz>
-            <izz>1</izz>
+            <izz>0.166667</izz>
           </inertia>
+          <pose>0 0 0 0 -0 0</pose>
         </inertial>
+        <pose>-0 0 0 0 -0 0</pose>
         <visual name='visual'>
+          <pose>0 0 0 0 -0 0</pose>
           <geometry>
             <mesh>
-              <uri>model://number1/meshes/number.dae</uri>
-              <scale>0.5 0.25 0.001</scale>
+              <uri>/home/lzc/lzc-code/src/simulation/models/biao/12/12.dae</uri>
+              <scale>1 1 1</scale>
             </mesh>
           </geometry>
-          <material>
-            <script>
-              <uri>model://number1/materials/scripts</uri>
-              <uri>model://number1/materials/textures</uri>
-              <name>Number/One</name>
-            </script>
-            <shader type='pixel'>
-              <normal_map>__default__</normal_map>
-            </shader>
-            <ambient>1 1 1 1</ambient>
-            <diffuse>1 1 1 1</diffuse>
-            <specular>0 0 0 1</specular>
-            <emissive>0 0 0 1</emissive>
-          </material>
-          <pose>0 0 0 0 -0 0</pose>
           <transparency>0</transparency>
           <cast_shadows>1</cast_shadows>
         </visual>
-        <collision name='collision_0'>
+        <collision name='collision'>
           <laser_retro>0</laser_retro>
           <max_contacts>10</max_contacts>
           <pose>0 0 0 0 -0 0</pose>
           <geometry>
-            <box>
-              <size>0.5 0.25 0.001</size>
-            </box>
+            <mesh>
+              <uri>/home/lzc/lzc-code/src/simulation/models/biao/12/12.dae</uri>
+              <scale>1 1 1</scale>
+            </mesh>
           </geometry>
           <surface>
             <friction>
@@ -1183,16 +1166,229 @@
             </contact>
           </surface>
         </collision>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
       </link>
-      <static>1</static>
+      <static>0</static>
       <allow_auto_disable>1</allow_auto_disable>
-      <pose>4.2756 -14.5732 0 0 -0 0</pose>
+      <pose>12.1405 -37.5522 0 0 -0 0</pose>
+    </model>
+    <model name='biao_34'>
+      <link name='link_0'>
+        <inertial>
+          <mass>1</mass>
+          <inertia>
+            <ixx>0.166667</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.166667</iyy>
+            <iyz>0</iyz>
+            <izz>0.166667</izz>
+          </inertia>
+          <pose>0 0 0 0 -0 0</pose>
+        </inertial>
+        <pose>-0 0 0 0 -0 0</pose>
+        <visual name='visual'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <uri>/home/lzc/lzc-code/src/simulation/models/biao/34/34.dae</uri>
+              <scale>1 1 1</scale>
+            </mesh>
+          </geometry>
+          <transparency>0</transparency>
+          <cast_shadows>1</cast_shadows>
+        </visual>
+        <collision name='collision'>
+          <laser_retro>0</laser_retro>
+          <max_contacts>10</max_contacts>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <uri>/home/lzc/lzc-code/src/simulation/models/biao/34/34.dae</uri>
+              <scale>1 1 1</scale>
+            </mesh>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1</mu>
+                <mu2>1</mu2>
+                <fdir1>0 0 0</fdir1>
+                <slip1>0</slip1>
+                <slip2>0</slip2>
+              </ode>
+              <torsional>
+                <coefficient>1</coefficient>
+                <patch_radius>0</patch_radius>
+                <surface_radius>0</surface_radius>
+                <use_patch_radius>1</use_patch_radius>
+                <ode>
+                  <slip>0</slip>
+                </ode>
+              </torsional>
+            </friction>
+            <bounce>
+              <restitution_coefficient>0</restitution_coefficient>
+              <threshold>1e+06</threshold>
+            </bounce>
+            <contact>
+              <collide_without_contact>0</collide_without_contact>
+              <collide_without_contact_bitmask>1</collide_without_contact_bitmask>
+              <collide_bitmask>1</collide_bitmask>
+              <ode>
+                <soft_cfm>0</soft_cfm>
+                <soft_erp>0.2</soft_erp>
+                <kp>1e+13</kp>
+                <kd>1</kd>
+                <max_vel>0.01</max_vel>
+                <min_depth>0</min_depth>
+              </ode>
+              <bullet>
+                <split_impulse>1</split_impulse>
+                <split_impulse_penetration_threshold>-0.01</split_impulse_penetration_threshold>
+                <soft_cfm>0</soft_cfm>
+                <soft_erp>0.2</soft_erp>
+                <kp>1e+13</kp>
+                <kd>1</kd>
+              </bullet>
+            </contact>
+          </surface>
+        </collision>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <static>0</static>
+      <allow_auto_disable>1</allow_auto_disable>
+      <pose>-53.1888 -117.975 0 0 -0 0</pose>
+    </model>
+    <model name='biao_56'>
+      <link name='link_0'>
+        <inertial>
+          <mass>1</mass>
+          <inertia>
+            <ixx>0.166667</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.166667</iyy>
+            <iyz>0</iyz>
+            <izz>0.166667</izz>
+          </inertia>
+          <pose>0 0 0 0 -0 0</pose>
+        </inertial>
+        <pose>0 -0 0 0 -0 0</pose>
+        <visual name='visual'>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <uri>/home/lzc/lzc-code/src/simulation/models/biao/56/56.dae</uri>
+              <scale>1 1 1</scale>
+            </mesh>
+          </geometry>
+          <transparency>0</transparency>
+          <cast_shadows>1</cast_shadows>
+        </visual>
+        <collision name='collision'>
+          <laser_retro>0</laser_retro>
+          <max_contacts>10</max_contacts>
+          <pose>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <uri>/home/lzc/lzc-code/src/simulation/models/biao/56/56.dae</uri>
+              <scale>1 1 1</scale>
+            </mesh>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1</mu>
+                <mu2>1</mu2>
+                <fdir1>0 0 0</fdir1>
+                <slip1>0</slip1>
+                <slip2>0</slip2>
+              </ode>
+              <torsional>
+                <coefficient>1</coefficient>
+                <patch_radius>0</patch_radius>
+                <surface_radius>0</surface_radius>
+                <use_patch_radius>1</use_patch_radius>
+                <ode>
+                  <slip>0</slip>
+                </ode>
+              </torsional>
+            </friction>
+            <bounce>
+              <restitution_coefficient>0</restitution_coefficient>
+              <threshold>1e+06</threshold>
+            </bounce>
+            <contact>
+              <collide_without_contact>0</collide_without_contact>
+              <collide_without_contact_bitmask>1</collide_without_contact_bitmask>
+              <collide_bitmask>1</collide_bitmask>
+              <ode>
+                <soft_cfm>0</soft_cfm>
+                <soft_erp>0.2</soft_erp>
+                <kp>1e+13</kp>
+                <kd>1</kd>
+                <max_vel>0.01</max_vel>
+                <min_depth>0</min_depth>
+              </ode>
+              <bullet>
+                <split_impulse>1</split_impulse>
+                <split_impulse_penetration_threshold>-0.01</split_impulse_penetration_threshold>
+                <soft_cfm>0</soft_cfm>
+                <soft_erp>0.2</soft_erp>
+                <kp>1e+13</kp>
+                <kd>1</kd>
+              </bullet>
+            </contact>
+          </surface>
+        </collision>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <static>0</static>
+      <allow_auto_disable>1</allow_auto_disable>
+      <pose>78.1749 -164.061 0 0 -0 0</pose>
     </model>
     <state world_name='default'>
-      <sim_time>339 117500000</sim_time>
-      <real_time>13 488661413</real_time>
-      <wall_time>1690353794 673405188</wall_time>
-      <iterations>5376</iterations>
+      <sim_time>89 942500000</sim_time>
+      <real_time>91 280808980</real_time>
+      <wall_time>1690373249 955608328</wall_time>
+      <iterations>35977</iterations>
+      <model name='biao_12'>
+        <pose>12.1405 -37.5522 0.010961 0 7.7e-05 -0.861325</pose>
+        <scale>1 1 1</scale>
+        <link name='link_0'>
+          <pose>12.1405 -37.5522 0.010961 0 7.7e-05 -0.861325</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0.211258 -0.246046 0 -2.84315 0.288501 0</acceleration>
+          <wrench>0.211258 -0.246046 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='biao_34'>
+        <pose>-53.1888 -117.975 0.010964 0 -0 1.14837</pose>
+        <scale>1 1 1</scale>
+        <link name='link_0'>
+          <pose>-53.1888 -117.975 0.010964 0 -0 1.14837</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 -9.8 0 -0 0</acceleration>
+          <wrench>0 0 -9.8 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='biao_56'>
+        <pose>78.1749 -164.061 0.010961 0 -7.7e-05 2.24268</pose>
+        <scale>1 1 1</scale>
+        <link name='link_0'>
+          <pose>78.1749 -164.061 0.010961 0 -7.7e-05 2.24268</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0.201863 -0.253811 -0 -2.13972 -0.562617 0</acceleration>
+          <wrench>0.201863 -0.253811 -0 0 -0 0</wrench>
+        </link>
+      </model>
       <model name='ground_plane'>
         <pose>0 0 0 0 -0 0</pose>
         <scale>1 1 1</scale>
@@ -1203,541 +1399,67 @@
           <wrench>0 0 0 0 -0 0</wrench>
         </link>
       </model>
-      <model name='my_number1'>
-        <pose>4.2756 -14.5732 0 0 -0 0</pose>
-        <scale>1 1 1</scale>
-        <link name='link'>
-          <pose>4.2756 -14.5732 0 0 -0 0</pose>
-          <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>0 0 0 0 -0 0</acceleration>
-          <wrench>0 0 0 0 -0 0</wrench>
-        </link>
-      </model>
-      <model name='my_number11'>
-        <pose>4.8041 -0.516163 0.4 0 -0 0</pose>
-        <scale>1 1 1</scale>
-        <link name='link'>
-          <pose>4.68128 -0.207575 0.400005 -4.7e-05 0 0</pose>
-          <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>0 0 0 0 -0 0</acceleration>
-          <wrench>0 0 0 0 -0 0</wrench>
-        </link>
-        <model name='my_number1'>
-          <pose>4.68128 -0.007575 0.4 0 -0 0</pose>
-          <scale>1 1 1</scale>
-          <link name='link'>
-            <pose>4.68128 -0.007575 0.4 0 -0 0</pose>
-            <velocity>0 0 0 0 -0 0</velocity>
-            <acceleration>0 0 0 0 -0 0</acceleration>
-            <wrench>0 0 0 0 -0 0</wrench>
-          </link>
-        </model>
-      </model>
-      <model name='my_number11_0'>
-        <pose>4.68193 -0.81313 0 0 -0 0</pose>
-        <scale>1 1 1</scale>
-        <link name='link'>
-          <pose>4.55911 -0.504542 5e-06 -4.7e-05 0 0</pose>
-          <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>0 0 0 0 -0 0</acceleration>
-          <wrench>0 0 0 0 -0 0</wrench>
-        </link>
-        <model name='my_number1'>
-          <pose>4.55911 -0.304542 0 0 -0 0</pose>
-          <scale>1 1 1</scale>
-          <link name='link'>
-            <pose>4.55911 -0.304542 0 0 -0 0</pose>
-            <velocity>0 0 0 0 -0 0</velocity>
-            <acceleration>0 0 0 0 -0 0</acceleration>
-            <wrench>0 0 0 0 -0 0</wrench>
-          </link>
-        </model>
-      </model>
-      <model name='my_number11_1'>
-        <pose>4.99936 -0.868674 0 0 -0 0</pose>
-        <scale>1 1 1</scale>
-        <link name='link'>
-          <pose>4.87654 -0.560086 5e-06 -4.7e-05 0 0</pose>
-          <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>0 0 0 0 -0 0</acceleration>
-          <wrench>0 0 0 0 -0 0</wrench>
-        </link>
-        <model name='my_number1'>
-          <pose>4.87654 -0.360086 0 0 -0 0</pose>
-          <scale>1 1 1</scale>
-          <link name='link'>
-            <pose>4.87654 -0.360086 0 0 -0 0</pose>
-            <velocity>0 0 0 0 -0 0</velocity>
-            <acceleration>0 0 0 0 -0 0</acceleration>
-            <wrench>0 0 0 0 -0 0</wrench>
-          </link>
-        </model>
-      </model>
-      <model name='my_number1_1'>
-        <pose>4.09859 -1.35859 0 0 -0 0</pose>
-        <scale>1 1 1</scale>
-        <link name='link'>
-          <pose>4.09859 -1.35859 0 0 -0 0</pose>
-          <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>0 0 0 0 -0 0</acceleration>
-          <wrench>0 0 0 0 -0 0</wrench>
-        </link>
-      </model>
       <model name='zephyr_delta_wing_demo'>
-        <pose>-1.6e-05 -0.000423 0.034946 2.4e-05 1e-06 1.2e-05</pose>
+        <pose>-1.4e-05 0.000433 0.034947 2.4e-05 -1e-06 -7e-06</pose>
         <scale>1 1 1</scale>
         <link name='zephyr_delta_wing_demo::ZED_stereocamera::link'>
-          <pose>-1.1e-05 -0.340429 0.314929 -1e-06 2.4e-05 -1.57079</pose>
-          <velocity>0.00026 -3e-06 0.000112 4.2e-05 0.000826 -2e-05</velocity>
-          <acceleration>0.21203 -0.01215 0.011976 0.001256 -1.35347 -0.028759</acceleration>
-          <wrench>0.033713 -0.001932 0.001904 0 -0 0</wrench>
+          <pose>-1.7e-05 -0.339574 0.314929 1e-06 2.4e-05 -1.57081</pose>
+          <velocity>-0.000267 -1.7e-05 9.7e-05 2.4e-05 -0.00083 1.5e-05</velocity>
+          <acceleration>-0.213073 0.002555 -0.00574 3.141 0.803416 -3.12447</acceleration>
+          <wrench>-0.033879 0.000406 -0.000913 0 -0 0</wrench>
         </link>
         <link name='zephyr_delta_wing_demo::cam_link'>
-          <pose>-1.6e-05 -0.000422 0.034946 2.4e-05 1e-06 1.2e-05</pose>
-          <velocity>8.3e-05 9e-06 0.000138 4.1e-05 0.000826 -2e-05</velocity>
-          <acceleration>0.061239 0.001763 0.029688 0.049067 0.702831 -0.029312</acceleration>
-          <wrench>0.000612 1.8e-05 0.000297 0 -0 0</wrench>
+          <pose>-1.4e-05 0.000433 0.034947 2.4e-05 -1e-06 -7e-06</pose>
+          <velocity>-8.2e-05 -1e-05 0.000115 2.3e-05 -0.00083 1.5e-05</velocity>
+          <acceleration>-0.064306 -0.000752 -0.009551 -0.011743 -0.673727 0.017666</acceleration>
+          <wrench>-0.000643 -8e-06 -9.6e-05 0 -0 0</wrench>
         </link>
         <link name='zephyr_delta_wing_demo::camera::link'>
-          <pose>-1.1e-05 -0.340427 0.234938 -0.001297 1.57002 -1.57208</pose>
-          <velocity>0.00019 0 0.000124 4.1e-05 0.000826 -2e-05</velocity>
-          <acceleration>0.150747 -0.00826 0.012859 0.049067 0.702838 -0.029311</acceleration>
-          <wrench>1.5e-05 -1e-06 1e-06 0 -0 0</wrench>
+          <pose>-1.7e-05 -0.339572 0.234939 0.00126 1.57002 -1.56955</pose>
+          <velocity>-0.000191 -1.5e-05 0.000107 2.3e-05 -0.00083 1.5e-05</velocity>
+          <acceleration>-0.151996 0.001663 -0.005518 -0.011743 -0.673734 0.017665</acceleration>
+          <wrench>-1.5e-05 0 -1e-06 0 -0 0</wrench>
         </link>
         <link name='zephyr_delta_wing_demo::skid_pad'>
-          <pose>-1.5e-05 -0.070423 0.014947 1.4e-05 -3e-06 1.2e-05</pose>
-          <velocity>-6.3e-05 -4e-06 0.000141 3.7e-05 -0.002553 0</velocity>
-          <acceleration>-0.050967 -0.001004 0.026303 -3.0943 -1.08973 -3.14131</acceleration>
-          <wrench>-0.005097 -0.0001 0.00263 0 -0 0</wrench>
+          <pose>-1.5e-05 -0.069568 0.014947 1.5e-05 3e-06 -7e-06</pose>
+          <velocity>6.4e-05 -4e-06 0.000118 7e-06 0.002564 -0</velocity>
+          <acceleration>0.050861 0.000271 -0.008684 3.1283 1.09401 3.14126</acceleration>
+          <wrench>0.005086 2.7e-05 -0.000868 0 -0 0</wrench>
         </link>
         <link name='zephyr_delta_wing_demo::zephyr_delta_wing::flap_left'>
-          <pose>0.45458 0.233739 0.222947 -0.501841 -0.157587 0.040482</pose>
-          <velocity>0.000193 -7e-06 -0.000235 0.000194 0.00088 -2.2e-05</velocity>
-          <acceleration>0.161139 -0.022903 -0.288846 0.023566 0.692461 -0.040764</acceleration>
-          <wrench>0.016114 -0.00229 -0.028885 0 -0 0</wrench>
+          <pose>0.454586 0.234586 0.222949 -0.501843 -0.15759 0.040463</pose>
+          <velocity>-0.000195 3e-06 0.000526 0.00049 -0.00068 1.8e-05</velocity>
+          <acceleration>-0.155615 0.010255 0.302136 -0.047039 -0.683344 0.028832</acceleration>
+          <wrench>-0.015561 0.001025 0.030214 0 -0 0</wrench>
         </link>
         <link name='zephyr_delta_wing_demo::zephyr_delta_wing::flap_right'>
-          <pose>-0.454618 0.233725 0.222942 -0.502037 0.157644 -0.040488</pose>
-          <velocity>0.000314 0.000378 0.001204 0.019351 -0.005549 -2.1e-05</velocity>
-          <acceleration>0.147981 -0.029704 0.304933 -1.86746 1.33245 -0.045395</acceleration>
-          <wrench>0.014798 -0.00297 0.030493 0 -0 0</wrench>
+          <pose>-0.454612 0.234591 0.222944 -0.50194 0.157615 -0.040493</pose>
+          <velocity>-0.000129 0.000165 7.2e-05 0.009903 -0.004098 1.7e-05</velocity>
+          <acceleration>-0.161183 -0.02657 -0.363622 -1.01485 -0.341157 0.025352</acceleration>
+          <wrench>-0.016118 -0.002657 -0.036362 0 -0 0</wrench>
         </link>
         <link name='zephyr_delta_wing_demo::zephyr_delta_wing::propeller'>
-          <pose>-1.6e-05 0.069573 0.242948 0.07283 1.57047 0.072842</pose>
-          <velocity>0.000207 -0 0.000141 4.1e-05 5e-06 -2.2e-05</velocity>
-          <acceleration>0.169994 -0.008646 0.033009 -0.620213 0.00452 0.001556</acceleration>
-          <wrench>0.0085 -0.000432 0.00165 0 -0 0</wrench>
+          <pose>-1.4e-05 0.070428 0.242948 0.073538 1.57047 0.073531</pose>
+          <velocity>-0.000206 -1.5e-05 0.000117 2.3e-05 -6e-06 1.7e-05</velocity>
+          <acceleration>-0.166193 0.001753 -0.010326 -1.34895 -0.004461 -0.000271</acceleration>
+          <wrench>-0.00831 8.8e-05 -0.000516 0 -0 0</wrench>
         </link>
         <link name='zephyr_delta_wing_demo::zephyr_delta_wing::wing'>
-          <pose>-1.6e-05 -0.000427 0.234946 2.4e-05 1e-06 1.2e-05</pose>
-          <velocity>0.0002 0 0.000138 4.1e-05 0.000828 -2.2e-05</velocity>
-          <acceleration>0.15952 -0.008251 0.023675 0.049145 0.704701 -0.031399</acceleration>
-          <wrench>0.23928 -0.012376 0.035513 0 -0 0</wrench>
+          <pose>-1.4e-05 0.000428 0.234947 2.4e-05 -1e-06 -7e-06</pose>
+          <velocity>-0.0002 -1.5e-05 0.000115 2.3e-05 -0.000832 1.7e-05</velocity>
+          <acceleration>-0.158165 0.001658 -0.008099 -0.011711 -0.67556 0.019721</acceleration>
+          <wrench>-0.237247 0.002487 -0.012148 0 -0 0</wrench>
         </link>
         <link name='zephyr_delta_wing_demo::zephyr_delta_wing::zephyr/imu_link'>
-          <pose>-1.6e-05 -0.000427 0.234946 2.4e-05 1e-06 1.2e-05</pose>
-          <velocity>0.0002 0 0.000138 4.1e-05 0.000828 -2.2e-05</velocity>
-          <acceleration>0.16329 -0.008251 0.02957 0.049123 0.704701 -0.031402</acceleration>
-          <wrench>0.024494 -0.001238 0.004435 0 -0 0</wrench>
+          <pose>-1.4e-05 0.000428 0.234947 2.4e-05 -1e-06 -7e-06</pose>
+          <velocity>-0.0002 -1.5e-05 0.000115 2.3e-05 -0.000832 1.7e-05</velocity>
+          <acceleration>-0.160534 0.001658 -0.009506 -0.011724 -0.67556 0.019724</acceleration>
+          <wrench>-0.02408 0.000249 -0.001426 0 -0 0</wrench>
         </link>
       </model>
       <light name='sun'>
         <pose>0 0 10 0 -0 0</pose>
       </light>
     </state>
-    <model name='my_number1_1'>
-      <link name='link'>
-        <self_collide>0</self_collide>
-        <enable_wind>0</enable_wind>
-        <kinematic>0</kinematic>
-        <pose>0 0 0 0 -0 0</pose>
-        <gravity>1</gravity>
-        <inertial>
-          <mass>1</mass>
-          <pose>0 0 0 0 -0 0</pose>
-          <inertia>
-            <ixx>1</ixx>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyy>1</iyy>
-            <iyz>0</iyz>
-            <izz>1</izz>
-          </inertia>
-        </inertial>
-        <visual name='visual'>
-          <geometry>
-            <mesh>
-              <uri>model://number1/meshes/number.dae</uri>
-              <scale>0.5 0.25 0.001</scale>
-            </mesh>
-          </geometry>
-          <material>
-            <script>
-              <uri>model://number1/materials/scripts</uri>
-              <uri>model://number1/materials/textures</uri>
-              <name>Number/One</name>
-            </script>
-            <shader type='pixel'>
-              <normal_map>__default__</normal_map>
-            </shader>
-            <ambient>1 1 1 1</ambient>
-            <diffuse>1 1 1 1</diffuse>
-            <specular>0 0 0 1</specular>
-            <emissive>0 0 0 1</emissive>
-          </material>
-          <pose>0 0 0 0 -0 0</pose>
-          <transparency>0</transparency>
-          <cast_shadows>1</cast_shadows>
-        </visual>
-      </link>
-      <static>1</static>
-      <allow_auto_disable>1</allow_auto_disable>
-      <pose>4.09859 -1.35859 0 0 -0 0</pose>
-    </model>
-    <model name='my_number11'>
-      <link name='link'>
-        <self_collide>0</self_collide>
-        <enable_wind>0</enable_wind>
-        <kinematic>0</kinematic>
-        <pose>-0.122822 0.308588 5e-06 -4.7e-05 0 0</pose>
-        <gravity>1</gravity>
-        <inertial>
-          <mass>1</mass>
-          <pose>0 0 0 0 -0 0</pose>
-          <inertia>
-            <ixx>1</ixx>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyy>1</iyy>
-            <iyz>0</iyz>
-            <izz>1</izz>
-          </inertia>
-        </inertial>
-        <visual name='visual'>
-          <geometry>
-            <mesh>
-              <uri>model://number1/meshes/number.dae</uri>
-              <scale>0.5 0.25 0.001</scale>
-            </mesh>
-          </geometry>
-          <material>
-            <script>
-              <uri>model://number1/materials/scripts</uri>
-              <uri>model://number1/materials/textures</uri>
-              <name>Number/One</name>
-            </script>
-            <shader type='pixel'>
-              <normal_map>__default__</normal_map>
-            </shader>
-            <ambient>1 1 1 1</ambient>
-            <diffuse>1 1 1 1</diffuse>
-            <specular>0 0 0 1</specular>
-            <emissive>0 0 0 1</emissive>
-          </material>
-          <pose>0 0 0 0 -0 0</pose>
-          <transparency>0</transparency>
-          <cast_shadows>1</cast_shadows>
-        </visual>
-      </link>
-      <model name='my_number1'>
-        <link name='link'>
-          <self_collide>0</self_collide>
-          <enable_wind>0</enable_wind>
-          <kinematic>0</kinematic>
-          <pose>0 0 0 0 -0 0</pose>
-          <gravity>1</gravity>
-          <inertial>
-            <mass>1</mass>
-            <pose>0 0 0 0 -0 0</pose>
-            <inertia>
-              <ixx>1</ixx>
-              <ixy>0</ixy>
-              <ixz>0</ixz>
-              <iyy>1</iyy>
-              <iyz>0</iyz>
-              <izz>1</izz>
-            </inertia>
-          </inertial>
-          <visual name='visual'>
-            <geometry>
-              <mesh>
-                <uri>model://number1/meshes/number.dae</uri>
-                <scale>0.5 0.25 0.001</scale>
-              </mesh>
-            </geometry>
-            <material>
-              <script>
-                <uri>model://number1/materials/scripts</uri>
-                <uri>model://number1/materials/textures</uri>
-                <name>Number/One</name>
-              </script>
-              <shader type='pixel'>
-                <normal_map>__default__</normal_map>
-              </shader>
-              <ambient>1 1 1 1</ambient>
-              <diffuse>1 1 1 1</diffuse>
-              <specular>0 0 0 1</specular>
-              <emissive>0 0 0 1</emissive>
-            </material>
-            <pose>0 0 0 0 -0 0</pose>
-            <transparency>0</transparency>
-            <cast_shadows>1</cast_shadows>
-          </visual>
-        </link>
-        <static>1</static>
-        <allow_auto_disable>1</allow_auto_disable>
-        <pose>-0.122822 0.508588 0 0 -0 0</pose>
-      </model>
-      <joint name='link_JOINT_0' type='fixed'>
-        <parent>link</parent>
-        <child>my_number1::link</child>
-        <pose>0 0 0 0 -0 0</pose>
-        <physics>
-          <ode>
-            <limit>
-              <cfm>0</cfm>
-              <erp>0.2</erp>
-            </limit>
-            <suspension>
-              <cfm>0</cfm>
-              <erp>0.2</erp>
-            </suspension>
-          </ode>
-        </physics>
-      </joint>
-      <static>1</static>
-      <allow_auto_disable>1</allow_auto_disable>
-      <pose>4.8041 -0.516163 0.4 0 -0 0</pose>
-    </model>
-    <model name='my_number11_0'>
-      <link name='link'>
-        <self_collide>0</self_collide>
-        <enable_wind>0</enable_wind>
-        <kinematic>0</kinematic>
-        <pose>-0.122822 0.308588 5e-06 -4.7e-05 0 0</pose>
-        <gravity>1</gravity>
-        <inertial>
-          <mass>1</mass>
-          <pose>0 0 0 0 -0 0</pose>
-          <inertia>
-            <ixx>1</ixx>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyy>1</iyy>
-            <iyz>0</iyz>
-            <izz>1</izz>
-          </inertia>
-        </inertial>
-        <visual name='visual'>
-          <geometry>
-            <mesh>
-              <uri>model://number1/meshes/number.dae</uri>
-              <scale>0.5 0.25 0.001</scale>
-            </mesh>
-          </geometry>
-          <material>
-            <script>
-              <uri>model://number1/materials/scripts</uri>
-              <uri>model://number1/materials/textures</uri>
-              <name>Number/One</name>
-            </script>
-            <shader type='pixel'>
-              <normal_map>__default__</normal_map>
-            </shader>
-            <ambient>1 1 1 1</ambient>
-            <diffuse>1 1 1 1</diffuse>
-            <specular>0 0 0 1</specular>
-            <emissive>0 0 0 1</emissive>
-          </material>
-          <pose>0 0 0 0 -0 0</pose>
-          <transparency>0</transparency>
-          <cast_shadows>1</cast_shadows>
-        </visual>
-      </link>
-      <model name='my_number1'>
-        <link name='link'>
-          <self_collide>0</self_collide>
-          <enable_wind>0</enable_wind>
-          <kinematic>0</kinematic>
-          <pose>0 0 0 0 -0 0</pose>
-          <gravity>1</gravity>
-          <inertial>
-            <mass>1</mass>
-            <pose>0 0 0 0 -0 0</pose>
-            <inertia>
-              <ixx>1</ixx>
-              <ixy>0</ixy>
-              <ixz>0</ixz>
-              <iyy>1</iyy>
-              <iyz>0</iyz>
-              <izz>1</izz>
-            </inertia>
-          </inertial>
-          <visual name='visual'>
-            <geometry>
-              <mesh>
-                <uri>model://number1/meshes/number.dae</uri>
-                <scale>0.5 0.25 0.001</scale>
-              </mesh>
-            </geometry>
-            <material>
-              <script>
-                <uri>model://number1/materials/scripts</uri>
-                <uri>model://number1/materials/textures</uri>
-                <name>Number/One</name>
-              </script>
-              <shader type='pixel'>
-                <normal_map>__default__</normal_map>
-              </shader>
-              <ambient>1 1 1 1</ambient>
-              <diffuse>1 1 1 1</diffuse>
-              <specular>0 0 0 1</specular>
-              <emissive>0 0 0 1</emissive>
-            </material>
-            <pose>0 0 0 0 -0 0</pose>
-            <transparency>0</transparency>
-            <cast_shadows>1</cast_shadows>
-          </visual>
-        </link>
-        <static>1</static>
-        <allow_auto_disable>1</allow_auto_disable>
-        <pose>-0.122822 0.508588 0 0 -0 0</pose>
-      </model>
-      <joint name='link_JOINT_0' type='fixed'>
-        <parent>link</parent>
-        <child>my_number1::link</child>
-        <pose>0 0 0 0 -0 0</pose>
-        <physics>
-          <ode>
-            <limit>
-              <cfm>0</cfm>
-              <erp>0.2</erp>
-            </limit>
-            <suspension>
-              <cfm>0</cfm>
-              <erp>0.2</erp>
-            </suspension>
-          </ode>
-        </physics>
-      </joint>
-      <static>1</static>
-      <allow_auto_disable>1</allow_auto_disable>
-      <pose>4.68193 -0.81313 0 0 -0 0</pose>
-    </model>
-    <model name='my_number11_1'>
-      <link name='link'>
-        <self_collide>0</self_collide>
-        <enable_wind>0</enable_wind>
-        <kinematic>0</kinematic>
-        <pose>-0.122822 0.308588 5e-06 -4.7e-05 0 0</pose>
-        <gravity>1</gravity>
-        <inertial>
-          <mass>1</mass>
-          <pose>0 0 0 0 -0 0</pose>
-          <inertia>
-            <ixx>1</ixx>
-            <ixy>0</ixy>
-            <ixz>0</ixz>
-            <iyy>1</iyy>
-            <iyz>0</iyz>
-            <izz>1</izz>
-          </inertia>
-        </inertial>
-        <visual name='visual'>
-          <geometry>
-            <mesh>
-              <uri>model://number1/meshes/number.dae</uri>
-              <scale>0.5 0.25 0.001</scale>
-            </mesh>
-          </geometry>
-          <material>
-            <script>
-              <uri>model://number1/materials/scripts</uri>
-              <uri>model://number1/materials/textures</uri>
-              <name>Number/One</name>
-            </script>
-            <shader type='pixel'>
-              <normal_map>__default__</normal_map>
-            </shader>
-            <ambient>1 1 1 1</ambient>
-            <diffuse>1 1 1 1</diffuse>
-            <specular>0 0 0 1</specular>
-            <emissive>0 0 0 1</emissive>
-          </material>
-          <pose>0 0 0 0 -0 0</pose>
-          <transparency>0</transparency>
-          <cast_shadows>1</cast_shadows>
-        </visual>
-      </link>
-      <model name='my_number1'>
-        <link name='link'>
-          <self_collide>0</self_collide>
-          <enable_wind>0</enable_wind>
-          <kinematic>0</kinematic>
-          <pose>0 0 0 0 -0 0</pose>
-          <gravity>1</gravity>
-          <inertial>
-            <mass>1</mass>
-            <pose>0 0 0 0 -0 0</pose>
-            <inertia>
-              <ixx>1</ixx>
-              <ixy>0</ixy>
-              <ixz>0</ixz>
-              <iyy>1</iyy>
-              <iyz>0</iyz>
-              <izz>1</izz>
-            </inertia>
-          </inertial>
-          <visual name='visual'>
-            <geometry>
-              <mesh>
-                <uri>model://number1/meshes/number.dae</uri>
-                <scale>0.5 0.25 0.001</scale>
-              </mesh>
-            </geometry>
-            <material>
-              <script>
-                <uri>model://number1/materials/scripts</uri>
-                <uri>model://number1/materials/textures</uri>
-                <name>Number/One</name>
-              </script>
-              <shader type='pixel'>
-                <normal_map>__default__</normal_map>
-              </shader>
-              <ambient>1 1 1 1</ambient>
-              <diffuse>1 1 1 1</diffuse>
-              <specular>0 0 0 1</specular>
-              <emissive>0 0 0 1</emissive>
-            </material>
-            <pose>0 0 0 0 -0 0</pose>
-            <transparency>0</transparency>
-            <cast_shadows>1</cast_shadows>
-          </visual>
-        </link>
-        <static>1</static>
-        <allow_auto_disable>1</allow_auto_disable>
-        <pose>-0.122822 0.508588 0 0 -0 0</pose>
-      </model>
-      <joint name='link_JOINT_0' type='fixed'>
-        <parent>link</parent>
-        <child>my_number1::link</child>
-        <pose>0 0 0 0 -0 0</pose>
-        <physics>
-          <ode>
-            <limit>
-              <cfm>0</cfm>
-              <erp>0.2</erp>
-            </limit>
-            <suspension>
-              <cfm>0</cfm>
-              <erp>0.2</erp>
-            </suspension>
-          </ode>
-        </physics>
-      </joint>
-      <static>1</static>
-      <allow_auto_disable>1</allow_auto_disable>
-      <pose>4.99936 -0.868674 0 0 -0 0</pose>
-    </model>
   </world>
 </sdf>
