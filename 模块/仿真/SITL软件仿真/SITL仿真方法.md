@@ -54,13 +54,88 @@ AP官网提供的样例使用的地面站为mavproxy，我们可以使用其他�
 **添加完插件的相机模型，添加完相机的飞机模型，靶标模型以及添加完靶标模型的世界文件我均已上传至`https://github.com/lzc-datou/zc-2023/tree/code/src/simulation`，下载好`ardupilot_gazebo`模型库后，用上述修改好的模型替换掉官方提供的模型，并将`biao`文件夹路径添加进`GAZEBO_MODEL_PATH`，即可运行仿真。该仓库为private仓库，使用不了时记得找李志翀获取权限。**    
 
 ### 6. 运行ardupilot+gazebo+QGC+ros联合仿真
-1. 启动ardupilot仿真源码sim_vehicle.py  
+
+**1. 启动ardupilot仿真源码sim_vehicle.py**   
+
 `sim_vehicle.py -v ArduPlane -f gazebo-zephyr`  
 
 如果发现只能连上QGC而连不上mavros，是因为sim_vehicle.py只启动了一个输出端口，在命令行输出中能看到![sim_vehicle.py输出端口](../../../photo/sim_vehicle.py输出端口.png)  
 此时我们需要将命令换为  
 `sim_vehicle.py -v ArduPlane -f gazebo-zephyr --out 127.0.0.1:14551`   
-手动为`sim_vehicle.py`增加一个输出端口`127.0.0.1:14551`，此端口需要与`mavros`的`apm.launch`文件中的端口号相对应。然后再次查看
+手动为`sim_vehicle.py`增加一个输出端口`127.0.0.1:14551`，此端口需要与`mavros`的`apm.launch`文件中的端口号相对应。然后再次查看命令行输出可以看到修改后sim_vehicle.py多开启了一个输出端口![sim_vehicle.py输出端口_1](../../../photo/sim_vehicle.py输出端口_1.png)
+
+**2.gazebo启动相应的世界文件**  
+
+`gazebo --verbose -s libgazebo_ros_api_plugin.so  path/to/my_simulation.world`  
+此处必须添加`-s libgazebo_ros_api_plugin.so`选项，作用是让gazebo加载ros_api插件，保证gazebo与ros的连接
+
+**3.启动QGC地面站**
+
+下载好QGC后双击`QGroundControl.AppImage`即可
+
+**4.启动rqt_image_view**  
+
+命令行输入`rqt_image_view`查看ros话题中的图像信息。此时应该能看到仿真飞机三个视角的摄像头图像
+
+**5.启动mavros**  
+
+AP与mavros连接主要靠启动`apm.launch`文件。可以命令行输入命令  
+`roslaunch mavros apm.launch`  
+
+但是我们经常要修改`apm.launch`文件的参数，所以建议直接把`apm.launch`文件放到主目录或者代码目录下，方便修改且需要运行时直接输入命令`roslaunch apm.launch`即可。仿真时`apm.launch`文件修改如下
+```xml
+<launch>
+	<!-- example launch script for ArduPilot based FCU's -->
+	<!-- <arg name="fcu_url" default="/dev/ttyACM2:57600" /> -->
+    <!-- <arg name="fcu_url" default="udp://127.0.0.1:14551@localhost14555" /> -->
+    <arg name="fcu_url" default="udp://127.0.0.1:14551@:14555" />
+	<arg name="gcs_url" default="" />
+	<arg name="tgt_system" default="1" />
+	<arg name="tgt_component" default="1" />
+	<arg name="log_output" default="screen" />
+	<arg name="fcu_protocol" default="v2.0" />
+	<arg name="respawn_mavros" default="false" />
+
+	<include file="$(find mavros)/launch/node.launch">
+		<arg name="pluginlists_yaml" value="$(find mavros)/launch/apm_pluginlists.yaml" />
+		<arg name="config_yaml" value="$(find mavros)/launch/apm_config.yaml" />
+
+		<arg name="fcu_url" value="$(arg fcu_url)" />
+		<arg name="gcs_url" value="$(arg gcs_url)" />
+		<arg name="tgt_system" value="$(arg tgt_system)" />
+		<arg name="tgt_component" value="$(arg tgt_component)" />
+		<arg name="log_output" value="$(arg log_output)" />
+		<arg name="fcu_protocol" value="$(arg fcu_protocol)" />
+		<arg name="respawn_mavros" value="$(arg respawn_mavros)" />
+	</include>
+</launch>
+```
+我们主要需要修改的参数为`<arg name="fcu_url" default="udp://     " />`。飞控的英文缩写为FCU(flight control unit)
+1. 连接实体飞控时该参数为`<arg name="fcu_url" default="/dev/ttyACM2:57600" />`，其中`ttyACM2`是飞控连接电脑后在电脑上的端口号，57600是飞控波特率，波特率是什么可以自行上网了解。
+2. 仿真时该参数为`<arg name="fcu_url" default="udp://127.0.0.1:14551@14555`，其中`127.0.0.1:14551`就是我们`sim_vehicle.py`多分配的那个端口号，`14555`是地面站（如QGC）的端口号，有时可能会是`localhost14555`，`localhost`即代表了`127.0.0.1`。
+3. 如果仿真时发现mavros连不上QGC了，可以尝试将该参数修改为`<arg name="fcu_url" default="udp://127.0.0.1:14551@localhost14555" />`。
+
+**6.启动用于识别仿真摄像头图像的yolov5**
+
+运行[侦查代码](https://github.com/lzc-datou/zc-2023/tree/code)中yolov5包下的detect_simulation.py文件，启动仿真的yolov5  
+`rosrun yolov5 detect_simulation.py`
+
+**7.启动识别数字与定位的程序**  
+
+运行[侦查代码](https://github.com/lzc-datou/zc-2023/tree/code)中`process_imgs`包下的`getNum_and_locate.py`文件，启动数字识别与视觉定位  
+`rosrun process_imgs getNum_and_locate.py`
+
+**8.启动规划航线程序**
+
+运行[侦查代码](https://github.com/lzc-datou/zc-2023/tree/code)中`mode`包下的`mode`可执行文件  
+`rosrun mode mode`
+
+至此，SITL仿真侦查全流程完毕。
+
+**上述只是基本流程讲解，下面进行相关知识与细节的讲解**
+
+
+
 
 
 
