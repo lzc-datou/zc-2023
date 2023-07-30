@@ -6,14 +6,12 @@
         "limitSymbolsToIncludedHeaders": false
       },
       "includePath": [
-        "/home/lzc/lzc-code/src/yolov5/include/**",
-        "/usr/include/**",
-        "./devel/include",
-        "/opt/ros/noetic/include/"
-
+        "/home/lzc/下载/zc-2023-code/devel/include/**",
+        "/opt/ros/noetic/include/**",
+        "/home/lzc/lzc-code/src/vision_opencv/cv_bridge/include/**",
+        "/home/lzc/lzc-code/src/vision_opencv/image_geometry/include/**",
+        "/usr/include/**"
       ],
-    
-
       "name": "ROS",
       "intelliSenseMode": "gcc-x64",
       "compilerPath": "/usr/bin/gcc",
@@ -23,5 +21,3 @@
   ],
   "version": 4
 }
-
-
