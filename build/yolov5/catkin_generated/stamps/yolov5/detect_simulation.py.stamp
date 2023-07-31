@@ -175,9 +175,12 @@ def run(
             s += '%gx%g ' % im.shape[2:]  # print string
             gn = torch.tensor(im0.shape)[[1, 0, 1, 0]]  # normalization gain whwh
             imc = im0.copy() if save_crop else im0  # for save_crop
+            # 保留一份没有打框的原始图像，我们只需要截图，不需要额外的框
+            Ori_image = im0.copy() 
+            
             annotator = Annotator(im0, line_width=line_thickness, example=str(names))
 
-            # 展示仿真图像
+            # 展示仿真摄像头图像
             cv2.imshow("yolov5",im0)
             cv2.waitKey(1)
 
@@ -210,7 +213,8 @@ def run(
                     y1 = int(xyxy[1])
                     x2 = int(xyxy[2])
                     y2 = int(xyxy[3])
-                  
+
+                    # 展示yolov5检测结果
                     cv2.imshow("yolov5",im0)
                     cv2.waitKey(1)
                     box = Bounding_box()
@@ -234,8 +238,8 @@ def run(
                     # 截取出被yolov5框出来的靶标
                     # 此处使用最原始的图片im0s[i],im0是被打过标签和框的，如果使用im0，被打上去的框和label可能会遮挡其他靶标
                     # 摄像头使用im0s[i],视频用im0s
-                
-                    Ori_image = im0.copy()  # 原始图片
+                    
+                    # Ori_image = im0.copy()  # 原始图片
                     roi_image = Ori_image[y1:y2, x1:x2] # 截取图片
                     
                     print(roi_image.dtype)
@@ -317,7 +321,7 @@ def parse_opt():
     # 权重和源文件
     # parser.add_argument('--weights', nargs='+', type=str, default='./src/yolov5/weights/last_3.pt', help='model path or triton URL')
     # parser.add_argument('--source', type=str, default='./src/yolov5/video/input/grass_num_11.mp4', help='file/dir/URL/glob/screen/0(webcam)')
-    parser.add_argument('--weights', nargs='+', type=str, default='./src/yolov5/weights/best.pt', help='model path or triton URL')
+    parser.add_argument('--weights', nargs='+', type=str, default='./src/yolov5/weights/best_7.30.pt', help='model path or triton URL')
     # 打开usb摄像头 设置default=2
     # parser.add_argument('--source', type=str, default=0, help='file/dir/URL/glob/screen/0(webcam)  path = "./src/yolov5/video/input/grass_num_7.mp4"')
     # 仿真的source
@@ -369,9 +373,11 @@ def quit(signum, frame):
     print("Keyboard interruption by yourself")
     sys.exit(0)
 
+# 接收到的话题图像存放的位置
 filename = "./src/simulation/simulation_image/sim_img.jpg"
 
 def img_callback(data):
+    '接收ros话题图像并保存'
     print(data.encoding)
     # 注意：仿真摄像头传来的图像是rgb8格式的，需要手动转换成bgr8
     img = bridge.imgmsg_to_cv2(data,'rgb8')

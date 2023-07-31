@@ -5,7 +5,6 @@ import sys
 sys.path.append("./src/process_imgs/scripts")
 sys.path.append("./src")
 # 导入参数
-from path_params import *
 from params import *
 
 # 导入神经网络
@@ -70,7 +69,7 @@ class RecoNum:
     # 训练好的权重路径
 
 
-    weight_path = "./src/process_imgs/weights/best.pth"
+    weight_path = LetNet_weight_path
 
     # 如果有cuda，就用cuda，否则使用cpu
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -155,7 +154,7 @@ class RecoNum:
             return False, Ori_target, np.empty(0)
 
         # 判断最大外轮廓是否合理,最大外轮廓即靶标外轮廓（三角形+正方形）  
-        if max_area/img_area < 0.2:
+        if max_area/img_area < min_targetArea_rate:
             # print("max_area not find")
             rospy.logwarn("max contour area not fit")
             # <测试>
@@ -318,8 +317,8 @@ class RecoNum:
         rows = transform_img.shape[1]
      
         # 将图片从中间分成两份,并做适量裁剪，去除边缘干扰  截取比例根据实际情况调整
-        left_num_img = transform_img[int(0.1*rows):int(0.9*rows), int(0.1*columns):int(0.5*columns)]
-        right_num_img = transform_img[int(0.1*rows):int(0.9*rows), int(0.5*columns):int(0.9*columns)]
+        left_num_img = transform_img[int(clip_h_rate * rows):int((1-clip_h_rate) * rows), int(clip_w_rate * columns):int(0.5 * columns)]
+        right_num_img = transform_img[int(clip_h_rate * rows):int((1-clip_h_rate) * rows), int(0.5 * columns):int((1- clip_w_rate) * columns)]
       
         # 调整图片为28*28的黑底白字图
         left_num_img = self.my_resize(left_num_img)
@@ -792,8 +791,10 @@ def ts_callback(msg1, msg2, msg3):
                     longitude, latitude = locate.xy_to_gps(rotated_x, rotated_y)
                     rospy.loginfo("target longitude = %f  latitude = %f ", longitude, latitude)
                     filter.num_dict_add(number, True, longitude, latitude) 
+
                     # <测试>
-                    rotated_z_save_path = "./src/simulation/simulation_image/height.txt"
+                    rotated_z_save_path = "./src/simulation/simulation_image/img_in_rotate/height.txt"
+                    data_save_path = "./src/simulation/simulation_image/img_in_rotate/data.txt"
                     try:
                         # 尝试以添加模式打开文件
                         with open(rotated_z_save_path, "a") as file:
@@ -803,6 +804,20 @@ def ts_callback(msg1, msg2, msg3):
                         # 如果文件不存在，则创建文件并以添加模式打开
                         with open(rotated_z_save_path, "w") as file:
                             file.write("rotated_z_"+ str(sequence) + " = " + str(rotated_z)+"\n")
+
+
+                    
+                        # data.txt覆盖写入
+                    with open(data_save_path,'w') as file:
+                        for key in num_and_location.keys():
+                            data_times = num_and_location[key].times
+                            data_longitude = num_and_location[key].longitude
+                            data_latitude = num_and_location[key].latitude
+                            file.write(str(key) + ":" + str(data_times) + "\n")
+                            file.write("longitude = " + str(data_longitude) + "\n")
+                            file.write("latitude = " + str(data_latitude) + "\n")
+                            file.write('\n')
+                            pass
                     # </测试>
                 else:
                     # 定位不精确，弃用

@@ -315,11 +315,11 @@ def parse_opt():
     # 权重和源文件
     # parser.add_argument('--weights', nargs='+', type=str, default='./src/yolov5/weights/last_3.pt', help='model path or triton URL')
     # parser.add_argument('--source', type=str, default='./src/yolov5/video/input/grass_num_11.mp4', help='file/dir/URL/glob/screen/0(webcam)')
-    parser.add_argument('--weights', nargs='+', type=str, default='./src/yolov5/weights/best.pt', help='model path or triton URL')
+    parser.add_argument('--weights', nargs='+', type=str, default='./src/yolov5/weights/best_7.30.pt', help='model path or triton URL')
     # 打开usb摄像头 设置default=2
     # parser.add_argument('--source', type=str, default=0, help='file/dir/URL/glob/screen/0(webcam)  path = "./src/yolov5/video/input/grass_num_7.mp4"')
     # 仿真的source
-    parser.add_argument('--source', type=str, default="./src/simulation/simulation_image/sim_video.mp4", help='file/dir/URL/glob/screen/0(webcam)  path = "./src/yolov5/video/input/grass_num_7.mp4"')
+    parser.add_argument('--source', type=str, default=0, help='file/dir/URL/glob/screen/0(webcam)  path = "./src/yolov5/video/input/grass_num_7.mp4"')
     #
     parser.add_argument('--data', type=str, default=ROOT / 'data/coco128.yaml', help='(optional) dataset.yaml path')
     parser.add_argument('--imgsz', '--img', '--img-size', nargs='+', type=int, default=[640], help='inference size h,w')

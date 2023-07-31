@@ -12,6 +12,7 @@ from params import *
 from LetNet import LetNet5
 
 # 导入python库
+import os
 import math
 from torch.autograd import Variable
 import torchvision
@@ -48,6 +49,9 @@ three_nums = []
 '存储识别到的三个靶标数字'
 
 
+sequence = 0 # 测试
+
+
 class Times_and_GPS:
     '单个数字出现的次数和多次获取到的该数字的经纬度'
     times = 0
@@ -64,6 +68,8 @@ class RecoNum:
     # 使用LetNet5神经网络模型
     model = LetNet5()
     # 训练好的权重路径
+
+
     weight_path = "./src/process_imgs/weights/best.pth"
 
     # 如果有cuda，就用cuda，否则使用cpu
@@ -85,22 +91,40 @@ class RecoNum:
         # 中间处理时不对原图操作，对原图的操作只有最后的转正   Ori_target表示 Origin target
         # 拷贝一份副本进行操作
         
+        # <测试>
+        global sequence 
+        global save_img_path
+        save_img_path = "./src/simulation/simulation_image/img_in_rotate/"+str(sequence)+'/'
+        if not os.path.exists(save_img_path):
+            os.makedirs(save_img_path)
+            print(save_img_path+" be created")
+        # </测试>
+
         target = Ori_target.copy()
+
+        cv2.imwrite(save_img_path+'Ori_target.jpg',Ori_target) # 测试
         # 图像预处理
 
-        # 将彩色图(bgr)转成灰度图(gray)
-        target = cv2.cvtColor(target, cv2.COLOR_BGR2GRAY)
-        # 创建核
-        kernal = np.ones(kernal_size, np.uint8)
-        # 膨胀
-        target = cv2.dilate(target, kernal, iterations=dilate_iter)
-        # show_img("dilate",target) # 测试用
-        # 腐蚀
-        target = cv2.erode(target, kernal, iterations=erode_iter)
-        # show_img("erode",target) # 测试用
+        # 进行仿真时，由于仿真里面的图像过于平滑，如果转成灰度图后无法检测出边缘，故仿真时直接省去灰度图和膨胀腐蚀，直接边缘检测即可
+        # # 将彩色图(bgr)转成灰度图(gray)
+        # target = cv2.cvtColor(target, cv2.COLOR_BGR2GRAY)
+        # cv2.imwrite(save_img_path+'grep.jpg',target) # 测试
+
+        # # 创建核
+        # kernal = np.ones(kernal_size, np.uint8)
+        # # 膨胀
+        # target = cv2.dilate(target, kernal, iterations=dilate_iter)
+        # cv2.imwrite(save_img_path+'dilate.jpg',target) # 测试
+        # # show_img("dilate",target) # 测试用
+
+        # # 腐蚀
+        # target = cv2.erode(target, kernal, iterations=erode_iter)
+        # cv2.imwrite(save_img_path+'erode.jpg',target) # 测试
+        # # show_img("erode",target) # 测试用
 
         # 边缘检测
-        target = cv2.Canny(target, 120, 200)
+        target = cv2.Canny(target, canny_threshold1, canny_threshold2)
+        cv2.imwrite(save_img_path+'canny.jpg',target) # 测试
         # show_img("canny_img",target) # 测试用
 
         img_area = target.shape[0] * target.shape[1]
@@ -123,29 +147,60 @@ class RecoNum:
             max_area = max(areas)
         else:
             rospy.logwarn("contour areas number = 0")
+            # <测试>
+            warn_path = save_img_path + 'warn.txt'
+            with open(warn_path,'w') as file:
+                file.write("contour areas number = 0")
+            # </测试>
             return False, Ori_target, np.empty(0)
 
-        # 判断最大外轮廓是否合理,最大外轮廓即靶标外轮廓（三角形+正方形）
+        # 判断最大外轮廓是否合理,最大外轮廓即靶标外轮廓（三角形+正方形）  
         if max_area/img_area < 0.2:
             # print("max_area not find")
             rospy.logwarn("max contour area not fit")
+            # <测试>
+            warn_path = save_img_path + 'warn.txt'
+            with open(warn_path,'w') as file:
+                file.write("max contour area not fit")
+            # </测试>
             return False, Ori_target, np.empty(0)
+
+    
         # 获取数字底板外轮廓
-        
+        # <测试>
+        areas_path = save_img_path + 'areas.txt'
+        with open(areas_path,'w') as file:
+            file.write("img_area = "+str(img_area)+'\n')
+            file.write("contour areas = \n")
+            for area in areas:
+                file.write(str(area)+'\n')
+                pass
+        # </测试>
+
         areas_copy = areas.copy()
         
         while (True):
             # 此处的检测很有必要，从报错中修改而来
             if len(areas_copy) == 0:
-                rospy.logwarn("number board area not fit")
+                rospy.logwarn("areas list len = 0")
+                # <测试>
+                warn_path = save_img_path + 'warn.txt'
+                with open(warn_path,'w') as file:
+                    file.write("areas list len = 0")
+                # </测试>
                 return False, Ori_target, np.empty(0)
             else:
                 numBoard_area = max(areas_copy)
-                if numBoard_area > 0.3*max_area:
+                if numBoard_area > numberBoard_maxArea_rate * max_area:
                     areas_copy.remove(numBoard_area)
-                elif numBoard_area < 0.1*max_area:
+                elif numBoard_area < numberBoard_minArea_rate * max_area:
                     # print("number_board not find")
-                    rospy.logwarn("number board area not fit")
+                    rospy.logwarn("number board area is too small")
+                    # <测试>
+                    warn_path = save_img_path + 'warn.txt'
+                    with open(warn_path,'w') as file:
+                        file.write("number board area is too small")
+                    # </测试>
                     return False, Ori_target, np.empty(0)
                 else:
                     numBoard_id = areas.index(numBoard_area)
@@ -153,8 +208,10 @@ class RecoNum:
         # print("max_id = ",max_id) # 测试用
         # print("numBoard_id = ",numBoard_id)
         
-        cv2.drawContours(im_test, contours, max_id, 255, 2)
-        cv2.drawContours(im_test, contours, numBoard_id, 255, 2)
+        cv2.drawContours(im_test, contours, max_id, 255, target_line_width)
+        cv2.drawContours(im_test, contours, numBoard_id, 255, numberBoard_line_width)
+
+        
       
         box_index = []
         # 绘制最小外接矩形
@@ -167,16 +224,18 @@ class RecoNum:
 
         min_box = np.int32(min_box)
         # 找外轮廓角点
-        corners = cv2.goodFeaturesToTrack(im_test, 9, 0.01, 10)
+        corners = cv2.goodFeaturesToTrack(im_test, max_corners, quality_level, min_distance)
         for point in corners:
             x, y = np.int32(point.ravel())
             # 对比最大外轮廓和最小近似矩形相同点
             for i in range(4):
-                if abs(x - min_box[i][0]) <= 10 and abs(y - min_box[i][1]) <= 10:
+                if abs(x - min_box[i][0]) <= same_point_maxDistance and abs(y - min_box[i][1]) <= same_point_maxDistance:
                     box_index.append(i)
                     # print(i) # 测试用
 
             cv2.circle(im_test, (x, y), 3, [255, 0, 0], 5)  # 测试用
+
+        
        
         # 测试用
         # print(im_test.shape)
@@ -184,12 +243,19 @@ class RecoNum:
         
         cv2.drawContours(im_test, [min_box], 0, 255, 2)
         cv2.drawContours(im_test, [numBoard_box], 0, 255, 2)
+        cv2.imwrite(save_img_path+'im_test.jpg',im_test) # 测试
         # show_img("after draw", im_test)  # 测试用
        
         # 如果重合角点不是两个，直接弃用
         if len(box_index) != 2:
             # print("same point less than 2")
             rospy.logwarn("same corner point number != 2")
+            # <测试>
+            warn_path = save_img_path + 'warn.txt'
+            with open(warn_path,'w') as file:
+                file.write("same corner point number = "+str(box_index))
+                
+            # </测试>
             return False, Ori_target, np.empty(0)
         # 外接矩形宽  数据类型:double  转成int32使用
         width = np.int32(numBoard_rect[1][0])
@@ -210,9 +276,11 @@ class RecoNum:
             src = np.float32([numBoard_box[0], numBoard_box[1],numBoard_box[2], numBoard_box[3]])
         elif box_index == [0, 1]:
             #  靶标朝向为右下  原图顺序(2 3 0 1)为正
+            
             src = np.float32([numBoard_box[2], numBoard_box[3],numBoard_box[0], numBoard_box[1]])
         elif box_index == [1, 2]:
             #  靶标朝向为右下  原图顺序(3 0 1 2)为正
+            
             src = np.float32([numBoard_box[3], numBoard_box[0],numBoard_box[1], numBoard_box[2]])
         # 目标结果都是一样的
         dst = np.float32(
@@ -221,12 +289,18 @@ class RecoNum:
         # 透视变换转正靶标
         transformMat = cv2.getPerspectiveTransform(src, dst)  # source 和 destination  原图片和目标图片
         transform_img = cv2.warpPerspective(Ori_target, transformMat, (side_len, side_len))
+        cv2.imwrite(save_img_path+'transform.jpg',transform_img) # 测试
         # show_img("transform_img",transform_img)
        
         # print("max_area/img_area = ",max_area/img_area)
         # print("numBoard_area/max_area = ",numBoard_area/max_area)
         if transform_img.shape[0] < 0.5*transform_img.shape[1]:
             rospy.logwarn("transform direction wrong")
+            # <测试>
+            warn_path = save_img_path + 'warn.txt'
+            with open(warn_path,'w') as file:
+                file.write("transform direction wrong")
+            # </测试>
             return False, Ori_target, np.empty(0)
         else:
             # 返回的src用于pnp算法定位
@@ -250,7 +324,8 @@ class RecoNum:
         # 调整图片为28*28的黑底白字图
         left_num_img = self.my_resize(left_num_img)
         right_num_img = self.my_resize(right_num_img)
-     
+        cv2.imwrite(save_img_path+'left_num.jpg',left_num_img) # 测试
+        cv2.imwrite(save_img_path+'right_num.jpg',right_num_img) # 测试
         return left_num_img, right_num_img
         pass
 
@@ -293,6 +368,9 @@ class RecoNum:
         kernal = np.ones((2, 2), np.uint8)
         img = cv2.erode(img, kernal, iterations=1)
         img = cv2.dilate(img, kernal, iterations=1)
+
+        global save_img_path # 测试
+        cv2.imwrite(save_img_path+'xintai.jpg',img) # 测试
         # show_img("xingtai", img)  # 测试用
         return img
 
@@ -338,19 +416,36 @@ class Locate:
     # 根据靶标大小直接得出世界坐标系（以靶标正方形中心为原点）下靶标最小外接矩形的坐标
     # obj_points = np.float32([[-0.5,1.366,0],[0.5,1.366,0],[0.5,-0.5,0],[-0.5,-0.5,0]]) # 最小外接矩形世界坐标
 
+    # 打印的靶标数字底板边长为1cm
     # obj_points = np.float32([[-0.01, 0.01, 0], [0.01, 0.01, 0],
     #                          [0.01, -0.01, 0], [-0.01, -0.01, 0]
     #                          ])  # 目前参数为IR 1080P 18.0mm 1/2.7''相机的参数
-    obj_points = np.float32([[-1, 1, 0], [1, 1, 0],
-                             [1, -1, 0], [-1, -1, 0]
+
+    # # 实际靶标边长为1m，数字底板边长0.5m
+    # obj_points = np.float32([[-0.25, 0.25, 0], [0.25, 0.25, 0],
+    #                          [0.25, -0.25, 0], [-0.25, -0.25, 0]
+    #                          ])
+    
+    # 仿真中靶标边长为2m，数字底板边长1m
+    obj_points = np.float32([[-0.5, 0.5, 0], [0.5, 0.5, 0],
+                             [0.5, -0.5, 0], [-0.5, -0.5, 0]
                              ])
+    # # 相机内参
+    # cameraMatrix = np.float32([[ 1312.071067,       0.        , 446.061005],
+    #                            [    0.      ,   1313.617388   , 309.887004],
+    #                            [    0.      ,       0.        ,     1.    ]
+    #                            ])
+    # # 相机畸变系数
+    # distCoeffs = np.float32([-0.505909,    0.469929,   -0.021110,  -0.018548,  0])
+
+    # 仿真相机参数
     # 相机内参
-    cameraMatrix = np.float32([[ 1312.071067,       0.        , 446.061005],
-                               [    0.      ,   1313.617388   , 309.887004],
+    cameraMatrix = np.float32([[ 553.686293,       0.        , 320.340100],
+                               [    0.      ,   553.594422   , 240.264610],
                                [    0.      ,       0.        ,     1.    ]
                                ])
     # 相机畸变系数
-    distCoeffs = np.float32([-0.505909,    0.469929,   -0.021110,  -0.018548,  0])
+    distCoeffs = np.float32([-0.001381,    -0.001568,   0.000214,  0.000549,  0])
 
     def get_imgPoints(self, Ori_point, num_board):
         '函数功能：获取到图像坐标系下的坐标并将结果保存至self.img_points，成功获取则返回True，否则返回False'
@@ -376,6 +471,7 @@ class Locate:
         x = tvecs[0][0]
         y = tvecs[1][0]
         z = tvecs[2][0]
+        
         return x, y, z
 
     def rotate_xyz(self, x, y, z):
@@ -437,10 +533,11 @@ class Locate:
         rotated_x = rotated_xyz[0, 0]
         rotated_y = -rotated_xyz[1, 0]
         rotated_z = -rotated_xyz[2, 0]
-
+        
+        
         return rotated_x, rotated_y, rotated_z
-        pass
-
+        
+        
     def xy_to_gps(self, x, y):
         '''
         函数功能：将旋转变换后的相对坐标转化为靶标的GPS坐标。实质为北东地相对坐标系转gps坐标系\n
@@ -623,6 +720,9 @@ def ts_callback(msg1, msg2, msg3):
         rospy.loginfo("ts_callback is stopped")
         return
     else:
+        
+        global sequence # 测试
+        sequence = sequence + 1 # 测试
 
         rospy.loginfo("ts_callback begin")
         # 1. 获取飞机自身gps坐标及姿态角
@@ -687,15 +787,38 @@ def ts_callback(msg1, msg2, msg3):
                 rotated_x, rotated_y, rotated_z = locate.rotate_xyz(x, y, z)
                 rospy.loginfo("rotated_x = %f rotated_y = %f rotated_z = %f", rotated_x, rotated_y, rotated_z)
                 # 如果视觉定位得到的飞机高度与飞控得到的飞机高度在误差范围内，则认为视觉定位准确，予以采用。否则，则舍弃此次定位
-                # if rotated_z >= (1 - locate_error) * locate.ref_altitude and rotated_z <= (1 + locate_error) * locate.ref_altitude:
+                if rotated_z >= (1 - locate_error) * locate.ref_altitude and rotated_z <= (1 + locate_error) * locate.ref_altitude:
                     #定位精确，予以采用
-                longitude, latitude = locate.xy_to_gps(rotated_x, rotated_y)
-                rospy.loginfo("target longitude = %f  latitude = %f ", longitude, latitude)
-                filter.num_dict_add(number, True, longitude, latitude) 
-                # else:
-                #     # 定位不精确，弃用
-                #     rospy.logwarn("inaccurate locate")
-                #     filter.num_dict_add(number, False, 0, 0)
+                    longitude, latitude = locate.xy_to_gps(rotated_x, rotated_y)
+                    rospy.loginfo("target longitude = %f  latitude = %f ", longitude, latitude)
+                    filter.num_dict_add(number, True, longitude, latitude) 
+                    # <测试>
+                    rotated_z_save_path = "./src/simulation/simulation_image/height.txt"
+                    data_save_path = "./src/simulation/simulation_image/data.txt"
+                    try:
+                        # 尝试以添加模式打开文件
+                        with open(rotated_z_save_path, "a") as file:
+                            file.write("rotated_z_"+ str(sequence) + " = " + str(rotated_z)+"\n")
+                            
+                    except FileNotFoundError:
+                        # 如果文件不存在，则创建文件并以添加模式打开
+                        with open(rotated_z_save_path, "w") as file:
+                            file.write("rotated_z_"+ str(sequence) + " = " + str(rotated_z)+"\n")
+
+                    with open(data_save_path,'w') as file:
+                        file.write(str(num_and_location))
+                    # </测试>
+                else:
+                    # 定位不精确，弃用
+                    rospy.logwarn("inaccurate locate")
+
+                     # <测试>
+                    warn_path = save_img_path + 'warn.txt'
+                    with open(warn_path,'w') as file:
+                        file.write("inaccurate locate")
+                    # </测试>
+                    
+                    filter.num_dict_add(number, False, 0, 0)
     pass
 
 
@@ -751,7 +874,7 @@ if __name__ == "__main__":
     rospy.loginfo("订阅者创建完毕")
     state_sub = rospy.Subscriber('/is_investigation_over', Signal, state_callback, queue_size=20)  # 获取侦查状态（正在侦查还是已侦查完毕）
     # 创建时间同步器
-    ts = ApproximateTimeSynchronizer([box_sub, gps_sub, pose_sub], queue_size=1, slop=time_error)
+    ts = ApproximateTimeSynchronizer([box_sub, gps_sub, pose_sub], queue_size=10, slop=time_error)
     rospy.loginfo("同步器创建完毕")
     # 注册回调函数
     ts.registerCallback(ts_callback)

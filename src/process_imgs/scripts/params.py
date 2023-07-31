@@ -56,3 +56,15 @@ target_line_width = 2
 numberBoard_line_width = 2
 '在空白图像上绘制白色数字底板边缘的线的粗细'
 
+# 裁剪处理得到的左右数字图像，去除图像边缘干扰对数字识别的影响
+clip_h_rate = 0.1
+'图片纵向裁剪比例（上下分别裁剪十分之一）'
+clip_w_rate = 0.1
+'图片横向裁剪比例(左右分别裁剪十分之一)'
+
+min_targetArea_rate = 0.2
+'靶标面积占整张图片（yolov5给的截图）面积的最小比例'
+
+
+LetNet_weight_path = "./src/process_imgs/weights/best.pth"
+'LetNet神经网络权重路径'
