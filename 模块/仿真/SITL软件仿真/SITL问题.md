@@ -1,6 +1,6 @@
 # SITL小问题
 > 2023.7.24
-
+**详细内容可参考[SITL仿真方法](./SITL仿真方法.md)**
 ### 1. urdf文件中的origin标签含义
 见文章解释  
 1. [ROS 的 urdf 中 link 和 joint 的子标签中 origin 的含义](https://blog.csdn.net/m0_60346726/article/details/128600473)
@@ -20,8 +20,8 @@
 
 ### 8. sim_vehicle.py连接mavros和QGC
 
-`cd /home/lzc/ardupilot/Tools/autotest;sim_vehicle.py -v ArduPlane -f gazebo-zephyr --out 127.0.0.1:14551
-`
+`cd /home/lzc/ardupilot/Tools/autotest;sim_vehicle.py -v ArduPlane -f gazebo-zephyr --out 127.0.0.1:14551`
+
 ### 9. sim_vehicle.py连接gazebo模型
 
 ### 10. gazebo连接ROS

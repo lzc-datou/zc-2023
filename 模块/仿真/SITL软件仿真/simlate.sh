@@ -1,18 +1,22 @@
 # SITL软件仿真启动顺序及参考写法
 {
-gnome-terminal --tab "ArduPlane" -- bash -c "cd /home/lzc/ardupilot/Tools/autotest;python sim_vehicle.py -v ArduPlane  -L Hanan"
+gnome-terminal --tab "roscore" -- bash -c "roscore"
 }& 
-sleep 2
+sleep 5
+{
+gnome-terminal --tab "gazebo" -- bash -c "cd /home/lzc/ardupilot_gazebo;gazebo --verbose -s libgazebo_ros_api_plugin.so ./worlds/target.world"
+}& 
+sleep 3
+{
+gnome-terminal --tab "ardupilot/ArduPlane" -- bash -c "cd /home/lzc/ardupilot/Tools/autotest;sim_vehicle.py -v ArduPlane -f gazebo-zephyr --out 127.0.0.1:14551 "
+}& 
+sleep 3
 {
 gnome-terminal --tab "QGC" -- bash -c "cd /home/lzc;./QGroundControl.AppImage"
 }& 
 sleep 3
 {
-gnome-terminal --tab "roscore" -- bash -c "roscore"
-}& 
-sleep 2
-{
-gnome-terminal --tab "my_pkg" -- bash -c "cd /home/lzc/lzc-code;source ./devel/setup.bash;rosrun yolov5 detect.py"
+gnome-terminal --tab "my_pkg" -- bash -c "cd /home/lzc/lzc-code;source ./devel/setup.bash;rosrun yolov5 detect_simulation.py"
 }& 
 sleep 2
 {
@@ -22,11 +26,10 @@ sleep 2
 {
 gnome-terminal --tab "my_pkg" -- bash -c "cd /home/lzc/lzc-code;source ./devel/setup.bash;rosrun mode mode;"
 }&
-sleep 2
+sleep 5
 {
 gnome-terminal --tab "mavros" -- bash -c "cd /home/lzc/lzc-code;roslaunch apm.launch"
 }
-
 
 
 

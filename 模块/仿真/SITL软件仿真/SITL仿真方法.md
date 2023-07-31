@@ -49,7 +49,7 @@ AP官网提供的样例使用的地面站为mavproxy，我们可以使用其他�
 3. 靶标模型使用许偌宁同学使用`blender`软件制作的红蓝靶标。
 4. `.world`文件使用`ardupilot_gazebo/worlds/zephyr_ardupilot_demo.world`，以此为基础添加靶标模型后另存为其他名字的`.world`文件。我存的名字叫做`my_simulation.world`
 
-**添加完插件的相机模型，添加完相机的飞机模型，靶标模型以及添加完靶标模型的世界文件我均已上传至`https://github.com/lzc-datou/zc-2023/tree/code/src/simulation`，下载好`ardupilot_gazebo`模型库后，用上述修改好的模型替换掉官方提供的模型，并将`biao`文件夹路径添加进`GAZEBO_MODEL_PATH`，即可运行仿真。该仓库为private仓库，使用不了时记得找李志翀获取权限。**    
+**添加完插件的相机模型，添加完相机的飞机模型，仿真摄像头标定用的标定板模型，靶标模型，添加完靶标模型的世界文件以及用于相机标定的世界文件我均已上传至`https://github.com/lzc-datou/zc-2023/tree/code/src/simulation`，下载好`ardupilot_gazebo`模型库后，用上述修改好的模型替换掉官方提供的模型，并将`biao`文件夹路径添加进`GAZEBO_MODEL_PATH`，即可运行仿真。该仓库为private仓库，使用不了时记得找李志翀获取权限。**    
 
 ### 6. 运行ardupilot+gazebo+QGC+ros联合仿真
 
@@ -60,7 +60,8 @@ AP官网提供的样例使用的地面站为mavproxy，我们可以使用其他�
 如果发现只能连上QGC而连不上mavros，是因为sim_vehicle.py只启动了一个输出端口，在命令行输出中能看到![sim_vehicle.py输出端口](../../../photo/sim_vehicle.py输出端口.png)  
 此时我们需要将命令换为  
 `sim_vehicle.py -v ArduPlane -f gazebo-zephyr --out 127.0.0.1:14551`   
-手动为`sim_vehicle.py`增加一个输出端口`127.0.0.1:14551`，此端口需要与`mavros`的`apm.launch`文件中的端口号相对应。然后再次查看命令行输出可以看到修改后sim_vehicle.py多开启了一个输出端口![sim_vehicle.py输出端口_1](../../../photo/sim_vehicle.py输出端口_1.png)
+手动为`sim_vehicle.py`增加一个输出端口`127.0.0.1:14551`，此端口需要与`mavros`的`apm.launch`文件中的端口号相对应。然后再次查看命令行输出可以看到修改后sim_vehicle.py多开启了一个输出端口![sim_vehicle.py输出端口_1](../../../photo/sim_vehicle.py输出端口_1.png)  
+此处解决方法受文章[ArduPilot+mavros+gazebo+QGC联合仿真初体验](https://blog.csdn.net/qq_15390133/article/details/105469756)启发。
 
 **2.gazebo启动相应的世界文件**  
 
