@@ -26,6 +26,7 @@ from message_filters import ApproximateTimeSynchronizer, Subscriber
 from geometry_msgs.msg import PoseStamped
 from sensor_msgs.msg import Imu
 from sensor_msgs.msg import NavSatFix
+from std_msgs.msg import Float64
 from my_msgs.msg import Median_gps
 from my_msgs.msg import Signal
 from my_msgs.msg import Boundingboxs_and_image
@@ -46,6 +47,9 @@ median_gps = list()
 '存储中位数靶标gps坐标，方便侦查结束后循环发布中位数靶标gps坐标'
 three_nums = []
 '存储识别到的三个靶标数字'
+
+ref_alt = 0
+'存储飞机对地高度'
 
 
 sequence = 0 # 测试
@@ -729,10 +733,11 @@ def ts_callback(msg1, msg2, msg3):
         locate.ref_longitude = msg2.longitude
         locate.ref_latitude = msg2.latitude
         # 减去地面海拔从而获得对地高度
-        locate.ref_altitude = msg2.altitude - home_altitude
+        global ref_alt
+        locate.ref_altitude = ref_alt
 
         # 输出飞机自身gps坐标
-        rospy.loginfo("plane longitude = %f latitude = %f altitude = %f",locate.ref_longitude, locate.ref_latitude, locate.ref_altitude)
+        rospy.loginfo("plane longitude = %f latitude = %f ref_altitude = %f",locate.ref_longitude, locate.ref_latitude, locate.ref_altitude)
 
         # 四元数转姿态角
         quaternion = (
@@ -871,7 +876,10 @@ def state_callback(msg):
         gps_pub = rospy.Publisher("/median_gps", Median_gps, queue_size=10)
         gps_pub.publish(median_gps_1)
 
-
+def ref_alt_callback(msg):
+    global ref_alt
+    ref_alt = msg.data
+    pass
 if __name__ == "__main__":
     # 初始化ros节点
     rospy.init_node("num_and_location")
@@ -882,8 +890,10 @@ if __name__ == "__main__":
     box_sub = Subscriber("/yolov5/Boundingboxs_and_image",Boundingboxs_and_image)  # 获取yolov5图像和坐标信息
     gps_sub = Subscriber('/mavros/global_position/global',NavSatFix)  # 获取飞控gps坐标
     pose_sub = Subscriber('/mavros/local_position/pose', PoseStamped)  # 获取飞控姿态
-    rospy.loginfo("订阅者创建完毕")
+
+    rel_alt_sub = rospy.Subscriber('/mavros/global_position/rel_alt',Float64,ref_alt_callback,queue_size=20)
     state_sub = rospy.Subscriber('/is_investigation_over', Signal, state_callback, queue_size=20)  # 获取侦查状态（正在侦查还是已侦查完毕）
+    rospy.loginfo("订阅者创建完毕")
     # 创建时间同步器
     ts = ApproximateTimeSynchronizer([box_sub, gps_sub, pose_sub], queue_size=10, slop=time_error)
     rospy.loginfo("同步器创建完毕")

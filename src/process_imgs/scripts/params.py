@@ -1,12 +1,15 @@
 # -*-coding:utf-8-*-
 # 本文件用于保存getNum_and_locate.py程序中的参数，便于在不同的环境下进行调参
 # 自定义变量均为小写，库自带变量一般均为全大写
-home_altitude = 604
+home_altitude = 584
 '水平地面的海拔高度，每到一个新地方时一定记得更新'
 locate_error = 0.4
+'视觉定位对地高度与实际对地高度的误差容许范围'
 time_error = 0.1
 '时间同步器允许的时间误差范围（单位为秒）'
-# rotate_target()函数转正靶标时的相关参数
+
+
+# <rotate_target()函数转正靶标时的相关参数>
 kernal_size = (2, 2)
 '''腐蚀，膨胀用到的卷积核的大小'''
 erode_iter = 1
@@ -23,6 +26,9 @@ canny_threshold1 = 50
 '''低阈值'''
 canny_threshold2 = 150
 '''高阈值'''
+
+min_targetArea_rate = 0.2
+'靶标面积占整张图片（yolov5给的截图）面积的最小比例'
 
 # cv2.goodFeaturesToTrack()检测外轮廓角点时的参数
 #   参数含义：
@@ -55,15 +61,16 @@ target_line_width = 2
 '在空白图像上绘制靶标边缘的线的粗细'
 numberBoard_line_width = 2
 '在空白图像上绘制白色数字底板边缘的线的粗细'
+# </rotate_target()函数转正靶标时的相关参数>
 
+
+# <识别数字时split_num()函数中的参数>
 # 裁剪处理得到的左右数字图像，去除图像边缘干扰对数字识别的影响
 clip_h_rate = 0.1
 '图片纵向裁剪比例（上下分别裁剪十分之一）'
 clip_w_rate = 0.1
 '图片横向裁剪比例(左右分别裁剪十分之一)'
-
-min_targetArea_rate = 0.2
-'靶标面积占整张图片（yolov5给的截图）面积的最小比例'
+# </识别数字时split_num()函数中的参数>
 
 
 LetNet_weight_path = "./src/process_imgs/weights/best.pth"
