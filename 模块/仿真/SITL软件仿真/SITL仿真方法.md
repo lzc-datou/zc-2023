@@ -60,8 +60,7 @@ AP官网提供的样例使用的地面站为mavproxy，我们可以使用其他�
 如果发现只能连上QGC而连不上mavros，是因为sim_vehicle.py只启动了一个输出端口，在命令行输出中能看到![sim_vehicle.py输出端口](../../../photo/sim_vehicle.py输出端口.png)  
 此时我们需要将命令换为  
 `sim_vehicle.py -v ArduPlane -f gazebo-zephyr --out 127.0.0.1:14551`   
-手动为`sim_vehicle.py`增加一个输出端口`127.0.0.1:14551`，此端口需要与`mavros`的`apm.launch`文件中的端口号相对应。然后再次查看命令行输出可以看到修改后sim_vehicle.py多开启了一个输出端口![sim_vehicle.py输出端口_1](../../../photo/sim_vehicle.py输出端口_1.png)  
-此处解决方法受文章[ArduPilot+mavros+gazebo+QGC联合仿真初体验](https://blog.csdn.net/qq_15390133/article/details/105469756)启发。
+手动为`sim_vehicle.py`增加一个输出端口`127.0.0.1:14551`，此端口需要与`mavros`的`apm.launch`文件中的端口号相对应。然后再次查看命令行输出可以看到修改后sim_vehicle.py多开启了一个输出端口![sim_vehicle.py输出端口_1](../../../photo/sim_vehicle.py输出端口_1.png)
 
 **2.gazebo启动相应的世界文件**  
 
@@ -194,7 +193,22 @@ yolov5的识别接口函数为`main(opt)`函数,其实主要接口是`main()`函
 
 
 ### 10. 使用blender创建模型并导入gazebo使用
-> 等待许偌宁补全
+首先是靶标的主体部分的创建，先用blender中的立方体和柱体（将柱体的顶点数调为3可得到三棱柱）构建靶标的基础外观，再给他们添加相应颜色的材质。
+
+其次创建一个放置数字的立方体（其高需略高于先前的靶标主体）。然后按Tab键进入编辑模式。使用Shift键+鼠标左键选择需贴图的面的四个顶点。再新建一个材质，并将该材质的基础色换为图像纹理，并导入相应的数字图片。后进入uv编辑界面，在左侧界面全选出现的四个点后右击选择展开。回到视图界面并将视图着色方式改为材质预览即可看到贴图。再将立方体进行变换使得数字正向。
+
+之后导出模型为Collada(.dae)格式（该格式包括图片）并传入ubuntu。打开gazebo点击Edit按钮后选择最后的Model Editor键进入模型编辑器。点击左侧的Add并选择方才保存的.dae文件打开。在防止在界面后按下Ctrl+s进行保存（建议改名并放在包含图片的大文件夹下）。之后打开生成的模型文件夹内的.sdf文件，找到gazebo生成的原版材质（即由两个`<material>`围成的代码）示例如下：
+```xml
+  <material>
+    <lighting>1</lighting>
+    <script>
+      <uri>file://media/materials/scripts/gazebo.material</uri>
+      <name>Gazebo/Grey</name>
+    </script>
+    <shader type='pixel'/>
+  </material>
+```
+并将这些原版材质的代码块删除。当你再次打开后就会惊奇地发现靶标的数字贴图出现了。
 
 ### 11. gazebo与ROS话题连接
 参考官方文档[Connect to Ros](https://classic.gazebosim.org/tutorials?cat=connect_ros)   
