@@ -175,6 +175,9 @@ def run(
             s += '%gx%g ' % im.shape[2:]  # print string
             gn = torch.tensor(im0.shape)[[1, 0, 1, 0]]  # normalization gain whwh
             imc = im0.copy() if save_crop else im0  # for save_crop
+            # 保留一份没有打框的原始图像，我们只需要截图，不需要额外的框
+            Ori_image = im0.copy() 
+            
             annotator = Annotator(im0, line_width=line_thickness, example=str(names))
 
             # 展示仿真摄像头图像
@@ -235,8 +238,8 @@ def run(
                     # 截取出被yolov5框出来的靶标
                     # 此处使用最原始的图片im0s[i],im0是被打过标签和框的，如果使用im0，被打上去的框和label可能会遮挡其他靶标
                     # 摄像头使用im0s[i],视频用im0s
-                
-                    Ori_image = im0.copy()  # 原始图片
+                    
+                    # Ori_image = im0.copy()  # 原始图片
                     roi_image = Ori_image[y1:y2, x1:x2] # 截取图片
                     
                     print(roi_image.dtype)

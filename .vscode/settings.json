@@ -6,5 +6,6 @@
         "cstdlib": "cpp",
         "shared_mutex": "cpp"
     },
-    "ros.distro": "noetic"
+    "ros.distro": "noetic",
+    "cmake.configureOnOpen": false
 }
