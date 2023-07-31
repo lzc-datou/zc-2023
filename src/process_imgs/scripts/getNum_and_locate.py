@@ -89,7 +89,7 @@ class RecoNum:
         pass
 
     def rotate_target(self, Ori_target: cv2.Mat):
-        '直接透视变换转正数字底板。返回值有两种情况，返回(False，原图，空列表)和返回(True，转正图，靶标最小外接矩形角点坐标)'
+        '直接透视变换转正数字底板。返回值有两种情况，识别失败返回(False，原图，空列表)和识别成功返回(True，转正图，白色数字底板的四个角点坐标)'
         
         # 中间处理时不对原图操作，对原图的操作只有最后的转正   Ori_target表示 Origin target
         # 拷贝一份副本进行操作
@@ -662,11 +662,21 @@ class Filter:
 
     def data_process(self, data):
         '''
-        函数功能：处理定位得到的经纬度数据,目前处理方法暂时为求所有数据平均值\n
+        函数功能：处理定位得到的经纬度数据,目前处理方法暂时为绝对中位数偏差法\n
         '''
-        mean_value = sum(data)/len(data)
-        return mean_value
+        median=np.median(data)
+        deviations = abs(data - median)
+        mad = np.median(deviations)
+        n_data=[]
+        for x in range(0,len(data)):
+            if abs(data[x]-median)<mad * Mad_threshold:
+                n_data.append(data[x])
+        result_data = np.average(n_data)
+
+
+        return result_data
     pass
+
 
 
 # 测试： 接收图片并保存

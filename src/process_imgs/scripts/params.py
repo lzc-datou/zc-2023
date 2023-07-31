@@ -75,3 +75,7 @@ clip_w_rate = 0.1
 
 LetNet_weight_path = "./src/process_imgs/weights/best.pth"
 'LetNet神经网络权重路径'
+
+# data_process()函数参数
+Mad_threshold = 1.5
+'数据处理参数：值越小去除数据越多'
