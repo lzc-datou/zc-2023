@@ -15,12 +15,14 @@ def data_loader(batch_size):
     transform = torchvision.transforms.ToTensor()
 
     train_set = torchvision.datasets.MNIST(root='./', train=True, transform=transform, download=True)
-    train_loaders = torch.utils.data.DataLoader(dataset=train_set, batch_size=batch_size, shuffle=True, num_workers=8)
+    train_loaders = torch.utils.data.DataLoader(dataset=train_set, batch_size=batch_size, shuffle=True, num_workers=16)
 
     test_set = torchvision.datasets.MNIST(root='./', train=False, transform=transform, download=True)
-    test_loaders = torch.utils.data.DataLoader(dataset=test_set, batch_size=batch_size, shuffle=False, num_workers=8)
+    test_loaders = torch.utils.data.DataLoader(dataset=test_set, batch_size=batch_size, shuffle=False, num_workers=16)
 
     return train_loaders, test_loaders
+
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 # 使用MNIST数据集训练
 def train(model, learn_rate, train_loaders, epoch):
@@ -34,6 +36,9 @@ def train(model, learn_rate, train_loaders, epoch):
     for i in range(epoch):
         running_loss = 0.0
         for j, (x, y) in enumerate(train_loaders):
+            # 将训练数据转到GPU上
+            x = x.to(device)
+            y = y.to(device)
 
             x = Variable(x, requires_grad=True)     # x是一个batch_size个的样本
             y = Variable(y)
@@ -50,7 +55,7 @@ def train(model, learn_rate, train_loaders, epoch):
                       (i + 1, j + 1, running_loss/200))
                 running_loss = 0.0
 
-    torch.save(model.state_dict(), 'model/model_11.pth')
+    torch.save(model.state_dict(), 'model/model_2_1000.pth')
     print("Finished training")
 
 # 使用MNIST数据集的测试部分测试训练效果
@@ -65,9 +70,9 @@ def test(model, test_loaders):
     
     for datas in test_loaders:
         images, labels = datas
-
+        images = images.to(device) # 将测试数据转到GPU上
         images = Variable(images)
-
+        
         outputs = model(images)
         # predicted = torch.max(outputs, 1)[1].data.numpy().squeeze()
         predicted = torch.max(outputs.data, 1)[1]
@@ -82,12 +87,13 @@ def test(model, test_loaders):
 
 if __name__ == "__main__":
     let = LetNet5()
+    let = let.to(device) # 将模型转到gpu上训练（如果没有，则使用cpu）
     # 训练时一次看几张图片
-    batch_size = 16
+    batch_size = 2
     # 学习率（修正网络参数的快慢）
-    learn_rate = 0.001
+    learn_rate = 0.0001
     # 训练的轮数
-    epoch = 1
+    epoch = 1000
     # 加载训练和测试使用的数据集
     train_loader, test_loader = data_loader(batch_size)
     # 训练
