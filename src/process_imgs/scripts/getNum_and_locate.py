@@ -98,6 +98,7 @@ class RecoNum:
         global sequence 
         global save_img_path
         save_img_path = "./src/simulation/simulation_image/img_in_rotate/"+str(sequence)+'/'
+        # save_img_path_to_learn = "./src/simulation/simulation_image/images/"
         if not os.path.exists(save_img_path):
             os.makedirs(save_img_path)
             print(save_img_path+" be created")
@@ -106,6 +107,9 @@ class RecoNum:
         target = Ori_target.copy()
 
         cv2.imwrite(save_img_path+'Ori_target.jpg',Ori_target) # 测试
+        # cv2.imwrite(save_img_path_to_learn+'Ori_target_'+str(sequence)+'.jpg',Ori_target) # 测试
+
+        
         # 图像预处理
 
         # 进行仿真时，由于仿真里面的图像过于平滑，如果转成灰度图后无法检测出边缘，故仿真时直接省去灰度图和膨胀腐蚀，直接边缘检测即可
