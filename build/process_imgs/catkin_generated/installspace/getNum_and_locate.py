@@ -5,7 +5,6 @@ import sys
 sys.path.append("./src/process_imgs/scripts")
 sys.path.append("./src")
 # 导入参数
-from path_params import *
 from params import *
 
 # 导入神经网络
@@ -27,6 +26,7 @@ from message_filters import ApproximateTimeSynchronizer, Subscriber
 from geometry_msgs.msg import PoseStamped
 from sensor_msgs.msg import Imu
 from sensor_msgs.msg import NavSatFix
+from std_msgs.msg import Float64
 from my_msgs.msg import Median_gps
 from my_msgs.msg import Signal
 from my_msgs.msg import Boundingboxs_and_image
@@ -37,6 +37,7 @@ from tf.transformations import euler_from_quaternion
 # 定义全局变量
 CONSTANTS_RADIUS_OF_EARTH = 6371000.     # meters (m)
 '''地球半径，相对坐标转化为gps坐标时使用'''
+
 num_and_location = dict()
 '存储每个数字出现的次数及多次定位到的gps坐标'
 stop_ts_callback = 0
@@ -47,6 +48,9 @@ median_gps = list()
 '存储中位数靶标gps坐标，方便侦查结束后循环发布中位数靶标gps坐标'
 three_nums = []
 '存储识别到的三个靶标数字'
+
+ref_alt = 0
+'存储飞机对地高度'
 
 
 sequence = 0 # 测试
@@ -60,7 +64,13 @@ class Times_and_GPS:
     '经度列表'
     latitude = []
     '纬度列表'
-    pass
+    def __init__(self) -> None:
+        '这个构造函数很重要，每次实例化时需要重置参数'
+        self.times = 0
+        self.longitude = []
+        self.latitude = []
+        pass
+    
 
 
 class RecoNum:
@@ -70,7 +80,7 @@ class RecoNum:
     # 训练好的权重路径
 
 
-    weight_path = "./src/process_imgs/weights/best.pth"
+    weight_path = LetNet_weight_path
 
     # 如果有cuda，就用cuda，否则使用cpu
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -86,7 +96,7 @@ class RecoNum:
         pass
 
     def rotate_target(self, Ori_target: cv2.Mat):
-        '直接透视变换转正数字底板。返回值有两种情况，返回(False，原图，空列表)和返回(True，转正图，靶标最小外接矩形角点坐标)'
+        '直接透视变换转正数字底板。返回值有两种情况，识别失败返回(False，原图，空列表)和识别成功返回(True，转正图，白色数字底板的四个角点坐标)'
         
         # 中间处理时不对原图操作，对原图的操作只有最后的转正   Ori_target表示 Origin target
         # 拷贝一份副本进行操作
@@ -95,6 +105,7 @@ class RecoNum:
         global sequence 
         global save_img_path
         save_img_path = "./src/simulation/simulation_image/img_in_rotate/"+str(sequence)+'/'
+        # save_img_path_to_learn = "./src/simulation/simulation_image/images/"
         if not os.path.exists(save_img_path):
             os.makedirs(save_img_path)
             print(save_img_path+" be created")
@@ -103,6 +114,9 @@ class RecoNum:
         target = Ori_target.copy()
 
         cv2.imwrite(save_img_path+'Ori_target.jpg',Ori_target) # 测试
+        # cv2.imwrite(save_img_path_to_learn+'Ori_target_'+str(sequence)+'.jpg',Ori_target) # 测试
+
+
         # 图像预处理
 
         # 进行仿真时，由于仿真里面的图像过于平滑，如果转成灰度图后无法检测出边缘，故仿真时直接省去灰度图和膨胀腐蚀，直接边缘检测即可
@@ -155,7 +169,7 @@ class RecoNum:
             return False, Ori_target, np.empty(0)
 
         # 判断最大外轮廓是否合理,最大外轮廓即靶标外轮廓（三角形+正方形）  
-        if max_area/img_area < 0.2:
+        if max_area/img_area < min_targetArea_rate:
             # print("max_area not find")
             rospy.logwarn("max contour area not fit")
             # <测试>
@@ -318,8 +332,8 @@ class RecoNum:
         rows = transform_img.shape[1]
      
         # 将图片从中间分成两份,并做适量裁剪，去除边缘干扰  截取比例根据实际情况调整
-        left_num_img = transform_img[int(0.1*rows):int(0.9*rows), int(0.1*columns):int(0.5*columns)]
-        right_num_img = transform_img[int(0.1*rows):int(0.9*rows), int(0.5*columns):int(0.9*columns)]
+        left_num_img = transform_img[int(clip_h_rate * rows):int((1-clip_h_rate) * rows), int(clip_w_rate * columns):int(0.5 * columns)]
+        right_num_img = transform_img[int(clip_h_rate * rows):int((1-clip_h_rate) * rows), int(0.5 * columns):int((1- clip_w_rate) * columns)]
       
         # 调整图片为28*28的黑底白字图
         left_num_img = self.my_resize(left_num_img)
@@ -437,16 +451,16 @@ class Locate:
     #                            ])
     # # 相机畸变系数
     # distCoeffs = np.float32([-0.505909,    0.469929,   -0.021110,  -0.018548,  0])
-
+    
     # 仿真相机参数
     # 相机内参
-    cameraMatrix = np.float32([[ 553.686293,       0.        , 320.340100],
-                               [    0.      ,   553.594422   , 240.264610],
+    cameraMatrix = np.float32([[ 637.223816,       0.        , 638.653280],
+                               [    0.      ,   637.796173   , 359.914037],
                                [    0.      ,       0.        ,     1.    ]
                                ])
     # 相机畸变系数
-    distCoeffs = np.float32([-0.001381,    -0.001568,   0.000214,  0.000549,  0])
-
+    distCoeffs = np.float32([0.000029,    -0.000280,   0.000175,  0.000447,  0])
+    # test.world中 红色34靶标坐标为45.56448 126.61867 红色12靶标坐标为45.56571 126.618586
     def get_imgPoints(self, Ori_point, num_board):
         '函数功能：获取到图像坐标系下的坐标并将结果保存至self.img_points，成功获取则返回True，否则返回False'
         # 如果数字底板坐标未获取到,即num_board为空，则返回False
@@ -592,19 +606,26 @@ class Filter:
         global num_and_location
         for key in num_and_location.keys():
             if key == input_num:
+                print("key = input num")
                 # 该数字计数增加,返回true
                 num_and_location[key].times = num_and_location[key].times + 1
                 # 如果定位精确，才将定位得到的靶标经纬度放入num_and_location中，否则只增加该数字出现的次数，而不采用其定位
                 if locate_is_accurate == True:
                     num_and_location[key].longitude.append(longitude)
                     num_and_location[key].latitude.append(latitude)
+                    
                 return True
+            else:
+                continue
         # 如果字典里没有该数字，则添加该数字及其位置并且将其计数调为1，返回false
+        print("key != input num")
         times_and_gps = Times_and_GPS()
         times_and_gps.times = 1
         if locate_is_accurate == True:
+            print("longitude list = ",times_and_gps.longitude)
             times_and_gps.longitude.append(longitude)
             times_and_gps.latitude.append(latitude)
+        
         num_and_location[input_num] = times_and_gps
         return False
 
@@ -659,11 +680,21 @@ class Filter:
 
     def data_process(self, data):
         '''
-        函数功能：处理定位得到的经纬度数据,目前处理方法暂时为求所有数据平均值\n
+        函数功能：处理定位得到的经纬度数据,目前处理方法暂时为绝对中位数偏差法\n
         '''
-        mean_value = sum(data)/len(data)
-        return mean_value
+        median=np.median(data)
+        deviations = abs(data - median)
+        mad = np.median(deviations)
+        n_data=[]
+        for x in range(0,len(data)):
+            if abs(data[x]-median)<=mad * Mad_threshold:
+                n_data.append(data[x])
+        result_data = np.average(n_data)
+
+
+        return result_data
     pass
+
 
 
 # 测试： 接收图片并保存
@@ -730,10 +761,11 @@ def ts_callback(msg1, msg2, msg3):
         locate.ref_longitude = msg2.longitude
         locate.ref_latitude = msg2.latitude
         # 减去地面海拔从而获得对地高度
-        locate.ref_altitude = msg2.altitude - home_altitude
+        global ref_alt
+        locate.ref_altitude = ref_alt
 
         # 输出飞机自身gps坐标
-        rospy.loginfo("plane longitude = %f latitude = %f altitude = %f",locate.ref_longitude, locate.ref_latitude, locate.ref_altitude)
+        rospy.loginfo("plane longitude = %f latitude = %f ref_altitude = %f",locate.ref_longitude, locate.ref_latitude, locate.ref_altitude)
 
         # 四元数转姿态角
         quaternion = (
@@ -777,6 +809,20 @@ def ts_callback(msg1, msg2, msg3):
                 right_num = reco.reco_num(right_num_img)
                 # 得到最终结果
                 number = left_num * 10 + right_num
+
+
+                # <测试>
+                data_save_path = "./src/simulation/simulation_image/img_in_rotate/number.txt"
+                try:
+                    # 尝试以添加模式打开文件
+                    with open(data_save_path, "a") as file:
+                        file.write("num"+ str(sequence) + " = " + str(number)+"\n")
+                        
+                except FileNotFoundError:
+                    # 如果文件不存在，则创建文件并以添加模式打开
+                    with open(data_save_path, "w") as file:
+                         file.write("num"+ str(sequence) + " = " + str(number)+"\n")
+                # </测试>
                 rospy.loginfo("num = %d", number)
 
             # 如果靶标中心正方形白色数字板的四个顶点坐标获取成功，则使用Pnp算法进行视觉定位
@@ -792,9 +838,10 @@ def ts_callback(msg1, msg2, msg3):
                     longitude, latitude = locate.xy_to_gps(rotated_x, rotated_y)
                     rospy.loginfo("target longitude = %f  latitude = %f ", longitude, latitude)
                     filter.num_dict_add(number, True, longitude, latitude) 
+
                     # <测试>
-                    rotated_z_save_path = "./src/simulation/simulation_image/height.txt"
-                    data_save_path = "./src/simulation/simulation_image/data.txt"
+                    rotated_z_save_path = "./src/simulation/simulation_image/img_in_rotate/height.txt"
+                    data_save_path = "./src/simulation/simulation_image/img_in_rotate/data.txt"
                     try:
                         # 尝试以添加模式打开文件
                         with open(rotated_z_save_path, "a") as file:
@@ -805,8 +852,19 @@ def ts_callback(msg1, msg2, msg3):
                         with open(rotated_z_save_path, "w") as file:
                             file.write("rotated_z_"+ str(sequence) + " = " + str(rotated_z)+"\n")
 
+
+                    
+                        # data.txt覆盖写入
                     with open(data_save_path,'w') as file:
-                        file.write(str(num_and_location))
+                        for key in num_and_location.keys():
+                            data_times = num_and_location[key].times
+                            data_longitude = num_and_location[key].longitude
+                            data_latitude = num_and_location[key].latitude
+                            file.write(str(key) + ":" + str(data_times) + "\n")
+                            file.write("longitude = " + str(data_longitude) + "\n")
+                            file.write("latitude = " + str(data_latitude) + "\n")
+                            file.write('\n')
+                            pass
                     # </测试>
                 else:
                     # 定位不精确，弃用
@@ -819,6 +877,20 @@ def ts_callback(msg1, msg2, msg3):
                     # </测试>
                     
                     filter.num_dict_add(number, False, 0, 0)
+                    # <测试>
+                    data_save_path = "./src/simulation/simulation_image/img_in_rotate/data.txt"
+                    # data.txt覆盖写入
+                    with open(data_save_path,'w') as file:
+                        for key in num_and_location.keys():
+                            data_times = num_and_location[key].times
+                            data_longitude = num_and_location[key].longitude
+                            data_latitude = num_and_location[key].latitude
+                            file.write(str(key) + ":" + str(data_times) + "\n")
+                            file.write("longitude = " + str(data_longitude) + "\n")
+                            file.write("latitude = " + str(data_latitude) + "\n")
+                            file.write('\n')
+                            pass
+                    # </测试>
     pass
 
 
@@ -860,7 +932,10 @@ def state_callback(msg):
         gps_pub = rospy.Publisher("/median_gps", Median_gps, queue_size=10)
         gps_pub.publish(median_gps_1)
 
-
+def ref_alt_callback(msg):
+    global ref_alt
+    ref_alt = msg.data
+    pass
 if __name__ == "__main__":
     # 初始化ros节点
     rospy.init_node("num_and_location")
@@ -871,8 +946,10 @@ if __name__ == "__main__":
     box_sub = Subscriber("/yolov5/Boundingboxs_and_image",Boundingboxs_and_image)  # 获取yolov5图像和坐标信息
     gps_sub = Subscriber('/mavros/global_position/global',NavSatFix)  # 获取飞控gps坐标
     pose_sub = Subscriber('/mavros/local_position/pose', PoseStamped)  # 获取飞控姿态
-    rospy.loginfo("订阅者创建完毕")
+
+    rel_alt_sub = rospy.Subscriber('/mavros/global_position/rel_alt',Float64,ref_alt_callback,queue_size=20)
     state_sub = rospy.Subscriber('/is_investigation_over', Signal, state_callback, queue_size=20)  # 获取侦查状态（正在侦查还是已侦查完毕）
+    rospy.loginfo("订阅者创建完毕")
     # 创建时间同步器
     ts = ApproximateTimeSynchronizer([box_sub, gps_sub, pose_sub], queue_size=10, slop=time_error)
     rospy.loginfo("同步器创建完毕")

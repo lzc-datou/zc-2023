@@ -11,7 +11,7 @@ gnome-terminal --tab "gazebo" -- bash -c "cd /home/lzc/ardupilot_gazebo;gazebo -
 }& 
 sleep 3
 {
-gnome-terminal --tab "ardupilot/ArduPlane" -- bash -c "cd /home/lzc/ardupilot/Tools/autotest;sim_vehicle.py -v ArduPlane -f gazebo-zephyr --out 127.0.0.1:14551 "
+gnome-terminal --tab "ardupilot/ArduPlane" -- bash -c "cd /home/lzc/ardupilot/Tools/autotest;sim_vehicle.py -v ArduPlane -f gazebo-zephyr -L Hanan --out 127.0.0.1:14551 "
 }& 
 sleep 3
 {

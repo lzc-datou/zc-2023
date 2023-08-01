@@ -179,7 +179,11 @@ def run(
             Ori_image = im0.copy() 
             
             annotator = Annotator(im0, line_width=line_thickness, example=str(names))
-
+            
+            # 创建具有固定大小的窗口
+            cv2.namedWindow("yolov5", cv2.WINDOW_NORMAL)
+            # 设置窗口的大小
+            cv2.resizeWindow("yolov5", 320, 180)
             # 展示仿真摄像头图像
             cv2.imshow("yolov5",im0)
             cv2.waitKey(1)
@@ -328,7 +332,7 @@ def parse_opt():
     parser.add_argument('--source', type=str, default="./src/simulation/simulation_image/sim_img.jpg", help='file/dir/URL/glob/screen/0(webcam)  path = "./src/yolov5/video/input/grass_num_7.mp4"')
     #
     parser.add_argument('--data', type=str, default=ROOT / 'data/coco128.yaml', help='(optional) dataset.yaml path')
-    parser.add_argument('--imgsz', '--img', '--img-size', nargs='+', type=int, default=[640], help='inference size h,w')
+    parser.add_argument('--imgsz', '--img', '--img-size', nargs='+', type=int, default=[1280], help='inference size h,w')
     parser.add_argument('--conf-thres', type=float, default=0.25, help='confidence threshold')
     parser.add_argument('--iou-thres', type=float, default=0.45, help='NMS IoU threshold')
     parser.add_argument('--max-det', type=int, default=1000, help='maximum detections per image')
@@ -378,10 +382,12 @@ filename = "./src/simulation/simulation_image/sim_img.jpg"
 
 def img_callback(data):
     '接收ros话题图像并保存'
-    print(data.encoding)
+    print('img_encoding = ' ,data.encoding)
+    
     # 注意：仿真摄像头传来的图像是rgb8格式的，需要手动转换成bgr8
     img = bridge.imgmsg_to_cv2(data,'rgb8')
     img = cv2.cvtColor(img,cv2.COLOR_RGB2BGR)
+    print("img_shape = ",img.shape)
     cv2.imwrite(filename,img)
     # 调用主函数中的run函数循环检测ros话题中的图像
     main(opt)

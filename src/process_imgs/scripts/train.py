@@ -54,8 +54,9 @@ def train(model, learn_rate, train_loaders, epoch):
                 print('[%d, %5d] loss: %.3f' %
                       (i + 1, j + 1, running_loss/200))
                 running_loss = 0.0
-
-    torch.save(model.state_dict(), 'model/model_2_1000.pth')
+    path = '../weights/model_32_800.pth'
+    torch.save(model.state_dict(), path)
+    print(path)
     print("Finished training")
 
 # 使用MNIST数据集的测试部分测试训练效果
@@ -70,10 +71,12 @@ def test(model, test_loaders):
     
     for datas in test_loaders:
         images, labels = datas
+        labels = labels.to(device)
         images = images.to(device) # 将测试数据转到GPU上
         images = Variable(images)
         
         outputs = model(images)
+        outputs = outputs.to(device)
         # predicted = torch.max(outputs, 1)[1].data.numpy().squeeze()
         predicted = torch.max(outputs.data, 1)[1]
         _, pred = torch.max(outputs,dim=1)
@@ -89,11 +92,11 @@ if __name__ == "__main__":
     let = LetNet5()
     let = let.to(device) # 将模型转到gpu上训练（如果没有，则使用cpu）
     # 训练时一次看几张图片
-    batch_size = 2
+    batch_size = 32
     # 学习率（修正网络参数的快慢）
-    learn_rate = 0.0001
+    learn_rate = 0.00001
     # 训练的轮数
-    epoch = 1000
+    epoch = 800
     # 加载训练和测试使用的数据集
     train_loader, test_loader = data_loader(batch_size)
     # 训练

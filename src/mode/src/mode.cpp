@@ -14,6 +14,7 @@
 #include <std_msgs/Int8.h>
 #include <my_msgs/Signal.h>
 #include <my_msgs/Median_gps.h>
+#include <csignal>
 
 #define CONSTANTS_RADIUS_OF_EARTH 6371000
 
@@ -23,7 +24,7 @@ sensor_msgs::NavSatFix globalPos; // float64 latitude,float64 longitude,float64 
 
 geometry_msgs::Point targetPos; // x，y,z x为北，y为东，z为高度  不一定需要
 
-const std::string scoutWpPath = "./src/mode/waypoints/1.txt";
+const std::string scoutWpPath = "./src/mode/waypoints/test.txt";
 const std::string strikePath = "./src/mode/waypoints/202301.txt";
 
 struct keypoint
@@ -91,6 +92,8 @@ void gps_receive(my_msgs::Median_gps msg)
 {
 	target.longtitude = msg.longitude;
 	target.latitude = msg.latitude;
+	std::cout << "get longitude = " << target.longtitude << std::endl;
+	std::cout << "get latitude = " << target.latitude << std::endl;
 }
 // 订阅飞机执行航点序号
 void wp_reached_cb(const mavros_msgs::WaypointReached::ConstPtr &msg)
@@ -724,11 +727,20 @@ void target_get(ros::Rate &rate, ros::Publisher &vision_command)
 	{
 
 		vision_command.publish(stop);
-		}
+		rate.sleep();
+	}
+}
+
+// 定义信号处理函数
+void signalHandler(int signum)
+{
+	std::cout << "手动终止" << std::endl;
+	exit(signum);
 }
 
 int main(int argc, char *argv[])
 {
+
 	bool FlagMode = true;
 	result_read_mission result; // 侦察航点结构体
 	result_read_mission target_result;
@@ -762,14 +774,15 @@ int main(int argc, char *argv[])
 	// 45.5614448	126.6185532	170.326400
 
 	std::cout << "载入数据" << std::endl;
+	signal(SIGINT, signalHandler); // SIGINT表示Ctrl+C信号
 	// 关键点家的经纬度
 	home.latitude = 45.5614448;
 	home.longtitude = 126.6185532;
 	home.altitude = 170.326400;
 
 	// 测试靶点的经纬度 45.56456740	126.61732350
-	target.latitude = 45.56456740;
-	target.longtitude = 126.61732350;
+	// target.latitude = 45.56456740;
+	// target.longtitude = 126.61732350;
 
 	// target.latitude=result.mission.request.waypoints[5].x_lat;      这样赋值 会报Segmentation fault (core dumped)
 	// target.longtitude=result.mission.request.waypoints[5].y_long;
@@ -817,7 +830,7 @@ int main(int argc, char *argv[])
 
 	manaul_control_detect();
 	// 等待
-	ros::Duration(5).sleep();
+	ros::Duration(10).sleep();
 	manaul_control_detect();
 
 	// 切换到阿auto以执行投靶任务

@@ -73,7 +73,7 @@ clip_w_rate = 0.1
 # </识别数字时split_num()函数中的参数>
 
 
-LetNet_weight_path = "./src/process_imgs/weights/best.pth"
+LetNet_weight_path = "./src/process_imgs/weights/model_2_400_.pth"
 'LetNet神经网络权重路径'
 
 # data_process()函数参数
