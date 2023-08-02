@@ -60,7 +60,9 @@ AP官网提供的样例使用的地面站为mavproxy，我们可以使用其他�
 如果发现只能连上QGC而连不上mavros，是因为sim_vehicle.py只启动了一个输出端口，在命令行输出中能看到![sim_vehicle.py输出端口](../../../photo/sim_vehicle.py输出端口.png)  
 此时我们需要将命令换为  
 `sim_vehicle.py -v ArduPlane -f gazebo-zephyr --out 127.0.0.1:14551`   
-手动为`sim_vehicle.py`增加一个输出端口`127.0.0.1:14551`，此端口需要与`mavros`的`apm.launch`文件中的端口号相对应。然后再次查看命令行输出可以看到修改后sim_vehicle.py多开启了一个输出端口![sim_vehicle.py输出端口_1](../../../photo/sim_vehicle.py输出端口_1.png)
+手动为`sim_vehicle.py`增加一个输出端口`127.0.0.1:14551`，此端口需要与`mavros`的`apm.launch`文件中的端口号相对应。然后再次查看命令行输出可以看到修改后sim_vehicle.py多开启了一个输出端口![sim_vehicle.py输出端口_1](../../../photo/sim_vehicle.py输出端口_1.png)  
+此处解决方法受文章[ArduPilot+mavros+gazebo+QGC联合仿真初体验](https://blog.csdn.net/qq_15390133/article/details/105469756)启发。  
+启动完毕后，可以命令行输入`sudo lsof -i :14551`和`sudo lsof -i :14550`查看这两个端口在被谁使用
 
 **2.gazebo启动相应的世界文件**  
 
