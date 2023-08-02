@@ -36,7 +36,7 @@ AP仿真文档：[Simulation](https://ardupilot.org/dev/docs/simulation-2.html#)
 
 ### 4. 使用地面站QGC
 [QGC官方文档](https://docs.qgroundcontrol.com/master/en/index.html)  
-下载QGC见其官方文档的[Download](https://docs.qgroundcontrol.com/master/en/getting_started/download_and_install.html)部分
+下载QGC见其官方文档的[Download](https://docs.qgroundcontrol.com/master/en/getting_started/download_and_install.html)部分。QGC最新版可能不太好使，建议下载旧版本的。
 
 AP官网提供的样例使用的地面站为mavproxy，我们可以使用其他任意地面站代替，这里推荐使用QGC地面站。
 
