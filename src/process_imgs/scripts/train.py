@@ -54,7 +54,7 @@ def train(model, learn_rate, train_loaders, epoch):
                 print('[%d, %5d] loss: %.3f' %
                       (i + 1, j + 1, running_loss/200))
                 running_loss = 0.0
-    path = '../weights/model_32_800.pth'
+    path = '../weights/test.pth'
     torch.save(model.state_dict(), path)
     print(path)
     print("Finished training")
@@ -92,11 +92,11 @@ if __name__ == "__main__":
     let = LetNet5()
     let = let.to(device) # 将模型转到gpu上训练（如果没有，则使用cpu）
     # 训练时一次看几张图片
-    batch_size = 32
+    batch_size = 4
     # 学习率（修正网络参数的快慢）
     learn_rate = 0.00001
     # 训练的轮数
-    epoch = 800
+    epoch = 400
     # 加载训练和测试使用的数据集
     train_loader, test_loader = data_loader(batch_size)
     # 训练

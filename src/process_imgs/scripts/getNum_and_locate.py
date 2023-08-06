@@ -49,7 +49,7 @@ median_gps = list()
 three_nums = []
 '存储识别到的三个靶标数字'
 
-ref_alt = 0
+ref_alt = float(0)
 '存储飞机对地高度'
 
 
@@ -114,6 +114,8 @@ class RecoNum:
         target = Ori_target.copy()
 
         cv2.imwrite(save_img_path+'Ori_target.jpg',Ori_target) # 测试
+        save_img_path_1 = "./src/simulation/simulation_image/Origin_image/" #测试
+        cv2.imwrite(save_img_path_1+'Ori_target_'+str(sequence)+'.jpg',Ori_target) # 测试
         # cv2.imwrite(save_img_path_to_learn+'Ori_target_'+str(sequence)+'.jpg',Ori_target) # 测试
 
 
@@ -379,6 +381,8 @@ class RecoNum:
         # show_img("kuobian",img) # 测试用
 
         # 腐蚀膨胀，消除一些噪声
+        
+        
         kernal = np.ones((2, 2), np.uint8)
         img = cv2.erode(img, kernal, iterations=1)
         img = cv2.dilate(img, kernal, iterations=1)
@@ -413,17 +417,17 @@ class RecoNum:
 
 class Locate:
     '定义类：定位，获取相对坐标'
-    ref_longitude = 0.
+    ref_longitude = float(0)
     '飞机的经度'
-    ref_latitude = 0.
+    ref_latitude = float(0)
     '飞机的纬度'
-    ref_altitude = 0.
+    ref_altitude = float(0)
     '飞机的海拔(对地高度)'
-    roll = 0.
+    roll = float(0)
     '飞机滚转角'
-    pitch = 0.
+    pitch = float(0)
     '飞机俯仰角'
-    yaw = 0.
+    yaw = float(0)
     '飞机偏航角'
 
     img_points = []
@@ -475,8 +479,8 @@ class Locate:
 
     def get_xyz(self):
         '函数功能：获取相对坐标（靶标相对于相机）'
-        __, rvecs, tvecs, __ = cv2.solvePnPRansac(self.obj_points, np.float32(
-            self.img_points), self.cameraMatrix, self.distCoeffs)
+        __, rvecs, tvecs, __ = cv2.solvePnPRansac(self.obj_points, np.float32(self.img_points), self.cameraMatrix, self.distCoeffs)
+        
         # r,__ = cv2.Rodrigues(rvecs)
         # 放置时相机朝向正下方，相机坐标系： x朝向相机平面右边，z朝向相机平面正前方，y朝向相机平面下方。
         # 偏航角：飞机机头与正北方向夹角（0-360°），向东顺时针转动为正
@@ -765,7 +769,7 @@ def ts_callback(msg1, msg2, msg3):
         locate.ref_altitude = ref_alt
 
         # 输出飞机自身gps坐标
-        rospy.loginfo("plane longitude = %f latitude = %f ref_altitude = %f",locate.ref_longitude, locate.ref_latitude, locate.ref_altitude)
+        rospy.loginfo("plane longitude = %.16f latitude = %.16f ref_altitude = %.16f",locate.ref_longitude, locate.ref_latitude, locate.ref_altitude)
 
         # 四元数转姿态角
         quaternion = (
@@ -778,7 +782,7 @@ def ts_callback(msg1, msg2, msg3):
         locate.roll, locate.pitch, locate.yaw = euler_from_quaternion(quaternion)
 
         # 输出姿态角
-        rospy.loginfo("plane roll = %f pitch = %f yaw = %f",math.degrees(locate.roll), math.degrees(locate.pitch), math.degrees(locate.yaw))
+        rospy.loginfo("plane roll = %.16f pitch = %.16f yaw = %.16f",math.degrees(locate.roll), math.degrees(locate.pitch), math.degrees(locate.yaw))
         # 2. 图像处理
         rospy.loginfo("len of image is %d ",len(msg1.image_list))
         if len(msg1.image_list) == 0:
@@ -836,12 +840,12 @@ def ts_callback(msg1, msg2, msg3):
                 x, y, z = locate.get_xyz()
                 # 坐标系变换，将相机坐标系变换为北东地坐标系
                 rotated_x, rotated_y, rotated_z = locate.rotate_xyz(x, y, z)
-                rospy.loginfo("rotated_x = %f rotated_y = %f rotated_z = %f", rotated_x, rotated_y, rotated_z)
+                rospy.loginfo("rotated_x = %.16f rotated_y = %.16f rotated_z = %.16f", rotated_x, rotated_y, rotated_z)
                 # 如果视觉定位得到的飞机高度与飞控得到的飞机高度在误差范围内，则认为视觉定位准确，予以采用。否则，则舍弃此次定位
                 if rotated_z >= (1 - locate_error) * locate.ref_altitude and rotated_z <= (1 + locate_error) * locate.ref_altitude:
                     #定位精确，予以采用
                     longitude, latitude = locate.xy_to_gps(rotated_x, rotated_y)
-                    rospy.loginfo("target longitude = %f  latitude = %f ", longitude, latitude)
+                    rospy.loginfo("target longitude = %.16f  latitude = %.16f ", longitude, latitude)
                     filter.num_dict_add(number, True, longitude, latitude) 
 
                     # <测试>
@@ -926,7 +930,7 @@ def state_callback(msg):
         # 打印结果
         rospy.loginfo("results = %d %d %d",three_nums[0], three_nums[1], three_nums[2])
         rospy.loginfo("median number = %d", three_nums[1])
-        rospy.loginfo("median number longitude = %f latitude = %f",median_gps[0],median_gps[1])
+        rospy.loginfo("median number longitude = %.16f latitude = %.16f",median_gps[0],median_gps[1])
         # 发布中位数靶标的gps坐标
         # 赋值
         median_gps_1 = Median_gps()

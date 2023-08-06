@@ -1,8 +1,0 @@
-prefix=/home/lzc/lzc-code/install
-
-Name: my_msgs
-Description: Description of my_msgs
-Version: 0.0.0
-Cflags: -I${prefix}/include
-Libs: -L${prefix}/lib 
-Requires: message_runtime roscpp rospy std_msgs

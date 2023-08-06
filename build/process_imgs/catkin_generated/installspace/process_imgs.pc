@@ -1,8 +1,0 @@
-prefix=/home/lzc/lzc-code/install
-
-Name: process_imgs
-Description: Description of process_imgs
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 

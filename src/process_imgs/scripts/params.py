@@ -1,8 +1,6 @@
 # -*-coding:utf-8-*-
 # 本文件用于保存getNum_and_locate.py程序中的参数，便于在不同的环境下进行调参
 # 自定义变量均为小写，库自带变量一般均为全大写
-home_altitude = 584
-'水平地面的海拔高度，每到一个新地方时一定记得更新'
 locate_error = 0.4
 '视觉定位对地高度与实际对地高度的误差容许范围'
 time_error = 0.1
@@ -59,7 +57,7 @@ numberBoard_minArea_rate = 0.1
 
 target_line_width = 2
 '在空白图像上绘制靶标边缘的线的粗细'
-numberBoard_line_width = 2
+numberBoard_line_width = 1
 '在空白图像上绘制白色数字底板边缘的线的粗细'
 # </rotate_target()函数转正靶标时的相关参数>
 
@@ -73,7 +71,7 @@ clip_w_rate = 0.1
 # </识别数字时split_num()函数中的参数>
 
 
-LetNet_weight_path = "./src/process_imgs/weights/model_2_400_.pth"
+LetNet_weight_path = "./src/process_imgs/weights/gaz+mni_2_354.pth"
 'LetNet神经网络权重路径'
 
 # data_process()函数参数

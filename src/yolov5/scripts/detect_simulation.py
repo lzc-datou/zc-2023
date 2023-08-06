@@ -183,7 +183,7 @@ def run(
             # 创建具有固定大小的窗口
             cv2.namedWindow("yolov5", cv2.WINDOW_NORMAL)
             # 设置窗口的大小
-            cv2.resizeWindow("yolov5", 320, 180)
+            cv2.resizeWindow("yolov5", 640, 480)
             # 展示仿真摄像头图像
             cv2.imshow("yolov5",im0)
             cv2.waitKey(1)
