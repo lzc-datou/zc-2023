@@ -14,7 +14,7 @@
     2. 短接载板上的`FC REC`引脚和`GND`引脚
     3. 插上系统电源通电，载板自动开机进入Recovery模式（此模式下风扇不转且HDMI无输出）
     4. 使用usb-microusb线连接笔记本电脑和xaiver，其中笔记本电脑接usb口，xaiver接microusb口
-    5. 连接完成，在sdk-manager中按照步骤刷机即可。可以命令行输入命令`lsusb`查看笔记本电脑usb连接，如果有`NVIDIA Corp. APX`字样，说明连接成功
+    5. 连接完成，在sdk-manager中按照步骤刷机即可，flash时选择手动模式并移除`FC REC`和`GND`的短接线。可以命令行输入命令`lsusb`查看笔记本电脑usb连接，如果有`NVIDIA Corp. APX`字样，说明连接成功
 3. 配置所需要的环境
     1. 安装ROS，方法见[ros-noetic-install](http://wiki.ros.org/noetic/Installation/Ubuntu)
     2. 安装mavros ,方法见[mavros-install](https://docs.px4.io/main/zh/ros/mavros_installation.html)
