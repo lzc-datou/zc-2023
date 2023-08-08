@@ -746,7 +746,7 @@ int main(int argc, char *argv[])
 	result_read_mission target_result;
 	setlocale(LC_ALL, "");
 	// 创建节点
-	ros::init(argc, argv, "hahaha");
+	ros::init(argc, argv, "mode");
 	// 创建句柄
 	ros::NodeHandle nh;
 	// 订阅飞机state话题

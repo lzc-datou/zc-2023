@@ -235,6 +235,18 @@ class RecoNum:
         numBoard_rect = cv2.minAreaRect(contours[numBoard_id])
         numBoard_box = cv2.boxPoints(numBoard_rect)
         numBoard_box = np.int32(numBoard_box)
+
+        # <测试>
+        numBoard_points_path = save_img_path + 'numBoard.txt'
+        Ori_img = Ori_target.copy()
+        for point in numBoard_box:
+            cv2.circle(Ori_img,tuple(point),1,255,1)
+        cv2.imwrite(save_img_path+'numBoard.jpg',Ori_img)
+        with open(numBoard_points_path,'w') as file:
+            file.write(str(numBoard_box))
+        # </测试>
+
+
         # 获取最小外接矩形的四个角点 其中x坐标最小的点为第0个，以顺时针依次排序
         min_box = cv2.boxPoints(min_rect)
 
@@ -257,8 +269,8 @@ class RecoNum:
         # print(im_test.shape)
         # print(min_box)
         
-        cv2.drawContours(im_test, [min_box], 0, 255, 2)
-        cv2.drawContours(im_test, [numBoard_box], 0, 255, 2)
+        cv2.drawContours(im_test, [min_box], 0, 255, 1)
+        cv2.drawContours(im_test, [numBoard_box], 0, 255, 1)
         cv2.imwrite(save_img_path+'im_test.jpg',im_test) # 测试
         # show_img("after draw", im_test)  # 测试用
        
@@ -513,6 +525,9 @@ class Locate:
         pitch = self.pitch
         # 绕偏航轴旋转时，由于飞控用的是东北天，而我们的目标坐标系是北东地，所以需要多转0.5*pi
         yaw = self.yaw + 0.5 * math.pi
+
+        # 偏航轴转正角度，转回去需要用负角度，而俯仰轴和滚转轴转正角度，转回去用正角度即可。
+        yaw = -yaw
 
         # 飞控使用的是东北天导航坐标系，对应载体坐标系为右前上坐标系
         # 相机坐标系->载体坐标系（右前上）
@@ -779,7 +794,14 @@ def ts_callback(msg1, msg2, msg3):
             msg3.pose.orientation.w
         )
         # 姿态角赋值
-        locate.roll, locate.pitch, locate.yaw = euler_from_quaternion(quaternion)
+        roll, pitch, yaw = euler_from_quaternion(quaternion)
+
+        # 修正mavros获取的三个角度。
+        # mavros俯仰角飞机低头为正角，抬头为负角，mavros偏航角以正东为0度，区间-180-180，且顺时针转为负角度。mavros滚转角右滚为正角。
+        # QGC俯仰角飞机抬头为正角，偏航角以正北方向为0度，角度区间0-360度，且顺时针旋转为正角度。滚转角右滚为正角
+        locate.roll = roll
+        locate.pitch = -pitch
+        locate.yaw = -yaw + math.pi/2
 
         # 输出姿态角
         rospy.loginfo("plane roll = %.16f pitch = %.16f yaw = %.16f",math.degrees(locate.roll), math.degrees(locate.pitch), math.degrees(locate.yaw))
@@ -840,6 +862,7 @@ def ts_callback(msg1, msg2, msg3):
                 x, y, z = locate.get_xyz()
                 # 坐标系变换，将相机坐标系变换为北东地坐标系
                 rotated_x, rotated_y, rotated_z = locate.rotate_xyz(x, y, z)
+                rospy.loginfo("x = %.16f y = %.16f z = %.16f", x, y, z)
                 rospy.loginfo("rotated_x = %.16f rotated_y = %.16f rotated_z = %.16f", rotated_x, rotated_y, rotated_z)
                 # 如果视觉定位得到的飞机高度与飞控得到的飞机高度在误差范围内，则认为视觉定位准确，予以采用。否则，则舍弃此次定位
                 if rotated_z >= (1 - locate_error) * locate.ref_altitude and rotated_z <= (1 + locate_error) * locate.ref_altitude:
@@ -936,7 +959,23 @@ def state_callback(msg):
         median_gps_1 = Median_gps()
         median_gps_1.longitude = median_gps[0]
         median_gps_1.latitude = median_gps[1]
+        longitude_loss = median_gps[0] - sim_longitude
+        latitude_loss = median_gps[1] - sim_latitude
+        # <测试>
+        loss_path = "./src/simulation/simulation_image/loss.txt"
+        try:
+            print(" try")
+            with open(loss_path,'a') as file:
+                file.write("longitude_loss = "+str(longitude_loss))
+                file.write("latitude_loss = "+str(latitude_loss))
+        except FileNotFoundError:
+            print("file not find")
+            with open(loss_path,'w') as file:
+                file.write("longitude_loss = "+str(longitude_loss)+'\n')
+                file.write("latitude_loss = "+str(latitude_loss))
 
+        # </测试>
+        rospy.loginfo("longitude_loss = %.16f  latitude_loss = %.16f",longitude_loss,latitude_loss)
         # 发布
         gps_pub = rospy.Publisher("/median_gps", Median_gps, queue_size=10)
         gps_pub.publish(median_gps_1)

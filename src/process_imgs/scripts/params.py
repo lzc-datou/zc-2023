@@ -1,7 +1,7 @@
 # -*-coding:utf-8-*-
 # 本文件用于保存getNum_and_locate.py程序中的参数，便于在不同的环境下进行调参
 # 自定义变量均为小写，库自带变量一般均为全大写
-locate_error = 0.4
+locate_error = 0.2
 '视觉定位对地高度与实际对地高度的误差容许范围'
 time_error = 0.1
 '时间同步器允许的时间误差范围（单位为秒）'
@@ -55,7 +55,7 @@ numberBoard_maxArea_rate = 0.4
 numberBoard_minArea_rate = 0.1
 '图像中白色数字底板面积占靶标总面积的最小比例'
 
-target_line_width = 2
+target_line_width = 1
 '在空白图像上绘制靶标边缘的线的粗细'
 numberBoard_line_width = 1
 '在空白图像上绘制白色数字底板边缘的线的粗细'
@@ -77,3 +77,7 @@ LetNet_weight_path = "./src/process_imgs/weights/gaz+mni_2_354.pth"
 # data_process()函数参数
 Mad_threshold = 1.5
 '数据处理参数：值越小去除数据越多'
+
+# 仿真中中位数靶标的gps坐标，用于计算误差
+sim_longitude = 126.6185472
+sim_latitude = 45.5646049
