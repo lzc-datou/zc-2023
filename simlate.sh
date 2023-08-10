@@ -15,7 +15,7 @@ gnome-terminal --tab "ardupilot/ArduPlane" -- bash -c "cd /home/lzc/ardupilot/To
 }& 
 sleep 5
 {
-gnome-terminal --tab "QGC" -- bash -c "cd /home/lzc;./QGroundControl.AppImage"
+gnome-terminal --tab "QGC" -- bash -c "cd /home/lzc;./QGroundControl\ .AppImage "
 }& 
 sleep 3
 {

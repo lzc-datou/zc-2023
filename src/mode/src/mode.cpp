@@ -90,10 +90,22 @@ void state_cb(const mavros_msgs::State::ConstPtr &msg)
 
 void gps_receive(my_msgs::Median_gps msg)
 {
-	target.longtitude = msg.longitude;
-	target.latitude = msg.latitude;
-	std::cout << "get longitude = " << target.longtitude << std::endl;
-	std::cout << "get latitude = " << target.latitude << std::endl;
+	// 接口
+	// 如果flag = 0,则说明没有定位到gps坐标
+	if (msg.flag == 0)
+	{
+		// 待修改，没有定位到gps坐标直接返航回家
+
+		std::cout << "target not find" << std::endl;
+	}
+	// 否则就是flag = 1,正确获取到了gps坐标
+	else
+	{
+		target.longtitude = msg.longitude;
+		target.latitude = msg.latitude;
+		std::cout << "get longitude = " << target.longtitude << std::endl;
+		std::cout << "get latitude = " << target.latitude << std::endl;
+	}
 }
 // 订阅飞机执行航点序号
 void wp_reached_cb(const mavros_msgs::WaypointReached::ConstPtr &msg)

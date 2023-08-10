@@ -79,5 +79,5 @@ Mad_threshold = 1.5
 '数据处理参数：值越小去除数据越多'
 
 # 仿真中中位数靶标的gps坐标，用于计算误差
-sim_longitude = 126.6185472
-sim_latitude = 45.5646049
+target_longitude = 126.6185472
+target_latitude = 45.5646049

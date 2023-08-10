@@ -20,6 +20,8 @@ import numpy as np
 from cv_bridge import CvBridge
 import cv2
 import rospy
+from datetime import datetime # 测试
+import shutil # 测试
 
 # 导入消息类型
 from message_filters import ApproximateTimeSynchronizer, Subscriber
@@ -46,14 +48,22 @@ is_processed = 0
 '标志变量：判断侦查获取到的数据是否已经处理过'
 median_gps = list()
 '存储中位数靶标gps坐标，方便侦查结束后循环发布中位数靶标gps坐标'
+median_num = 0
+'存储中位数数字'
 three_nums = []
 '存储识别到的三个靶标数字'
 
 ref_alt = float(0)
 '存储飞机对地高度'
 
-
 sequence = 0 # 测试
+is_result_write = 0 #测试
+'标志变量：判断经纬度定位误差是否写入'
+# 标志变量：判断时间是否写入
+is_time_write_result = 0 # 测试
+is_time_write_height = 0 # 测试
+is_time_write_number = 0 # 测试
+is_time_write_loss = 0 # 测试
 
 
 class Times_and_GPS:
@@ -106,18 +116,25 @@ class RecoNum:
         global save_img_path
         save_img_path = "./src/simulation/simulation_image/img_in_rotate/"+str(sequence)+'/'
         # save_img_path_to_learn = "./src/simulation/simulation_image/images/"
-        if not os.path.exists(save_img_path):
+        # 每次都重新开始写入
+        if os.path.exists(save_img_path):
+            shutil.rmtree(save_img_path)
+            os.makedirs(save_img_path)
+            print(save_img_path+" be created")
+        else:
             os.makedirs(save_img_path)
             print(save_img_path+" be created")
         # </测试>
 
-        target = Ori_target.copy()
-
-        cv2.imwrite(save_img_path+'Ori_target.jpg',Ori_target) # 测试
-        save_img_path_1 = "./src/simulation/simulation_image/Origin_image/" #测试
-        cv2.imwrite(save_img_path_1+'Ori_target_'+str(sequence)+'.jpg',Ori_target) # 测试
+        target = Ori_target.copy() # 非测试
+        
+        # <测试>
+        # # 保存原始yolov5传过来的图片
+        # cv2.imwrite(save_img_path+'Ori_target.jpg',Ori_target) # 测试
+        # save_img_path_1 = "./src/simulation/simulation_image/Origin_image/" #测试
+        # cv2.imwrite(save_img_path_1+'Ori_target_'+str(sequence)+'.jpg',Ori_target) # 测试
         # cv2.imwrite(save_img_path_to_learn+'Ori_target_'+str(sequence)+'.jpg',Ori_target) # 测试
-
+        # </测试>
 
         # 图像预处理
 
@@ -476,6 +493,8 @@ class Locate:
                                ])
     # 相机畸变系数
     distCoeffs = np.float32([0.000029,    -0.000280,   0.000175,  0.000447,  0])
+
+    
     # test.world中 红色34靶标坐标为45.56448 126.61867 红色12靶标坐标为45.56571 126.618586
     def get_imgPoints(self, Ori_point, num_board):
         '函数功能：获取到图像坐标系下的坐标并将结果保存至self.img_points，成功获取则返回True，否则返回False'
@@ -641,7 +660,6 @@ class Filter:
         times_and_gps = Times_and_GPS()
         times_and_gps.times = 1
         if locate_is_accurate == True:
-            print("longitude list = ",times_and_gps.longitude)
             times_and_gps.longitude.append(longitude)
             times_and_gps.latitude.append(latitude)
         
@@ -655,30 +673,49 @@ class Filter:
         '''
         global num_and_location
         count_list = list()
+        num_gps = {}
+        '存储数字和对应的gps坐标'
+
         for value in num_and_location.values():
             count = value.times
             count_list.append(count)
         # 对times值进行排序
         count_list.sort(reverse=True)
-        # 通过排序后的times值找到对应的key值,并对出现次数最多的三个数字的经纬度值进行处理
-        num1 = self.times_to_key(count_list[0], num_and_location)
-        # 处理经纬度列表数据
-        num1_longitude = self.data_process(num_and_location[num1].longitude)
-        num1_latitude = self.data_process(num_and_location[num1].latitude)
-        # 注意，一定要把已获取的key删除掉，避免两个key对应相同的value时通过value获取不到后一个key值
-        num_and_location.pop(num1)
+        if len(count_list) == 0:
+            # 如果该列表长度为0，说明没有数字被识别到，函数直接返回空字典
+            return {}
+        elif len(count_list) < 3:
+            # 如果长度小于3，则按该长度给num_gps赋值
+            for i in range(len(count_list)):
+                # 通过排序后的times值找到对应的key值,并对出现次数最多的三个数字的经纬度值进行处理
+                num = self.times_to_key(count_list[i], num_and_location)
+                 # 处理经纬度列表数据
+                num_longitude = self.data_process(num_and_location[num].longitude)
+                num_latitude = self.data_process(num_and_location[num].latitude)
 
-        num2 = self.times_to_key(count_list[1], num_and_location)
-        num2_longitude = self.data_process(num_and_location[num2].longitude)
-        num2_latitude = self.data_process(num_and_location[num2].latitude)
-        num_and_location.pop(num2)
-
-        num3 = self.times_to_key(count_list[2], num_and_location)
-        num3_longitude = self.data_process(num_and_location[num3].longitude)
-        num3_latitude = self.data_process(num_and_location[num3].latitude)
-
-        num_gps = {num1: [num1_longitude, num1_latitude], num2: [num2_longitude, num2_latitude], num3: [num3_longitude, num3_latitude]}
-
+                # 此处判断数据是否为nan十分重要，因为如果是nan，也会被添加进入列表中，然后列表也会有长度，那么我们后面靠判断列表长度是否为0的方法就不行了
+                if math.isnan(num_longitude) or math.isnan(num_latitude):
+                    num_gps[num] = []
+                else:
+                    # 赋值给num_gps
+                    num_gps[num] = [num_longitude,num_latitude]
+                # 注意，一定要把已获取的key删除掉，避免两个key对应相同的value时通过value获取不到后一个key值
+                num_and_location.pop(num)
+        elif len(count_list) >= 3:
+            # 如果长度大于3，则长度按3给num_gps赋值
+            for i in range(3):
+                # 通过排序后的times值找到对应的key值,并对出现次数最多的三个数字的经纬度值进行处理
+                num = self.times_to_key(count_list[i], num_and_location)
+                 # 处理经纬度列表数据
+                num_longitude = self.data_process(num_and_location[num].longitude)
+                num_latitude = self.data_process(num_and_location[num].latitude)
+                if math.isnan(num_longitude) or math.isnan(num_latitude):
+                    num_gps[num] = []
+                else:
+                    # 赋值给num_gps
+                    num_gps[num] = [num_longitude,num_latitude]
+                # 注意，一定要把已获取的key删除掉，避免两个key对应相同的value时通过value获取不到后一个key值
+                num_and_location.pop(num)
         return num_gps
 
     def times_to_key(self, times, num_and_location):
@@ -766,6 +803,10 @@ def ts_callback(msg1, msg2, msg3):
     '回调函数功能：处理单张图片及定位该图片中的靶标，并把识别到的数字和靶标gps坐标放入全局变量num_and_location中'
     # rospy.loginfo("get into ts_callback")
     # 判断同步器的回调函数是否执行，如果不执行直接返回
+
+    
+
+
     if stop_ts_callback == 1:
         rospy.loginfo("ts_callback is stopped")
         return
@@ -843,16 +884,29 @@ def ts_callback(msg1, msg2, msg3):
 
 
                 # <测试>
-                data_save_path = "./src/simulation/simulation_image/img_in_rotate/number.txt"
+                data_save_path = "./src/simulation/simulation_image/number.txt"
+                global is_time_write_number
                 try:
                     # 尝试以添加模式打开文件
                     with open(data_save_path, "a") as file:
+                        # 写入时间
+                        if is_time_write_number == 0:
+                            is_time_write_number = 1
+                            now = datetime.now()
+                            file.write("\n")
+                            file.write("time = " + str(now) + '\n')
                         file.write("num"+ str(sequence) + " = " + str(number)+"\n")
                         
                 except FileNotFoundError:
                     # 如果文件不存在，则创建文件并以添加模式打开
                     with open(data_save_path, "w") as file:
-                         file.write("num"+ str(sequence) + " = " + str(number)+"\n")
+                        # 写入时间
+                        if is_time_write_number == 0:
+                            is_time_write_number = 1
+                            now = datetime.now()
+                            file.write("\n")
+                            file.write("time = " + str(now) + '\n')
+                        file.write("num"+ str(sequence) + " = " + str(number)+"\n")
                 # </测试>
                 rospy.loginfo("num = %d", number)
 
@@ -869,34 +923,74 @@ def ts_callback(msg1, msg2, msg3):
                     #定位精确，予以采用
                     longitude, latitude = locate.xy_to_gps(rotated_x, rotated_y)
                     rospy.loginfo("target longitude = %.16f  latitude = %.16f ", longitude, latitude)
+
+                    # <测试>
+                    lon_loss = longitude - target_longitude
+                    lat_loss = latitude - target_latitude
+                    rospy.loginfo("longitude_loss = %.16f  latitude_loss = %.16f",lon_loss,lat_loss)
+                    loss_path = "./src/simulation/simulation_image/loss.txt"
+                    global is_time_write_loss
+                    try:
+                        with open(loss_path,'a') as file:
+                            if is_time_write_loss == 0:
+                                is_time_write_loss = 1
+                                now = datetime.now()
+                                file.write("\n")
+                                file.write("time = "+str(now) + '\n')
+                            file.write("longitude_loss = " + str(lon_loss) + "    latitude_loss = " + str(lat_loss)+'\n')
+                    except FileNotFoundError:
+                        with open(loss_path,'w') as file:
+                            if is_time_write_loss == 0:
+                                is_time_write_loss = 1
+                                now = datetime.now()
+                                file.write("\n")
+                                file.write("time = "+str(now)+'\n')
+                            file.write("longitude_loss = " + str(lon_loss) + "    latitude_loss = " + str(lat_loss)+'\n')
+                    # </测试>
+
                     filter.num_dict_add(number, True, longitude, latitude) 
 
                     # <测试>
-                    rotated_z_save_path = "./src/simulation/simulation_image/img_in_rotate/height.txt"
-                    data_save_path = "./src/simulation/simulation_image/img_in_rotate/data.txt"
+                    rotated_z_save_path = "./src/simulation/simulation_image/height.txt"
+                    data_save_path = "./src/simulation/simulation_image/data.txt"
+                    global is_time_write_height
                     try:
                         # 尝试以添加模式打开文件
                         with open(rotated_z_save_path, "a") as file:
+                            # 写入时间
+                            if is_time_write_height == 0:
+                                is_time_write_height = 1
+                                now = datetime.now()
+                                file.write("\n")
+                                file.write("time = " + str(now) + '\n')
                             file.write("rotated_z_"+ str(sequence) + " = " + str(rotated_z)+"\n")
-                            
+                           
                     except FileNotFoundError:
                         # 如果文件不存在，则创建文件并以添加模式打开
                         with open(rotated_z_save_path, "w") as file:
                             file.write("rotated_z_"+ str(sequence) + " = " + str(rotated_z)+"\n")
-
+                            # 写入时间
+                            if is_time_write_height == 0:
+                                is_time_write_height = 1
+                                now = datetime.now()
+                                file.write("\n")
+                                file.write("time = " + str(now) + '\n')
 
                     
-                        # data.txt覆盖写入
+                    # data.txt覆盖写入
+                    global is_time_write_data
                     with open(data_save_path,'w') as file:
+                        now = datetime.now()
+                        file.write("time = " + str(now) + '\n')
                         for key in num_and_location.keys():
                             data_times = num_and_location[key].times
                             data_longitude = num_and_location[key].longitude
                             data_latitude = num_and_location[key].latitude
+                            
                             file.write(str(key) + ":" + str(data_times) + "\n")
                             file.write("longitude = " + str(data_longitude) + "\n")
                             file.write("latitude = " + str(data_latitude) + "\n")
                             file.write('\n')
-                            pass
                     # </测试>
                 else:
                     # 定位不精确，弃用
@@ -909,6 +1003,7 @@ def ts_callback(msg1, msg2, msg3):
                     # </测试>
                     
                     filter.num_dict_add(number, False, 0, 0)
+
                     # <测试>
                     data_save_path = "./src/simulation/simulation_image/img_in_rotate/data.txt"
                     # data.txt覆盖写入
@@ -934,6 +1029,10 @@ def state_callback(msg):
         global is_processed
         global median_gps
         global three_nums
+        global median_num
+        global is_result_write
+        global is_time_write_result
+        
         stop_ts_callback = 1
 
         if is_processed == 0:
@@ -946,39 +1045,155 @@ def state_callback(msg):
             for key in num_gps.keys():
                 num_list.append(key)
             num_list.sort(reverse=True)
-
             three_nums = num_list
-            median_num = num_list[1]
-            median_gps = [num_gps[median_num][0], num_gps[median_num][1]]
+            # 如果识别到的数字类型大于等于三个，则正常进行操作（理想情况）
+            if len(three_nums) >= 3:
+                median_num = three_nums[1]
+                median_gps = num_gps[median_num]
+            elif len(three_nums) == 2:
+                # 如果只识别到两种数字类别，则选择数字较大为中位数投靶
+                median_num = max(three_nums)
+                median_gps = num_gps[median_num]
+            elif len(three_nums) == 1:
+                # 如果只有一个数字，直接投该数字
+                median_num = three_nums[0]
+                median_gps = num_gps[median_num]
+            elif len(three_nums) == 0:
+                # 未获取到数字，也就获取不到经纬度了
+                median_num = None
+                median_gps = []
+                pass
         # 打印结果
-        rospy.loginfo("results = %d %d %d",three_nums[0], three_nums[1], three_nums[2])
-        rospy.loginfo("median number = %d", three_nums[1])
-        rospy.loginfo("median number longitude = %.16f latitude = %.16f",median_gps[0],median_gps[1])
+        if len(three_nums) >= 3:
+            rospy.loginfo("results = %d %d %d",three_nums[0], three_nums[1], three_nums[2])
+            rospy.loginfo("median number = %d", median_num)
+            if len(median_gps) != 0:
+                rospy.loginfo("median number longitude = %.16f latitude = %.16f",median_gps[0],median_gps[1])
+            else:
+                rospy.logwarn("median number gps not find")
+        elif len(three_nums) == 2:
+            rospy.loginfo("results = %d %d ",three_nums[0], three_nums[1])
+            rospy.loginfo("median number = %d", median_num)
+            if len(median_gps) != 0:
+                rospy.loginfo("median number longitude = %.16f latitude = %.16f",median_gps[0],median_gps[1])
+            else:
+                rospy.logwarn("median number gps not find")
+        elif len(three_nums) == 1:
+            rospy.loginfo("results = %d ",three_nums[0])
+            rospy.loginfo("median number = %d", median_num)
+            if len(median_gps) != 0:
+                rospy.loginfo("median number longitude = %.16f latitude = %.16f",median_gps[0],median_gps[1])
+            else:
+                rospy.logwarn("median number gps not find")
+        elif len(three_nums) == 0:
+            rospy.logwarn("results = median number not find")
+            pass
+
         # 发布中位数靶标的gps坐标
         # 赋值
-        median_gps_1 = Median_gps()
-        median_gps_1.longitude = median_gps[0]
-        median_gps_1.latitude = median_gps[1]
-        longitude_loss = median_gps[0] - sim_longitude
-        latitude_loss = median_gps[1] - sim_latitude
-        # <测试>
-        loss_path = "./src/simulation/simulation_image/loss.txt"
-        try:
-            print(" try")
-            with open(loss_path,'a') as file:
-                file.write("longitude_loss = "+str(longitude_loss))
-                file.write("latitude_loss = "+str(latitude_loss))
-        except FileNotFoundError:
-            print("file not find")
-            with open(loss_path,'w') as file:
-                file.write("longitude_loss = "+str(longitude_loss)+'\n')
-                file.write("latitude_loss = "+str(latitude_loss))
+        median_gps_msg = Median_gps()
+        if len(median_gps) == 0:
+            median_gps_msg.flag = 0
+        else:
+            median_gps_msg.flag = 1
+            median_gps_msg.longitude = median_gps[0]
+            median_gps_msg.latitude = median_gps[1]
+            longitude_loss = median_gps[0] - target_longitude
+            latitude_loss = median_gps[1] - target_latitude
 
+        # <测试> 写入经纬度定位误差和数字识别结果
+        if len(three_nums) == 0:
+            # 如果没有获取到数字
+            if is_result_write == 0:
+                is_result_write = 1
+                result_path = "./src/simulation/simulation_image/result.txt"
+                try:
+                    with open(result_path,'a') as file:
+                        # 写入时间
+                        if is_time_write_result == 0:
+                            is_time_write_result = 1
+                            now = datetime.now()
+                            file.write("\n")
+                            file.write("time = " + str(now) + '\n')
+                        file.write("result = median number not find \n") 
+                except FileNotFoundError:
+                    with open(result_path,'w') as file:
+                        # 写入时间
+                        if is_time_write_result == 0:
+                            is_time_write_result = 1
+                            now = datetime.now()
+                            file.write("\n")
+                            file.write("time = " + str(now) + '\n')
+                        file.write("result = median number not find \n")
+        elif len(three_nums) != 0 and len(median_gps) == 0:
+            # 获取到了数字但是没有获取到中位数靶标的gps坐标
+            if is_result_write == 0:
+                is_result_write = 1
+                result_path = "./src/simulation/simulation_image/result.txt"
+                try:
+                    with open(result_path,'a') as file:
+                        # 写入时间
+                        if is_time_write_result == 0:
+                            is_time_write_result = 1
+                            now = datetime.now()
+                            file.write("\n")
+                            file.write("time = " + str(now) + '\n')
+                        file.write("result = "+ str(three_nums) +" \n")
+                        file.write("median num = " + str(median_num)+'\n')
+                        file.write("median num gps not find \n") 
+                except FileNotFoundError:
+                    with open(result_path,'w') as file:
+                        # 写入时间
+                        if is_time_write_result == 0:
+                            is_time_write_result = 1
+                            now = datetime.now()
+                            file.write("\n")
+                            file.write("time = " + str(now) + '\n')
+                        file.write("result = "+ str(three_nums) +" \n") 
+                        file.write("median num = " + str(median_num)+'\n')
+                        file.write("median num gps not find \n")
+            pass
+        else:
+            # 获取到结果后就正常写入数字定位结果
+            if is_result_write == 0:
+                is_result_write = 1
+                result_path = "./src/simulation/simulation_image/result.txt"
+                try:
+                    with open(result_path,'a') as file:
+                        # 写入时间
+                        if is_time_write_result == 0:
+                            is_time_write_result = 1
+                            now = datetime.now()
+                            file.write("\n")
+                            file.write("time = " + str(now) + '\n')
+                        file.write("result = " + str(three_nums)+'\n')
+                        file.write("median num = " + str(median_num)+'\n')
+                        file.write("longitude = " + str(median_gps[0])+ "\n")
+                        file.write("latitude = " + str(median_gps[1])+ "\n")
+                        file.write("longitude_loss = "+str(longitude_loss)+'\n')
+                        file.write("latitude_loss = "+str(latitude_loss)+'\n')
+                except FileNotFoundError:
+                    with open(result_path,'w') as file:
+                        # 写入时间
+                        if is_time_write_result == 0:
+                            is_time_write_result = 1
+                            now = datetime.now()
+                            file.write("\n")
+                            file.write("time = " + str(now) + '\n')
+                        file.write("result = " + str(three_nums)+'\n')
+                        file.write("median num = " + str(median_num)+'\n')
+                        file.write("longitude = " + str(median_gps[0])+ "\n")
+                        file.write("latitude = " + str(median_gps[1])+ "\n")
+                        file.write("longitude_loss = "+str(longitude_loss)+'\n')
+                        file.write("latitude_loss = "+str(latitude_loss)+'\n')
+            else:
+                pass
+            rospy.loginfo("longitude_loss = %.16f  latitude_loss = %.16f",longitude_loss,latitude_loss)
         # </测试>
-        rospy.loginfo("longitude_loss = %.16f  latitude_loss = %.16f",longitude_loss,latitude_loss)
+        
         # 发布
         gps_pub = rospy.Publisher("/median_gps", Median_gps, queue_size=10)
-        gps_pub.publish(median_gps_1)
+        gps_pub.publish(median_gps_msg)
 
 def ref_alt_callback(msg):
     global ref_alt
