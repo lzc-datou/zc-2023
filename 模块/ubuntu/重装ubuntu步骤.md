@@ -20,3 +20,5 @@
 官网：[NVIDIA CUDA](https://developer.nvidia.com/cuda-toolkit-archive)
 
 10. 安装gpu版本的torch和torchvision。参考文档[笔记本安装gpu版torch与torchvision](./笔记本安装gpu版torch与torchvision.md)
+
+

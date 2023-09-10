@@ -17,7 +17,7 @@ def rundistribute(path):
     os.mkdir(path2+'/Val')
     T=1
     flag=1
-    for x in os.listdir(path+'/image'):
+    for x in os.listdir(path+'/images'):
         T=T-1
         flag=flag-1
         if T==0:
@@ -28,27 +28,27 @@ def rundistribute(path):
         
         if flag==0:
             try:
-                shutil.move(path+'/label/'+namx+'.txt',path2+'/Val/'+namx+'.txt')
+                shutil.move(path+'/labels/'+namx+'.txt',path2+'/Val/'+namx+'.txt')
             except FileNotFoundError:
                 print('%s.txt do not exist'%(namx))
-                os.remove(path+'/image/'+x)
+                os.remove(path+'/images/'+x)
             else:
-                shutil.move(path+'/image/'+x,path1+'/Val/'+x)
+                shutil.move(path+'/images/'+x,path1+'/Val/'+x)
             
         else:
             try:
-                shutil.move(path+'/label/'+namx+'.txt',path2+'/Train/'+namx+'.txt')
+                shutil.move(path+'/labels/'+namx+'.txt',path2+'/Train/'+namx+'.txt')
             except FileNotFoundError:
                 print('%s.txt do not exist'%(namx))
-                os.remove(path+'/image/'+x)
+                os.remove(path+'/images/'+x)
             else:
-                shutil.move(path+'/image/'+x,path1+'/Train/'+x)
-    for y in os.listdir(path+'/label'):
+                shutil.move(path+'/images/'+x,path1+'/Train/'+x)
+    for y in os.listdir(path+'/labels'):
         namy,formaty=os.path.splitext(y)
         print('%s.jpg do not exist\n'%(namy))
-        os.remove(path+'/label/'+y)
-    os.rmdir(path+'/label')
-    os.rmdir(path+'/image')
+        os.remove(path+'/labels/'+y)
+    os.rmdir(path+'/labels')
+    os.rmdir(path+'/images')
 
 if __name__=='__main__':
     path=sys.argv[1]
