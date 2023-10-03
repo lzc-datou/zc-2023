@@ -3,7 +3,7 @@ import os
 import time
 import numpy as np
 
-pic=cv2.imread('white.jpg')
+
 
 """
 输入：图片、长、宽
